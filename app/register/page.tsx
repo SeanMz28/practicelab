@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { RegisterForm } from "@/components/auth/register-form"
 import { GraduationCap } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function RegisterPage() {
   return (
@@ -17,7 +17,17 @@ export default function RegisterPage() {
           <p className="text-muted-foreground">Start your journey to academic excellence</p>
         </div>
 
-        <RegisterForm />
+        <Card>
+          <CardHeader>
+            <CardTitle>Register</CardTitle>
+            <CardDescription>Authentication will be implemented soon</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-muted-foreground">
+              Auth system is being set up. Check back soon!
+            </p>
+          </CardContent>
+        </Card>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already have an account?{" "}

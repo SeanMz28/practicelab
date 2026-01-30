@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { ConvexClientProvider } from "@/components/convex-provider"
 import { DataInitializer } from "@/components/data-initializer"
 import "./globals.css"
 
@@ -39,9 +40,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans antialiased`}>
-        <DataInitializer />
-        {children}
-        <Analytics />
+        <ConvexClientProvider>
+          <DataInitializer />
+          {children}
+          <Analytics />
+        </ConvexClientProvider>
       </body>
     </html>
   )

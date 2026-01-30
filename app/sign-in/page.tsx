@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { SignInForm } from "@/components/auth/sign-in-form"
 import { GraduationCap } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function SignInPage() {
   return (
@@ -17,7 +17,17 @@ export default function SignInPage() {
           <p className="text-muted-foreground">Sign in to continue your learning journey</p>
         </div>
 
-        <SignInForm />
+        <Card>
+          <CardHeader>
+            <CardTitle>Sign In</CardTitle>
+            <CardDescription>Authentication will be implemented soon</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-muted-foreground">
+              Auth system is being set up. Check back soon!
+            </p>
+          </CardContent>
+        </Card>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           {"Don't have an account? "}
