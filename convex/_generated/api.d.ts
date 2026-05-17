@@ -14,7 +14,6 @@ import type * as auth from "../auth.js";
 import type * as cleanup from "../cleanup.js";
 import type * as courses from "../courses.js";
 import type * as files from "../files.js";
-import type * as grades from "../grades.js";
 import type * as http from "../http.js";
 import type * as notes from "../notes.js";
 import type * as resources from "../resources.js";
@@ -34,7 +33,6 @@ declare const fullApi: ApiFromModules<{
   cleanup: typeof cleanup;
   courses: typeof courses;
   files: typeof files;
-  grades: typeof grades;
   http: typeof http;
   notes: typeof notes;
   resources: typeof resources;

@@ -18,8 +18,10 @@ export const purgeLegacyFiles = mutation({
     }
 
     const resources = await ctx.db.query("resources").collect()
-    for (const r of resources) {
-      if (!("storageId" in r)) await ctx.db.delete(r._id)
+    for (const r of resources as Array<{ _id: typeof resources[number]["_id"] }>) {
+      if (!("storageId" in (r as Record<string, unknown>))) {
+        await ctx.db.delete(r._id)
+      }
     }
   },
 })
