@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,66 +16,45 @@ import {
 } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Plus, Pencil, Trash2, FileText, Download } from "lucide-react"
-import type { Note } from "@/lib/dummy-data"
 import { MarkdownRenderer } from "@/components/notes/markdown-renderer"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc, Id } from "@/convex/_generated/dataModel"
 
 interface NotesManagerProps {
-  courseId: string
+  courseId: Id<"courses">
 }
 
 export function NotesManager({ courseId }: NotesManagerProps) {
-  const [notes, setNotes] = useState<Note[]>([])
+  const notes = useQuery(api.notes.listByCourse, { courseId }) ?? []
+  const createNote = useMutation(api.notes.create)
+  const updateNote = useMutation(api.notes.update)
+  const removeNote = useMutation(api.notes.remove)
+
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [editingNote, setEditingNote] = useState<Note | null>(null)
+  const [editingNote, setEditingNote] = useState<Doc<"notes"> | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   })
   const [previewMode, setPreviewMode] = useState<"edit" | "preview">("edit")
 
-  useEffect(() => {
-    loadNotes()
-  }, [courseId])
-
-  const loadNotes = () => {
-    const stored = JSON.parse(localStorage.getItem("notes") || "[]")
-    setNotes(stored.filter((n: Note) => n.courseId === courseId))
-  }
-
-  const saveNotes = (updatedNotes: Note[]) => {
-    const allNotes = JSON.parse(localStorage.getItem("notes") || "[]")
-    const otherNotes = allNotes.filter((n: Note) => n.courseId !== courseId)
-    localStorage.setItem("notes", JSON.stringify([...otherNotes, ...updatedNotes]))
-    setNotes(updatedNotes)
-  }
-
-  const handleCreate = () => {
-    const newNote: Note = {
-      id: Date.now().toString(),
-      courseId,
-      ...formData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-    saveNotes([...notes, newNote])
+  const handleCreate = async () => {
+    await createNote({ courseId, title: formData.title, content: formData.content })
     setIsCreateOpen(false)
     resetForm()
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!editingNote) return
-
-    const updated = notes.map((n) =>
-      n.id === editingNote.id ? { ...editingNote, ...formData, updatedAt: new Date().toISOString() } : n,
-    )
-    saveNotes(updated)
+    await updateNote({ id: editingNote._id, title: formData.title, content: formData.content })
     setEditingNote(null)
     resetForm()
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: Id<"notes">) => {
     if (confirm("Are you sure you want to delete this note?")) {
-      saveNotes(notes.filter((n) => n.id !== id))
+      await removeNote({ id })
     }
   }
 
@@ -84,7 +63,7 @@ export function NotesManager({ courseId }: NotesManagerProps) {
     setPreviewMode("edit")
   }
 
-  const openEdit = (note: Note) => {
+  const openEdit = (note: Doc<"notes">) => {
     setEditingNote(note)
     setFormData({
       title: note.title,
@@ -92,8 +71,7 @@ export function NotesManager({ courseId }: NotesManagerProps) {
     })
   }
 
-  const downloadAsPdf = async (note: Note) => {
-    // Create a printable HTML page
+  const downloadAsPdf = async (note: Doc<"notes">) => {
     const printWindow = window.open("", "_blank")
     if (!printWindow) return
 
@@ -103,38 +81,15 @@ export function NotesManager({ courseId }: NotesManagerProps) {
         <head>
           <title>${note.title}</title>
           <style>
-            body {
-              font-family: system-ui, -apple-system, sans-serif;
-              max-width: 800px;
-              margin: 40px auto;
-              padding: 20px;
-              line-height: 1.6;
-            }
+            body { font-family: system-ui, -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
             h1, h2, h3 { color: #1e40af; margin-top: 24px; }
             h1 { font-size: 32px; border-bottom: 2px solid #1e40af; padding-bottom: 8px; }
             h2 { font-size: 24px; }
             h3 { font-size: 20px; }
-            code {
-              background: #f3f4f6;
-              padding: 2px 6px;
-              border-radius: 4px;
-              font-family: monospace;
-            }
-            pre {
-              background: #1e293b;
-              color: #e2e8f0;
-              padding: 16px;
-              border-radius: 8px;
-              overflow-x: auto;
-            }
-            pre code {
-              background: none;
-              padding: 0;
-              color: inherit;
-            }
-            @media print {
-              body { margin: 0; padding: 20px; }
-            }
+            code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+            pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; }
+            pre code { background: none; padding: 0; color: inherit; }
+            @media print { body { margin: 0; padding: 20px; } }
           </style>
         </head>
         <body>
@@ -143,10 +98,7 @@ export function NotesManager({ courseId }: NotesManagerProps) {
             import { marked } from 'https://cdn.jsdelivr.net/npm/marked@11.1.1/+esm';
             const content = ${JSON.stringify(note.content)};
             document.getElementById('content').innerHTML = marked.parse(content);
-            setTimeout(() => {
-              window.print();
-              window.close();
-            }, 500);
+            setTimeout(() => { window.print(); window.close(); }, 500);
           </script>
         </body>
       </html>
@@ -204,17 +156,7 @@ export function NotesManager({ courseId }: NotesManagerProps) {
                     <Label htmlFor="note-content">Content (Markdown)</Label>
                     <Textarea
                       id="note-content"
-                      placeholder="# Heading
-
-## Subheading
-
-Write your content here using markdown...
-
-\`\`\`python
-# Code example
-def hello():
-    print('Hello, World!')
-\`\`\`"
+                      placeholder="# Heading"
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                       className="min-h-[400px] font-mono"
@@ -255,7 +197,7 @@ def hello():
           </Card>
         ) : (
           notes.map((note) => (
-            <Card key={note.id}>
+            <Card key={note._id}>
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
@@ -271,7 +213,7 @@ def hello():
                     <Button variant="outline" size="icon" onClick={() => openEdit(note)}>
                       <Pencil className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="icon" onClick={() => handleDelete(note.id)}>
+                    <Button variant="outline" size="icon" onClick={() => handleDelete(note._id)}>
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </Button>
                   </div>

@@ -10,8 +10,10 @@ import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Check, FileText, Download, CheckCircle, XCircle } from "lucide-react"
 import Link from "next/link"
-import type { AssessmentAttempt, Question, Answer } from "@/lib/dummy-data"
-import { dummyAssessments } from "@/lib/dummy-data"
+import { useQuery, useMutation, useConvex } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Id } from "@/convex/_generated/dataModel"
+import { downloadFromUrl } from "@/lib/download-file"
 
 interface GradingInterfaceProps {
   attemptId: string
@@ -19,31 +21,43 @@ interface GradingInterfaceProps {
 
 export function GradingInterface({ attemptId }: GradingInterfaceProps) {
   const router = useRouter()
-  const [attempt, setAttempt] = useState<AssessmentAttempt | null>(null)
-  const [assessment, setAssessment] = useState<any>(null)
+  const convex = useConvex()
+  const attempt = useQuery(api.attempts.get, { id: attemptId as Id<"assessmentAttempts"> })
+  const assessment = useQuery(
+    api.assessments.get,
+    attempt ? { id: attempt.assessmentId } : "skip",
+  )
+  const student = useQuery(api.users.getById, attempt ? { id: attempt.userId } : "skip")
+  const grade = useMutation(api.attempts.grade)
+
+  const handleDownloadFile = async (file: { storageId: Id<"_storage">; fileName: string }) => {
+    const url = await convex.query(api.files.getUrl, { storageId: file.storageId })
+    if (!url) {
+      alert("File not available")
+      return
+    }
+    try {
+      await downloadFromUrl(url, file.fileName)
+    } catch (err) {
+      alert(`Download failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+    }
+  }
+
   const [gradingData, setGradingData] = useState<
-    {
-      pointsAwarded: number
-      feedback: string
-    }[]
+    { pointsAwarded: number; feedback: string }[]
   >([])
 
   useEffect(() => {
-    const attempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const found = attempts.find((a: AssessmentAttempt) => a.id === attemptId)
-    if (found) {
-      setAttempt(found)
-      const assessmentData = dummyAssessments.find((a) => a.id === found.assessmentId)
-      setAssessment(assessmentData)
-
+    if (attempt && assessment) {
       setGradingData(
-        found.answers.map((answer: Answer, index: number) => ({
-          pointsAwarded: answer.pointsAwarded || (answer.isCorrect ? assessmentData?.questions[index].points : 0) || 0,
+        attempt.answers.map((answer, index) => ({
+          pointsAwarded:
+            answer.pointsAwarded ?? (answer.isCorrect ? assessment.questions[index].points : 0) ?? 0,
           feedback: answer.feedback || "",
         })),
       )
     }
-  }, [attemptId])
+  }, [attempt, assessment])
 
   const handlePointsChange = (index: number, points: number) => {
     const newData = [...gradingData]
@@ -57,34 +71,24 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
     setGradingData(newData)
   }
 
-  const handleSubmitGrades = () => {
+  const handleSubmitGrades = async () => {
     if (!attempt || !assessment) return
 
-    const totalPoints = assessment.questions.reduce((acc: number, q: Question) => acc + q.points, 0)
-    const earnedPoints = gradingData.reduce((acc, data) => acc + data.pointsAwarded, 0)
+    const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
+    const earnedPoints = gradingData.reduce((acc, d) => acc + d.pointsAwarded, 0)
     const finalScore = Math.round((earnedPoints / totalPoints) * 100)
 
-    const updatedAnswers = attempt.answers.map((answer: Answer, index: number) => ({
+    const updatedAnswers = attempt.answers.map((answer, index) => ({
       ...answer,
       pointsAwarded: gradingData[index].pointsAwarded,
       feedback: gradingData[index].feedback,
     }))
 
-    const updatedAttempt = {
-      ...attempt,
+    await grade({
+      id: attempt._id,
       answers: updatedAnswers,
       score: finalScore,
-      status: "graded",
-      gradedAt: new Date().toISOString(),
-      gradedBy: "tutor1",
-    }
-
-    const attempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const index = attempts.findIndex((a: AssessmentAttempt) => a.id === attemptId)
-    if (index !== -1) {
-      attempts[index] = updatedAttempt
-      localStorage.setItem("assessmentAttempts", JSON.stringify(attempts))
-    }
+    })
 
     router.push("/tutor/grading")
   }
@@ -97,8 +101,8 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
     )
   }
 
-  const totalPoints = assessment.questions.reduce((acc: number, q: Question) => acc + q.points, 0)
-  const currentPoints = gradingData.reduce((acc, data) => acc + data.pointsAwarded, 0)
+  const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
+  const currentPoints = gradingData.reduce((acc, d) => acc + d.pointsAwarded, 0)
 
   return (
     <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
@@ -110,9 +114,20 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">{(attempt as any).assessmentTitle}</h1>
+        <h1 className="text-3xl font-bold mb-2">{assessment.title}</h1>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <span>Student {attempt.userId}</span>
+          <span>
+            {student ? (
+              <>
+                {student.name}
+                {student.email && (
+                  <span className="text-muted-foreground/70"> ({student.email})</span>
+                )}
+              </>
+            ) : (
+              "Loading student..."
+            )}
+          </span>
           <span>•</span>
           <span>Submitted {new Date(attempt.completedAt).toLocaleDateString()}</span>
           <span>•</span>
@@ -123,9 +138,9 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
       </div>
 
       <div className="space-y-6">
-        {assessment.questions.map((question: Question, index: number) => {
+        {assessment.questions.map((question, index) => {
           const answer = attempt.answers[index]
-          const grading = gradingData[index]
+          const grading = gradingData[index] ?? { pointsAwarded: 0, feedback: "" }
 
           return (
             <Card key={question.id}>
@@ -205,7 +220,7 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                     </div>
                   )}
 
-                  {question.type === "file" && (
+                  {question.type === "file" && answer.value && typeof answer.value === "object" && (
                     <div className="border-2 rounded-lg p-4 bg-muted/20">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -213,12 +228,19 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                           <div>
                             <p className="font-medium">{(answer.value as any).fileName}</p>
                             <p className="text-sm text-muted-foreground">
-                              {((answer.value as any).fileSize / 1024).toFixed(2)} KB • Uploaded{" "}
-                              {new Date((answer.value as any).uploadedAt).toLocaleDateString()}
+                              {((answer.value as any).fileSize / 1024).toFixed(2)} KB
                             </p>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handleDownloadFile(
+                              answer.value as { storageId: Id<"_storage">; fileName: string },
+                            )
+                          }
+                        >
                           <Download className="w-4 h-4 mr-2" />
                           Download
                         </Button>

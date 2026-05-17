@@ -9,10 +9,16 @@
  */
 
 import type * as assessments from "../assessments.js";
+import type * as attempts from "../attempts.js";
+import type * as auth from "../auth.js";
+import type * as cleanup from "../cleanup.js";
 import type * as courses from "../courses.js";
+import type * as files from "../files.js";
 import type * as grades from "../grades.js";
+import type * as http from "../http.js";
 import type * as notes from "../notes.js";
 import type * as resources from "../resources.js";
+import type * as seed from "../seed.js";
 import type * as users from "../users.js";
 
 import type {
@@ -23,10 +29,16 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   assessments: typeof assessments;
+  attempts: typeof attempts;
+  auth: typeof auth;
+  cleanup: typeof cleanup;
   courses: typeof courses;
+  files: typeof files;
   grades: typeof grades;
+  http: typeof http;
   notes: typeof notes;
   resources: typeof resources;
+  seed: typeof seed;
   users: typeof users;
 }>;
 
@@ -56,4 +68,6 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  betterAuth: import("@convex-dev/better-auth/_generated/component.js").ComponentApi<"betterAuth">;
+};

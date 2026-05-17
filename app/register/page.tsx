@@ -11,7 +11,7 @@ export default function RegisterPage() {
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <GraduationCap className="w-6 h-6 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold">Practise Lab</span>
+            <span className="text-2xl font-bold">Practice Lab</span>
           </Link>
           <h1 className="text-3xl font-bold mb-2">Create Your Account</h1>
           <p className="text-muted-foreground">Start your journey to academic excellence</p>

@@ -13,25 +13,36 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { ArrowLeft, Clock, ChevronRight, Check, Upload, FileText, X, Calendar } from "lucide-react"
-import type { Assessment, Course } from "@/lib/dummy-data"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc, Id } from "@/convex/_generated/dataModel"
 
-// Local interface for tracking answers during the assessment (allows null for unset file uploads)
+interface LocalFileAnswer {
+  file: File
+  fileName: string
+  fileSize: number
+  fileType: string
+}
+
 interface LocalAnswer {
   questionId: string
   type: "multiple-choice" | "text" | "file"
-  value: number | string | { fileName: string; fileSize: number } | null
+  value: number | string | LocalFileAnswer | null
   isCorrect?: boolean
   pointsAwarded?: number
   feedback?: string
 }
 
 interface AssessmentInterfaceProps {
-  assessment: Assessment
-  course: Course
+  assessment: Doc<"assessments">
+  course: Doc<"courses">
 }
 
 export function AssessmentInterface({ assessment, course }: AssessmentInterfaceProps) {
   const router = useRouter()
+  const submitAttempt = useMutation(api.attempts.submit)
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+  const [submitting, setSubmitting] = useState(false)
   const [started, setStarted] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<LocalAnswer[]>(
@@ -74,7 +85,12 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     const file = e.target.files?.[0]
     if (file) {
       const newAnswers = [...answers]
-      newAnswers[questionIndex].value = { fileName: file.name, fileSize: file.size }
+      newAnswers[questionIndex].value = {
+        file,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+      }
       setAnswers(newAnswers)
       updateAnsweredCount()
     }
@@ -104,7 +120,6 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
       setStartTime(now)
 
       if (assessment.type === "assignment") {
-        // For assignments, calculate seconds until due date
         if (assessment.dueDate) {
           const dueTime = new Date(assessment.dueDate).getTime()
           const currentTime = new Date(now).getTime()
@@ -112,7 +127,6 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           setTimeLeft(secondsLeft > 0 ? secondsLeft : 0)
         }
       } else if (assessment.timeLimit) {
-        // For quiz/test, use minutes converted to seconds
         setTimeLeft(assessment.timeLimit * 60)
       }
     }
@@ -123,7 +137,6 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev !== null && prev <= 1) {
-            // Time's up - auto submit
             handleSubmit(true)
             return 0
           }
@@ -134,49 +147,73 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     }
   }, [started, timeLeft])
 
-  const handleSubmit = (autoSubmit = false) => {
-    const gradedAnswers = answers.map((answer, index) => {
-      const question = assessment.questions[index]
-      if (question.type === "multiple-choice") {
-        const isCorrect = answer.value === question.correctAnswer
-        return {
-          ...answer,
-          isCorrect,
-          pointsAwarded: isCorrect ? question.points : 0,
+  const handleSubmit = async (_autoSubmit = false) => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const gradedAnswers = answers.map((answer, index) => {
+        const q = assessment.questions[index]
+        if (q.type === "multiple-choice") {
+          const isCorrect = answer.value === q.correctAnswer
+          return {
+            ...answer,
+            isCorrect,
+            pointsAwarded: isCorrect ? q.points : 0,
+          }
         }
-      }
-      return answer
-    })
+        return answer
+      })
 
-    const autoGradedScore = gradedAnswers.reduce((acc, answer) => {
-      return acc + (answer.pointsAwarded || 0)
-    }, 0)
+      const autoGradedScore = gradedAnswers.reduce((acc, a) => acc + (a.pointsAwarded || 0), 0)
+      const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
+      const hasManualGrading = assessment.questions.some((q) => q.type !== "multiple-choice")
 
-    const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
-    const hasManualGrading = assessment.questions.some((q) => q.type !== "multiple-choice")
+      // Upload any file answers to Convex storage and replace with FileSubmission shape.
+      const submittableAnswers = await Promise.all(
+        gradedAnswers.map(async (a) => {
+          if (a.type === "file" && a.value && typeof a.value === "object" && "file" in a.value) {
+            const local = a.value as LocalFileAnswer
+            const postUrl = await generateUploadUrl()
+            const result = await fetch(postUrl, {
+              method: "POST",
+              headers: { "Content-Type": local.fileType || "application/octet-stream" },
+              body: local.file,
+            })
+            if (!result.ok) throw new Error(`Upload failed for ${local.fileName}`)
+            const { storageId } = (await result.json()) as { storageId: Id<"_storage"> }
+            return {
+              ...a,
+              value: {
+                fileName: local.fileName,
+                fileType: local.fileType || "",
+                fileSize: local.fileSize,
+                storageId,
+                uploadedAt: new Date().toISOString(),
+              },
+            }
+          }
+          if (a.value === null || a.value === -1) {
+            return { ...a, value: a.type === "multiple-choice" ? -1 : "" }
+          }
+          return a
+        }),
+      )
 
-    const attempt = {
-      id: Date.now().toString(),
-      assessmentId: assessment.id,
-      userId: "user1",
-      courseId: course.id,
-      courseName: course.name,
-      assessmentTitle: assessment.title,
-      assessmentType: assessment.type,
-      answers: gradedAnswers,
-      score: hasManualGrading ? null : Math.round((autoGradedScore / totalPoints) * 100),
-      totalQuestions: assessment.questions.length,
-      startedAt: startTime || new Date().toISOString(),
-      completedAt: new Date().toISOString(),
-      status: hasManualGrading ? "pending" : "graded",
-      autoSubmitted: autoSubmit,
+      const attemptId = await submitAttempt({
+        assessmentId: assessment._id,
+        answers: submittableAnswers as any,
+        score: hasManualGrading ? null : Math.round((autoGradedScore / totalPoints) * 100),
+        totalQuestions: assessment.questions.length,
+        startedAt: startTime || new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+        status: hasManualGrading ? "pending" : "graded",
+      })
+
+      router.push(`/courses/${course._id}/assessments/${assessment._id}/results?attemptId=${attemptId}`)
+    } catch (err) {
+      alert(`Submission failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+      setSubmitting(false)
     }
-
-    const attempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    attempts.push(attempt)
-    localStorage.setItem("assessmentAttempts", JSON.stringify(attempts))
-
-    router.push(`/courses/${course.id}/assessments/${assessment.id}/results?attemptId=${attempt.id}`)
   }
 
   const formatTime = (seconds: number) => {
@@ -208,7 +245,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
   if (!started) {
     return (
       <main className="flex-1 container mx-auto px-4 py-8 max-w-3xl">
-        <Link href={`/courses/${course.id}`}>
+        <Link href={`/courses/${course._id}`}>
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to {course.code}
@@ -426,10 +463,12 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           <Button
             onClick={() => handleSubmit(false)}
             variant="secondary"
-            disabled={answeredCount < assessment.questions.length}
+            disabled={answeredCount < assessment.questions.length || submitting}
           >
             <Check className="w-4 h-4 mr-2" />
-            Submit {assessment.type === "quiz" ? "Quiz" : assessment.type === "assignment" ? "Assignment" : "Test"}
+            {submitting
+              ? "Submitting..."
+              : `Submit ${assessment.type === "quiz" ? "Quiz" : assessment.type === "assignment" ? "Assignment" : "Test"}`}
           </Button>
         )}
       </div>

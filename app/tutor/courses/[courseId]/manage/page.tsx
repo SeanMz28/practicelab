@@ -1,40 +1,39 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileText, ClipboardList, FolderOpen, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import type { Course, Note, Assessment } from "@/lib/dummy-data"
 import { NotesManager } from "@/components/tutor/notes-manager"
 import { AssessmentsManager } from "@/components/tutor/assessments-manager"
 import { ResourcesManager } from "@/components/tutor/resources-manager"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Id } from "@/convex/_generated/dataModel"
 
 export default function ManageCoursePage() {
   const params = useParams()
-  const router = useRouter()
-  const [course, setCourse] = useState<Course | null>(null)
-  const [notes, setNotes] = useState<Note[]>([])
-  const [assessments, setAssessments] = useState<Assessment[]>([])
+  const courseId = params.courseId as Id<"courses">
+  const course = useQuery(api.courses.get, { id: courseId })
 
-  useEffect(() => {
-    const courses = JSON.parse(localStorage.getItem("courses") || "[]")
-    const foundCourse = courses.find((c: Course) => c.id === params.courseId)
-    if (foundCourse) {
-      setCourse(foundCourse)
-    }
+  if (course === undefined) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <DashboardHeader />
+        <main className="flex-1 container mx-auto px-4 py-8">Loading...</main>
+      </div>
+    )
+  }
 
-    const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]")
-    setNotes(storedNotes.filter((n: Note) => n.courseId === params.courseId))
-
-    const storedAssessments = JSON.parse(localStorage.getItem("assessments") || "[]")
-    setAssessments(storedAssessments.filter((a: Assessment) => a.courseId === params.courseId))
-  }, [params.courseId])
-
-  if (!course) {
-    return <div>Loading...</div>
+  if (course === null) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <DashboardHeader />
+        <main className="flex-1 container mx-auto px-4 py-8">Course not found.</main>
+      </div>
+    )
   }
 
   return (
@@ -72,15 +71,15 @@ export default function ManageCoursePage() {
           </TabsList>
 
           <TabsContent value="notes">
-            <NotesManager courseId={params.courseId as string} />
+            <NotesManager courseId={courseId} />
           </TabsContent>
 
           <TabsContent value="assessments">
-            <AssessmentsManager courseId={params.courseId as string} />
+            <AssessmentsManager courseId={courseId} />
           </TabsContent>
 
           <TabsContent value="resources">
-            <ResourcesManager courseId={params.courseId as string} />
+            <ResourcesManager courseId={courseId} />
           </TabsContent>
         </Tabs>
       </main>

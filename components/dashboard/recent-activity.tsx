@@ -1,37 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
-
-interface AssessmentAttempt {
-  id: string
-  assessmentTitle: string
-  courseName: string
-  score: number
-  completedAt: string
-}
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export function RecentActivity() {
-  const [recentActivities, setRecentActivities] = useState<any[]>([])
-
-  useEffect(() => {
-    const storedAttempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    // Get the 3 most recent attempts
-    const recent = storedAttempts
-      .sort((a: any, b: any) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())
-      .slice(0, 3)
-      .map((attempt: AssessmentAttempt) => ({
-        id: attempt.id,
-        type: "assessment",
-        title: attempt.assessmentTitle,
-        course: attempt.courseName,
-        score: attempt.score,
-        date: getRelativeTime(new Date(attempt.completedAt)),
-      }))
-
-    setRecentActivities(recent)
-  }, [])
+  const attempts = useQuery(api.attempts.listForCurrentUser) ?? []
+  const assessments = useQuery(api.assessments.list) ?? []
+  const courses = useQuery(api.courses.list) ?? []
 
   const getRelativeTime = (date: Date) => {
     const now = new Date()
@@ -45,7 +22,22 @@ export function RecentActivity() {
     return date.toLocaleDateString()
   }
 
-  if (recentActivities.length === 0) {
+  const recent = [...attempts]
+    .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())
+    .slice(0, 3)
+    .map((attempt) => {
+      const assessment = assessments.find((a) => a._id === attempt.assessmentId)
+      const course = assessment ? courses.find((c) => c._id === assessment.courseId) : undefined
+      return {
+        id: attempt._id,
+        title: assessment?.title ?? "Assessment",
+        course: course?.name ?? "",
+        score: attempt.score,
+        date: getRelativeTime(new Date(attempt.completedAt)),
+      }
+    })
+
+  if (recent.length === 0) {
     return (
       <Card>
         <CardContent className="p-6 text-center text-muted-foreground">
@@ -60,7 +52,7 @@ export function RecentActivity() {
     <Card>
       <CardContent className="p-6">
         <div className="space-y-4">
-          {recentActivities.map((activity) => (
+          {recent.map((activity) => (
             <div key={activity.id} className="flex items-start gap-3 pb-4 border-b last:border-0 last:pb-0">
               <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                 <CheckCircle2 className="w-4 h-4 text-primary" />
@@ -69,7 +61,7 @@ export function RecentActivity() {
                 <p className="font-medium text-sm truncate">{activity.title}</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {activity.course}
-                  {activity.type === "assessment" && ` • Score: ${activity.score}%`}
+                  {activity.score !== null && ` • Score: ${activity.score}%`}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">{activity.date}</p>
               </div>

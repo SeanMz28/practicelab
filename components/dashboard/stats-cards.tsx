@@ -1,21 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { BookOpen, Trophy, TrendingUp, Award } from "lucide-react"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export function StatsCards() {
-  const [attempts, setAttempts] = useState<any[]>([])
+  const courses = useQuery(api.courses.list) ?? []
+  const attempts = useQuery(api.attempts.listForCurrentUser) ?? []
 
-  useEffect(() => {
-    const storedAttempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    setAttempts(storedAttempts)
-  }, [])
-
+  const graded = attempts.filter((a) => a.score !== null)
   const totalAssessments = attempts.length
   const averageScore =
-    attempts.length > 0 ? Math.round(attempts.reduce((acc, a) => acc + a.score, 0) / attempts.length) : 0
-  const notesAccessed = 3 // This would be tracked in a real app
+    graded.length > 0 ? Math.round(graded.reduce((acc, a) => acc + (a.score ?? 0), 0) / graded.length) : 0
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -24,7 +21,7 @@ export function StatsCards() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Total Courses</p>
-              <p className="text-3xl font-bold">4</p>
+              <p className="text-3xl font-bold">{courses.length}</p>
             </div>
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
               <BookOpen className="w-6 h-6 text-primary" />
@@ -65,8 +62,8 @@ export function StatsCards() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Notes Accessed</p>
-              <p className="text-3xl font-bold">{notesAccessed}</p>
+              <p className="text-sm text-muted-foreground mb-1">Perfect Scores</p>
+              <p className="text-3xl font-bold">{graded.filter((a) => a.score === 100).length}</p>
             </div>
             <div className="w-12 h-12 bg-secondary/30 rounded-lg flex items-center justify-center">
               <Award className="w-6 h-6 text-secondary-foreground" />

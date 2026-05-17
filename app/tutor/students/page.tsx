@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Users, TrendingUp, Award, Clock, CheckCircle2 } from "lucide-react"
-import type { AssessmentAttempt, Course, Assessment } from "@/lib/dummy-data"
 import Link from "next/link"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 interface StudentProgress {
   userId: string
@@ -22,36 +23,26 @@ interface StudentProgress {
 }
 
 export default function TutorStudentsPage() {
-  const [students, setStudents] = useState<StudentProgress[]>([])
-  const [allAttempts, setAllAttempts] = useState<AssessmentAttempt[]>([])
-  const [courses, setCourses] = useState<Course[]>([])
-  const [assessments, setAssessments] = useState<Assessment[]>([])
+  const allAttempts = useQuery(api.attempts.list) ?? []
+  const courses = useQuery(api.courses.list) ?? []
+  const assessments = useQuery(api.assessments.list) ?? []
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadData()
-  }, [])
+  const studentIds = useMemo(() => Array.from(new Set(allAttempts.map((a) => a.userId))), [allAttempts])
+  const studentUsers = useQuery(api.users.listByIds, { ids: studentIds }) ?? []
+  const userById = useMemo(() => new Map(studentUsers.map((u) => [u.id, u])), [studentUsers])
 
-  const loadData = () => {
-    const attempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const coursesData = JSON.parse(localStorage.getItem("courses") || "[]")
-    const assessmentsData = JSON.parse(localStorage.getItem("assessments") || "[]")
-
-    setAllAttempts(attempts)
-    setCourses(coursesData)
-    setAssessments(assessmentsData)
-
-    const studentMap = new Map<string, StudentProgress>()
-
-    attempts.forEach((attempt: AssessmentAttempt) => {
-      const existing = studentMap.get(attempt.userId)
+  const students: StudentProgress[] = useMemo(() => {
+    const map = new Map<string, StudentProgress>()
+    for (const attempt of allAttempts) {
       const isCompleted = attempt.status === "graded"
       const isPending = attempt.status === "pending"
-
+      const existing = map.get(attempt.userId)
       if (!existing) {
-        studentMap.set(attempt.userId, {
+        const user = userById.get(attempt.userId)
+        map.set(attempt.userId, {
           userId: attempt.userId,
-          userName: `Student ${attempt.userId.slice(-4)}`,
+          userName: user?.name ?? "Loading...",
           totalAttempts: 1,
           completedAssessments: isCompleted ? 1 : 0,
           pendingAssessments: isPending ? 1 : 0,
@@ -65,32 +56,26 @@ export default function TutorStudentsPage() {
           const totalScore = existing.averageScore * (existing.completedAssessments - 1) + (attempt.score || 0)
           existing.averageScore = totalScore / existing.completedAssessments
         }
-        if (isPending) {
-          existing.pendingAssessments++
-        }
+        if (isPending) existing.pendingAssessments++
         if (new Date(attempt.completedAt) > new Date(existing.lastActivity)) {
           existing.lastActivity = attempt.completedAt
         }
       }
-    })
+    }
+    return Array.from(map.values())
+  }, [allAttempts, userById])
 
-    setStudents(Array.from(studentMap.values()))
-  }
-
-  const getStudentAttempts = (userId: string) => {
-    return allAttempts.filter((a) => a.userId === userId)
-  }
-
-  const getAssessmentName = (assessmentId: string) => {
-    const assessment = assessments.find((a) => a.id === assessmentId)
-    return assessment?.title || "Unknown Assessment"
-  }
-
-  const getCourseName = (assessmentId: string) => {
-    const assessment = assessments.find((a) => a.id === assessmentId)
+  const getStudentAttempts = (userId: string) => allAttempts.filter((a) => a.userId === userId)
+  const getAssessmentName = (assessmentId: string) =>
+    assessments.find((a) => a._id === assessmentId)?.title ?? "Unknown Assessment"
+  const getCourseCode = (assessmentId: string) => {
+    const assessment = assessments.find((a) => a._id === assessmentId)
     if (!assessment) return "Unknown Course"
-    const course = courses.find((c) => c.id === assessment.courseId)
-    return course?.code || "Unknown Course"
+    return courses.find((c) => c._id === assessment.courseId)?.code ?? "Unknown Course"
+  }
+  const getCourseId = (assessmentId: string) => {
+    const assessment = assessments.find((a) => a._id === assessmentId)
+    return assessment?.courseId
   }
 
   const overallStats = {
@@ -260,45 +245,55 @@ export default function TutorStudentsPage() {
                       {isExpanded && (
                         <CardContent>
                           <div className="space-y-3">
-                            {studentAttempts.map((attempt) => (
-                              <div key={attempt.id} className="flex items-center justify-between p-3 border rounded-lg">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className="font-medium">{getAssessmentName(attempt.assessmentId)}</span>
-                                    <Badge variant="outline" className="text-xs">
-                                      {getCourseName(attempt.assessmentId)}
-                                    </Badge>
-                                  </div>
-                                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                    <span>Submitted {new Date(attempt.completedAt).toLocaleDateString()}</span>
-                                    <span>{attempt.totalQuestions} questions</span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  {attempt.status === "graded" ? (
-                                    <>
-                                      <Badge variant={attempt.score! >= 70 ? "default" : "destructive"}>
-                                        {attempt.score}%
+                            {studentAttempts.map((attempt) => {
+                              const courseId = getCourseId(attempt.assessmentId)
+                              return (
+                                <div
+                                  key={attempt._id}
+                                  className="flex items-center justify-between p-3 border rounded-lg"
+                                >
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <span className="font-medium">
+                                        {getAssessmentName(attempt.assessmentId)}
+                                      </span>
+                                      <Badge variant="outline" className="text-xs">
+                                        {getCourseCode(attempt.assessmentId)}
                                       </Badge>
-                                      <Link
-                                        href={`/courses/${getCourseName(attempt.assessmentId)}/assessments/${attempt.assessmentId}/results?attemptId=${attempt.id}`}
-                                      >
-                                        <Button variant="outline" size="sm">
-                                          View Results
-                                        </Button>
-                                      </Link>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Badge variant="secondary">Pending</Badge>
-                                      <Link href={`/tutor/grading/${attempt.id}`}>
-                                        <Button size="sm">Grade Now</Button>
-                                      </Link>
-                                    </>
-                                  )}
+                                    </div>
+                                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                      <span>Submitted {new Date(attempt.completedAt).toLocaleDateString()}</span>
+                                      <span>{attempt.totalQuestions} questions</span>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-3">
+                                    {attempt.status === "graded" ? (
+                                      <>
+                                        <Badge variant={(attempt.score ?? 0) >= 70 ? "default" : "destructive"}>
+                                          {attempt.score}%
+                                        </Badge>
+                                        {courseId && (
+                                          <Link
+                                            href={`/courses/${courseId}/assessments/${attempt.assessmentId}/results?attemptId=${attempt._id}`}
+                                          >
+                                            <Button variant="outline" size="sm">
+                                              View Results
+                                            </Button>
+                                          </Link>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Badge variant="secondary">Pending</Badge>
+                                        <Link href={`/tutor/grading/${attempt._id}`}>
+                                          <Button size="sm">Grade Now</Button>
+                                        </Link>
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              )
+                            })}
                           </div>
                         </CardContent>
                       )}

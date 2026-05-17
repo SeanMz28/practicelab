@@ -2,15 +2,16 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import { ConvexClientProvider } from "@/components/convex-provider"
+import { Providers } from "@/components/providers"
 import { DataInitializer } from "@/components/data-initializer"
+import { getToken } from "@/lib/auth-server"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Practise Lab - Learn, Practice, Excel",
+  title: "Practice Lab - Learn, Practice, Excel",
   description: "Educational platform for course notes, quizzes, and grade tracking",
   generator: "v0.app",
   icons: {
@@ -32,19 +33,21 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const initialToken = await getToken()
+
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        <ConvexClientProvider>
+      <body className={`font-sans antialiased`} suppressHydrationWarning>
+        <Providers initialToken={initialToken}>
           <DataInitializer />
           {children}
-          <Analytics />
-        </ConvexClientProvider>
+        </Providers>
+        <Analytics />
       </body>
     </html>
   )

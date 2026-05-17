@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -16,13 +16,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus, Pencil, Trash2, BookOpen } from "lucide-react"
-import type { Course } from "@/lib/dummy-data"
 import Link from "next/link"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc } from "@/convex/_generated/dataModel"
 
 export default function TutorCoursesPage() {
-  const [courses, setCourses] = useState<Course[]>([])
+  const courses = useQuery(api.courses.list) ?? []
+  const createCourse = useMutation(api.courses.create)
+  const updateCourse = useMutation(api.courses.update)
+  const removeCourse = useMutation(api.courses.remove)
+
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [editingCourse, setEditingCourse] = useState<Course | null>(null)
+  const [editingCourse, setEditingCourse] = useState<Doc<"courses"> | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     code: "",
@@ -30,41 +36,24 @@ export default function TutorCoursesPage() {
     color: "bg-blue-500",
   })
 
-  useEffect(() => {
-    const stored = localStorage.getItem("courses")
-    if (stored) {
-      setCourses(JSON.parse(stored))
-    }
-  }, [])
-
-  const saveCourses = (updatedCourses: Course[]) => {
-    setCourses(updatedCourses)
-    localStorage.setItem("courses", JSON.stringify(updatedCourses))
-  }
-
-  const handleCreate = () => {
-    const newCourse: Course = {
-      id: Date.now().toString(),
-      ...formData,
-    }
-    saveCourses([...courses, newCourse])
+  const handleCreate = async () => {
+    await createCourse(formData)
     setIsCreateOpen(false)
     resetForm()
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!editingCourse) return
-    const updated = courses.map((c) => (c.id === editingCourse.id ? { ...editingCourse, ...formData } : c))
-    saveCourses(updated)
+    await updateCourse({ id: editingCourse._id, ...formData })
     setEditingCourse(null)
     resetForm()
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: Doc<"courses">["_id"]) => {
     if (
       confirm("Are you sure you want to delete this course? This will also delete all associated notes and quizzes.")
     ) {
-      saveCourses(courses.filter((c) => c.id !== id))
+      await removeCourse({ id })
     }
   }
 
@@ -72,7 +61,7 @@ export default function TutorCoursesPage() {
     setFormData({ name: "", code: "", description: "", color: "bg-blue-500" })
   }
 
-  const openEdit = (course: Course) => {
+  const openEdit = (course: Doc<"courses">) => {
     setEditingCourse(course)
     setFormData({
       name: course.name,
@@ -167,7 +156,7 @@ export default function TutorCoursesPage() {
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <Card key={course.id} className="hover:shadow-md transition-shadow">
+            <Card key={course._id} className="hover:shadow-md transition-shadow">
               <CardHeader className={`${course.color} text-white rounded-t-lg`}>
                 <div className="flex items-start justify-between">
                   <div>
@@ -180,7 +169,7 @@ export default function TutorCoursesPage() {
               <CardContent className="pt-4">
                 <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
                 <div className="flex items-center gap-2">
-                  <Link href={`/tutor/courses/${course.id}/manage`} className="flex-1">
+                  <Link href={`/tutor/courses/${course._id}/manage`} className="flex-1">
                     <Button variant="outline" className="w-full bg-transparent">
                       Manage
                     </Button>
@@ -242,7 +231,7 @@ export default function TutorCoursesPage() {
                       </div>
                     </DialogContent>
                   </Dialog>
-                  <Button variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
+                  <Button variant="outline" size="icon" onClick={() => handleDelete(course._id)}>
                     <Trash2 className="w-4 h-4 text-red-600" />
                   </Button>
                 </div>
