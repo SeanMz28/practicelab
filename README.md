@@ -1,4 +1,4 @@
-# Practise Lab
+# Practice Lab
 
 A comprehensive educational platform for students to access course notes, take quizzes, and track their academic progress.
 

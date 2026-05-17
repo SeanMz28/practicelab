@@ -12,7 +12,7 @@ export default function HomePage() {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <GraduationCap className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold">Practise Lab</span>
+            <span className="text-xl font-bold">Practice Lab</span>
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/sign-in">
@@ -92,7 +92,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t py-8 px-4">
         <div className="container mx-auto text-center text-sm text-muted-foreground">
-          <p>&copy; 2026 Practise Lab. All rights reserved.</p>
+          <p>&copy; 2026 Practice Lab. All rights reserved.</p>
         </div>
       </footer>
     </div>

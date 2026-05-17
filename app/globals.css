@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color scheme to white/blue/yellow theme for Practise Lab */
+  /* Updated color scheme to white/blue/yellow theme for Practice Lab */
   --background: oklch(1 0 0); /* white */
   --foreground: oklch(0.2 0.015 260); /* dark blue-gray */
   --card: oklch(1 0 0);
