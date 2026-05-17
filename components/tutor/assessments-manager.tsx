@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,18 +15,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Pencil, Trash2, Clock, HelpCircle, X, Calendar } from "lucide-react"
+import { Plus, Pencil, Trash2, Clock, HelpCircle, X, Calendar, ChevronUp, ChevronDown, Check } from "lucide-react"
 import { ClipboardList } from "lucide-react"
-import type { Assessment, Question } from "@/lib/dummy-data"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc, Id } from "@/convex/_generated/dataModel"
+
+type Question = Doc<"assessments">["questions"][number]
 
 interface AssessmentsManagerProps {
-  courseId: string
+  courseId: Id<"courses">
 }
 
 export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
-  const [assessments, setAssessments] = useState<Assessment[]>([])
+  const assessments = useQuery(api.assessments.listByCourse, { courseId }) ?? []
+  const createAssessment = useMutation(api.assessments.create)
+  const updateAssessment = useMutation(api.assessments.update)
+  const removeAssessment = useMutation(api.assessments.remove)
+
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [editingAssessment, setEditingAssessment] = useState<Assessment | null>(null)
+  const [editingAssessment, setEditingAssessment] = useState<Doc<"assessments"> | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -42,55 +50,45 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
     options: ["", "", "", ""],
     correctAnswer: 0,
   })
+  const [editingQuestionIndex, setEditingQuestionIndex] = useState<number | null>(null)
+  const [questionDraft, setQuestionDraft] = useState<Partial<Question>>({})
 
-  useEffect(() => {
-    loadAssessments()
-  }, [courseId])
-
-  const loadAssessments = () => {
-    const stored = JSON.parse(localStorage.getItem("assessments") || "[]")
-    setAssessments(stored.filter((a: Assessment) => a.courseId === courseId))
-  }
-
-  const saveAssessments = (updatedAssessments: Assessment[]) => {
-    const allAssessments = JSON.parse(localStorage.getItem("assessments") || "[]")
-    const otherAssessments = allAssessments.filter((a: Assessment) => a.courseId !== courseId)
-    localStorage.setItem("assessments", JSON.stringify([...otherAssessments, ...updatedAssessments]))
-    setAssessments(updatedAssessments)
-  }
-
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (questions.length === 0) {
       alert("Please add at least one question")
       return
     }
-
-    const newAssessment: Assessment = {
-      id: Date.now().toString(),
+    await createAssessment({
       courseId,
-      ...formData,
+      title: formData.title,
+      description: formData.description,
+      type: formData.type,
       questions,
-      createdAt: new Date().toISOString(),
-    }
-    saveAssessments([...assessments, newAssessment])
+      timeLimit: formData.type === "assignment" ? undefined : formData.timeLimit,
+      dueDate: formData.type === "assignment" ? formData.dueDate || undefined : undefined,
+    })
     setIsCreateOpen(false)
     resetForm()
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!editingAssessment || questions.length === 0) return
-
-    const updated = assessments.map((a) =>
-      a.id === editingAssessment.id ? { ...editingAssessment, ...formData, questions } : a,
-    )
-    saveAssessments(updated)
+    await updateAssessment({
+      id: editingAssessment._id,
+      title: formData.title,
+      description: formData.description,
+      type: formData.type,
+      questions,
+      timeLimit: formData.type === "assignment" ? undefined : formData.timeLimit,
+      dueDate: formData.type === "assignment" ? formData.dueDate || undefined : undefined,
+    })
     setEditingAssessment(null)
     resetForm()
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: Id<"assessments">) => {
     if (confirm("Are you sure you want to delete this assessment?")) {
-      saveAssessments(assessments.filter((a) => a.id !== id))
+      await removeAssessment({ id })
     }
   }
 
@@ -104,9 +102,69 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       options: ["", "", "", ""],
       correctAnswer: 0,
     })
+    setEditingQuestionIndex(null)
+    setQuestionDraft({})
   }
 
-  const openEdit = (assessment: Assessment) => {
+  const startEditQuestion = (index: number) => {
+    const q = questions[index]
+    setEditingQuestionIndex(index)
+    setQuestionDraft({
+      ...q,
+      options: q.options ? [...q.options] : ["", "", "", ""],
+      acceptedFileTypes: q.acceptedFileTypes ? [...q.acceptedFileTypes] : undefined,
+    })
+  }
+
+  const cancelEditQuestion = () => {
+    setEditingQuestionIndex(null)
+    setQuestionDraft({})
+  }
+
+  const saveEditQuestion = () => {
+    if (editingQuestionIndex === null) return
+    if (!questionDraft.question?.trim()) {
+      alert("Please enter a question")
+      return
+    }
+    const original = questions[editingQuestionIndex]
+    const updated: Question = {
+      id: original.id,
+      type: questionDraft.type ?? original.type,
+      question: questionDraft.question,
+      points: questionDraft.points && questionDraft.points > 0 ? questionDraft.points : original.points,
+      ...(questionDraft.type === "multiple-choice" && {
+        options: questionDraft.options,
+        correctAnswer: questionDraft.correctAnswer ?? 0,
+        explanation: questionDraft.explanation,
+      }),
+      ...(questionDraft.type === "file" && {
+        acceptedFileTypes: questionDraft.acceptedFileTypes ?? original.acceptedFileTypes ?? [".pdf", ".doc", ".docx"],
+      }),
+    }
+    const next = [...questions]
+    next[editingQuestionIndex] = updated
+    setQuestions(next)
+    cancelEditQuestion()
+  }
+
+  const updateDraftOption = (i: number, value: string) => {
+    const opts = [...(questionDraft.options || ["", "", "", ""])]
+    opts[i] = value
+    setQuestionDraft({ ...questionDraft, options: opts })
+  }
+
+  const moveQuestion = (index: number, direction: -1 | 1) => {
+    const target = index + direction
+    if (target < 0 || target >= questions.length) return
+    const next = [...questions]
+    ;[next[index], next[target]] = [next[target], next[index]]
+    setQuestions(next)
+    if (editingQuestionIndex === index) setEditingQuestionIndex(target)
+    else if (editingQuestionIndex === target) setEditingQuestionIndex(index)
+  }
+
+  const openEdit = (assessment: Doc<"assessments">) => {
     setEditingAssessment(assessment)
     setFormData({
       title: assessment.title,
@@ -159,9 +217,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
     setCurrentQuestion({ ...currentQuestion, options: newOptions })
   }
 
-  const getAssessmentTypeLabel = (type: string) => {
-    return type.charAt(0).toUpperCase() + type.slice(1)
-  }
+  const getAssessmentTypeLabel = (type: string) => type.charAt(0).toUpperCase() + type.slice(1)
 
   const getAssessmentTypeBadge = (type: string) => {
     const badges = {
@@ -213,7 +269,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="quiz">Quiz (Timed in minutes)</SelectItem>
-                      <SelectItem value="assignment">Assignment (Deadline in days)</SelectItem>
+                      <SelectItem value="assignment">Assignment (Deadline)</SelectItem>
                       <SelectItem value="test">Test (Long timed assessment)</SelectItem>
                     </SelectContent>
                   </Select>
@@ -250,9 +306,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                   </div>
                 ) : (
                   <div>
-                    <Label htmlFor="time-limit">
-                      Time Limit ({formData.type === "quiz" ? "minutes" : "minutes for test"})
-                    </Label>
+                    <Label htmlFor="time-limit">Time Limit (minutes)</Label>
                     <Input
                       id="time-limit"
                       type="number"
@@ -267,37 +321,224 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
               <div className="border-t pt-6">
                 <h3 className="text-lg font-semibold mb-4">Questions ({questions.length})</h3>
 
-                {questions.map((q, index) => (
-                  <Card key={index} className="mb-3">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="font-semibold">Q{index + 1}:</span>
-                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{q.type}</span>
-                            <span className="text-xs text-muted-foreground">{q.points} points</span>
-                          </div>
-                          <p className="text-sm">{q.question}</p>
-                          {q.type === "multiple-choice" && (
-                            <div className="mt-2 space-y-1">
-                              {q.options?.map((opt, i) => (
-                                <div key={i} className="text-xs flex items-center gap-2">
-                                  <span className={i === q.correctAnswer ? "text-green-600 font-semibold" : ""}>
-                                    {String.fromCharCode(65 + i)}. {opt}
-                                  </span>
-                                  {i === q.correctAnswer && <span className="text-green-600">(Correct)</span>}
-                                </div>
-                              ))}
+                {questions.map((q, index) => {
+                  const isEditing = editingQuestionIndex === index
+                  return (
+                    <Card
+                      key={q.id ?? index}
+                      className={`mb-3 ${isEditing ? "border-blue-500 ring-1 ring-blue-200" : ""}`}
+                    >
+                      <CardContent className="p-4">
+                        {isEditing ? (
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold">Editing Q{index + 1}</span>
+                              <span className="text-xs text-muted-foreground">
+                                Save or cancel before editing another question
+                              </span>
                             </div>
-                          )}
-                        </div>
-                        <Button variant="ghost" size="icon" onClick={() => removeQuestion(index)}>
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label>Question Type</Label>
+                                <Select
+                                  value={questionDraft.type}
+                                  onValueChange={(value: any) =>
+                                    setQuestionDraft({ ...questionDraft, type: value })
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="multiple-choice">Multiple Choice</SelectItem>
+                                    <SelectItem value="text">Text Answer</SelectItem>
+                                    <SelectItem value="file">File Upload</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label>Points</Label>
+                                <Input
+                                  type="number"
+                                  min="1"
+                                  value={questionDraft.points ?? 1}
+                                  onChange={(e) =>
+                                    setQuestionDraft({
+                                      ...questionDraft,
+                                      points: Number.parseInt(e.target.value) || 1,
+                                    })
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <Label>Question</Label>
+                              <Textarea
+                                value={questionDraft.question || ""}
+                                onChange={(e) =>
+                                  setQuestionDraft({ ...questionDraft, question: e.target.value })
+                                }
+                              />
+                            </div>
+                            {questionDraft.type === "multiple-choice" && (
+                              <>
+                                <div>
+                                  <Label>Options</Label>
+                                  <div className="space-y-2">
+                                    {(questionDraft.options ?? ["", "", "", ""]).map((opt, i) => (
+                                      <div key={i} className="flex items-center gap-2">
+                                        <span className="text-sm w-6">{String.fromCharCode(65 + i)}.</span>
+                                        <Input
+                                          placeholder={`Option ${i + 1}`}
+                                          value={opt}
+                                          onChange={(e) => updateDraftOption(i, e.target.value)}
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <Label>Correct Answer</Label>
+                                  <Select
+                                    value={(questionDraft.correctAnswer ?? 0).toString()}
+                                    onValueChange={(value) =>
+                                      setQuestionDraft({
+                                        ...questionDraft,
+                                        correctAnswer: Number.parseInt(value),
+                                      })
+                                    }
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {(questionDraft.options ?? []).map((_, i) => (
+                                        <SelectItem key={i} value={i.toString()}>
+                                          Option {String.fromCharCode(65 + i)}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <Label>Explanation (Optional)</Label>
+                                  <Textarea
+                                    value={questionDraft.explanation ?? ""}
+                                    onChange={(e) =>
+                                      setQuestionDraft({ ...questionDraft, explanation: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </>
+                            )}
+                            {questionDraft.type === "file" && (
+                              <div>
+                                <Label>Accepted File Types</Label>
+                                <Input
+                                  placeholder="e.g., .py, .java, .pdf"
+                                  value={questionDraft.acceptedFileTypes?.join(", ") ?? ""}
+                                  onChange={(e) =>
+                                    setQuestionDraft({
+                                      ...questionDraft,
+                                      acceptedFileTypes: e.target.value
+                                        .split(",")
+                                        .map((s) => s.trim())
+                                        .filter(Boolean),
+                                    })
+                                  }
+                                />
+                              </div>
+                            )}
+                            <div className="flex justify-end gap-2">
+                              <Button variant="outline" onClick={cancelEditQuestion}>
+                                Cancel
+                              </Button>
+                              <Button onClick={saveEditQuestion}>
+                                <Check className="w-4 h-4 mr-2" />
+                                Save Question
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="font-semibold">Q{index + 1}:</span>
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{q.type}</span>
+                                <span className="text-xs text-muted-foreground">{q.points} points</span>
+                              </div>
+                              <p className="text-sm whitespace-pre-wrap">{q.question}</p>
+                              {q.type === "multiple-choice" && (
+                                <div className="mt-2 space-y-1">
+                                  {q.options?.map((opt, i) => (
+                                    <div key={i} className="text-xs flex items-center gap-2">
+                                      <span className={i === q.correctAnswer ? "text-green-600 font-semibold" : ""}>
+                                        {String.fromCharCode(65 + i)}. {opt}
+                                      </span>
+                                      {i === q.correctAnswer && <span className="text-green-600">(Correct)</span>}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              {q.type === "file" && q.acceptedFileTypes && q.acceptedFileTypes.length > 0 && (
+                                <p className="mt-2 text-xs text-muted-foreground">
+                                  Accepts: {q.acceptedFileTypes.join(", ")}
+                                </p>
+                              )}
+                              {q.explanation && (
+                                <p className="mt-2 text-xs text-muted-foreground italic">
+                                  Explanation: {q.explanation}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex flex-col items-center gap-1 ml-2">
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  title="Move up"
+                                  disabled={editingQuestionIndex !== null || index === 0}
+                                  onClick={() => moveQuestion(index, -1)}
+                                >
+                                  <ChevronUp className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  title="Move down"
+                                  disabled={editingQuestionIndex !== null || index === questions.length - 1}
+                                  onClick={() => moveQuestion(index, 1)}
+                                >
+                                  <ChevronDown className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  title="Edit question"
+                                  disabled={editingQuestionIndex !== null}
+                                  onClick={() => startEditQuestion(index)}
+                                >
+                                  <Pencil className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  title="Remove question"
+                                  disabled={editingQuestionIndex !== null}
+                                  onClick={() => removeQuestion(index)}
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
 
                 <Card className="bg-muted/50">
                   <CardHeader>
@@ -411,7 +652,12 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                       </div>
                     )}
 
-                    <Button onClick={addQuestion} variant="outline" className="w-full bg-transparent">
+                    <Button
+                      onClick={addQuestion}
+                      variant="outline"
+                      className="w-full bg-transparent"
+                      disabled={editingQuestionIndex !== null}
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Question
                     </Button>
@@ -419,7 +665,16 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                 </Card>
               </div>
 
-              <Button onClick={editingAssessment ? handleUpdate : handleCreate} className="w-full">
+              {editingQuestionIndex !== null && (
+                <p className="text-xs text-amber-600 text-center">
+                  Save or cancel the open question edit before saving the assessment.
+                </p>
+              )}
+              <Button
+                onClick={editingAssessment ? handleUpdate : handleCreate}
+                className="w-full"
+                disabled={editingQuestionIndex !== null}
+              >
                 {editingAssessment ? "Save Changes" : "Create Assessment"}
               </Button>
             </div>
@@ -438,7 +693,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
           </Card>
         ) : (
           assessments.map((assessment) => (
-            <Card key={assessment.id}>
+            <Card key={assessment._id}>
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -456,7 +711,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                     <Button variant="outline" size="icon" onClick={() => openEdit(assessment)}>
                       <Pencil className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="icon" onClick={() => handleDelete(assessment.id)}>
+                    <Button variant="outline" size="icon" onClick={() => handleDelete(assessment._id)}>
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </Button>
                   </div>
@@ -476,11 +731,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                   ) : assessment.timeLimit ? (
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      <span>
-                        {assessment.type === "assignment"
-                          ? `${assessment.timeLimit} days`
-                          : `${assessment.timeLimit} minutes`}
-                      </span>
+                      <span>{assessment.timeLimit} minutes</span>
                     </div>
                   ) : null}
                   <span className="text-xs">Created {new Date(assessment.createdAt).toLocaleDateString()}</span>

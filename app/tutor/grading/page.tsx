@@ -1,22 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Clock, FileText, User } from "lucide-react"
 import Link from "next/link"
-import type { AssessmentAttempt } from "@/lib/dummy-data"
+import { useMemo } from "react"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export default function TutorGradingPage() {
-  const [attempts, setAttempts] = useState<AssessmentAttempt[]>([])
+  const pending = useQuery(api.attempts.listByStatus, { status: "pending" }) ?? []
+  const assessments = useQuery(api.assessments.list) ?? []
+  const courses = useQuery(api.courses.list) ?? []
 
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const pending = stored.filter((a: AssessmentAttempt) => a.status === "pending")
-    setAttempts(pending)
-  }, [])
+  const studentIds = useMemo(() => pending.map((p) => p.userId), [pending])
+  const students = useQuery(api.users.listByIds, { ids: studentIds }) ?? []
+  const studentById = useMemo(() => new Map(students.map((s) => [s.id, s])), [students])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -27,7 +28,7 @@ export default function TutorGradingPage() {
           <p className="text-muted-foreground">Review and grade student submissions</p>
         </div>
 
-        {attempts.length === 0 ? (
+        {pending.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
               <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
@@ -37,40 +38,45 @@ export default function TutorGradingPage() {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {attempts.map((attempt) => (
-              <Card key={attempt.id} className="hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <CardTitle className="text-xl">{(attempt as any).assessmentTitle}</CardTitle>
-                      <CardDescription>{(attempt as any).courseName}</CardDescription>
+            {pending.map((attempt) => {
+              const assessment = assessments.find((a) => a._id === attempt.assessmentId)
+              const course = assessment ? courses.find((c) => c._id === assessment.courseId) : undefined
+              const student = studentById.get(attempt.userId)
+              return (
+                <Card key={attempt._id} className="hover:shadow-md transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <CardTitle className="text-xl">{assessment?.title ?? "Assessment"}</CardTitle>
+                        <CardDescription>{course?.name ?? ""}</CardDescription>
+                      </div>
+                      <Badge variant="secondary">Pending</Badge>
                     </div>
-                    <Badge variant="secondary">Pending</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        <span>Student {attempt.userId}</span>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          <span>{student?.name ?? "Loading..."}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          <span>Submitted {new Date(attempt.completedAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4" />
+                          <span>{attempt.totalQuestions} questions</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        <span>Submitted {new Date(attempt.completedAt).toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        <span>{attempt.totalQuestions} questions</span>
-                      </div>
+                      <Link href={`/tutor/grading/${attempt._id}`}>
+                        <Button>Grade Submission</Button>
+                      </Link>
                     </div>
-                    <Link href={`/tutor/grading/${attempt.id}`}>
-                      <Button>Grade Submission</Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         )}
       </main>

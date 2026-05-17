@@ -14,57 +14,45 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useQuery, useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { authClient } from "@/lib/auth-client"
 
 export function DashboardHeader() {
   const router = useRouter()
   const pathname = usePathname()
-  const [user, setUser] = useState<{ name: string; email: string; role?: string } | null>(null)
-  const [pendingCount, setPendingCount] = useState(0)
+  const me = useQuery(api.users.me)
+  const setRole = useMutation(api.users.setRole)
+  const pendingAttempts = useQuery(api.attempts.listByStatus, { status: "pending" })
+  const pendingCount = pendingAttempts?.length ?? 0
 
   useEffect(() => {
-    const userData = localStorage.getItem("user")
-    if (userData) {
-      const parsedUser = JSON.parse(userData)
-      if (!parsedUser.role) {
-        parsedUser.role = "student"
-        localStorage.setItem("user", JSON.stringify(parsedUser))
-      }
-      setUser(parsedUser)
-    } else {
-      router.push("/sign-in")
-    }
+    if (me === null) router.push("/sign-in")
+  }, [me, router])
 
-    const attempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const pending = attempts.filter((a: any) => a.status === "pending")
-    setPendingCount(pending.length)
-  }, [router, pathname])
-
-  const handleSignOut = () => {
-    localStorage.removeItem("user")
+  const handleSignOut = async () => {
+    await authClient.signOut()
     router.push("/")
   }
 
-  const handleToggleRole = () => {
-    if (user) {
-      const newRole = user.role === "tutor" ? "student" : "tutor"
-      const updatedUser = { ...user, role: newRole }
-      localStorage.setItem("user", JSON.stringify(updatedUser))
-      setUser(updatedUser)
-      router.push(newRole === "tutor" ? "/tutor/grading" : "/dashboard")
-    }
+  const handleToggleRole = async () => {
+    if (!me) return
+    const newRole = me.role === "tutor" ? "student" : "tutor"
+    await setRole({ role: newRole })
+    router.push(newRole === "tutor" ? "/tutor/grading" : "/dashboard")
   }
 
-  if (!user) return null
+  if (!me) return null
 
-  const initials = user.name
+  const initials = (me.name || me.email)
     .split(" ")
     .map((n) => n[0])
     .join("")
     .toUpperCase()
     .slice(0, 2)
 
-  const isTutor = user.role === "tutor"
+  const isTutor = me.role === "tutor"
 
   return (
     <header className="border-b bg-card sticky top-0 z-50">
@@ -122,8 +110,8 @@ export function DashboardHeader() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                  <p className="text-sm font-medium">{me.name}</p>
+                  <p className="text-xs text-muted-foreground">{me.email}</p>
                   <Badge variant="outline" className="w-fit mt-1">
                     {isTutor ? "Tutor" : "Student"}
                   </Badge>

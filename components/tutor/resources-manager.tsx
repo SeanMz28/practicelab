@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,47 +16,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus, Trash2, Download, FileText, File, ImageIcon, FolderOpen, Code } from "lucide-react"
-
-interface Resource {
-  id: string
-  courseId: string
-  title: string
-  description: string
-  fileName: string
-  fileType: string
-  fileSize: number
-  fileUrl: string
-  uploadedAt: string
-}
+import { useQuery, useMutation, useConvex } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc, Id } from "@/convex/_generated/dataModel"
+import { downloadFromUrl } from "@/lib/download-file"
 
 interface ResourcesManagerProps {
-  courseId: string
+  courseId: Id<"courses">
 }
 
 export function ResourcesManager({ courseId }: ResourcesManagerProps) {
-  const [resources, setResources] = useState<Resource[]>([])
+  const convex = useConvex()
+  const resources = useQuery(api.resources.listByCourse, { courseId }) ?? []
+  const createResource = useMutation(api.resources.create)
+  const removeResource = useMutation(api.resources.remove)
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+
   const [isUploadOpen, setIsUploadOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-  })
+  const [isUploading, setIsUploading] = useState(false)
+  const [formData, setFormData] = useState({ title: "", description: "" })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-
-  useEffect(() => {
-    loadResources()
-  }, [courseId])
-
-  const loadResources = () => {
-    const stored = JSON.parse(localStorage.getItem("resources") || "[]")
-    setResources(stored.filter((r: Resource) => r.courseId === courseId))
-  }
-
-  const saveResources = (updatedResources: Resource[]) => {
-    const allResources = JSON.parse(localStorage.getItem("resources") || "[]")
-    const otherResources = allResources.filter((r: Resource) => r.courseId !== courseId)
-    localStorage.setItem("resources", JSON.stringify([...otherResources, ...updatedResources]))
-    setResources(updatedResources)
-  }
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -69,46 +47,58 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
     }
   }
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file")
       return
     }
 
-    // In production, you would upload to a real storage service
-    // For now, we'll create a blob URL for demo purposes
-    const fileUrl = URL.createObjectURL(selectedFile)
+    setIsUploading(true)
+    try {
+      const postUrl = await generateUploadUrl()
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": selectedFile.type },
+        body: selectedFile,
+      })
+      if (!result.ok) throw new Error("Upload failed")
+      const { storageId } = (await result.json()) as { storageId: Id<"_storage"> }
 
-    const newResource: Resource = {
-      id: Date.now().toString(),
-      courseId,
-      title: formData.title || selectedFile.name,
-      description: formData.description,
-      fileName: selectedFile.name,
-      fileType: selectedFile.type,
-      fileSize: selectedFile.size,
-      fileUrl,
-      uploadedAt: new Date().toISOString(),
+      await createResource({
+        courseId,
+        title: formData.title || selectedFile.name,
+        description: formData.description,
+        fileName: selectedFile.name,
+        fileType: selectedFile.type,
+        fileSize: selectedFile.size,
+        storageId,
+      })
+      setIsUploadOpen(false)
+      resetForm()
+    } catch (err) {
+      alert(`Upload failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+    } finally {
+      setIsUploading(false)
     }
-
-    saveResources([...resources, newResource])
-    setIsUploadOpen(false)
-    resetForm()
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: Id<"resources">) => {
     if (confirm("Are you sure you want to delete this resource?")) {
-      saveResources(resources.filter((r) => r.id !== id))
+      await removeResource({ id })
     }
   }
 
-  const handleDownload = (resource: Resource) => {
-    const link = document.createElement("a")
-    link.href = resource.fileUrl
-    link.download = resource.fileName
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  const handleDownload = async (resource: Doc<"resources">) => {
+    const url = await convex.query(api.files.getUrl, { storageId: resource.storageId })
+    if (!url) {
+      alert("File not available")
+      return
+    }
+    try {
+      await downloadFromUrl(url, resource.fileName)
+    } catch (err) {
+      alert(`Download failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+    }
   }
 
   const resetForm = () => {
@@ -181,8 +171,8 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 />
               </div>
-              <Button onClick={handleUpload} className="w-full">
-                Upload Resource
+              <Button onClick={handleUpload} className="w-full" disabled={isUploading}>
+                {isUploading ? "Uploading..." : "Upload Resource"}
               </Button>
             </div>
           </DialogContent>
@@ -200,7 +190,7 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
           </Card>
         ) : (
           resources.map((resource) => (
-            <Card key={resource.id}>
+            <Card key={resource._id}>
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">{getFileIcon(resource.fileType)}</div>
@@ -219,7 +209,7 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
                     <Button variant="outline" size="icon" onClick={() => handleDownload(resource)}>
                       <Download className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="icon" onClick={() => handleDelete(resource.id)}>
+                    <Button variant="outline" size="icon" onClick={() => handleDelete(resource._id)}>
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </Button>
                   </div>

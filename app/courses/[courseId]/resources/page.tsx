@@ -1,41 +1,33 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Download, FileText, File, ImageIcon, Code, FolderOpen, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-
-interface Resource {
-  id: string
-  courseId: string
-  title: string
-  description: string
-  fileName: string
-  fileType: string
-  fileSize: number
-  fileUrl: string
-  uploadedAt: string
-}
+import { useQuery, useConvex } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc, Id } from "@/convex/_generated/dataModel"
+import { downloadFromUrl } from "@/lib/download-file"
 
 export default function CourseResourcesPage() {
   const params = useParams()
-  const [resources, setResources] = useState<Resource[]>([])
+  const courseId = params.courseId as Id<"courses">
+  const resources = useQuery(api.resources.listByCourse, { courseId }) ?? []
+  const convex = useConvex()
 
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("resources") || "[]")
-    setResources(stored.filter((r: Resource) => r.courseId === params.courseId))
-  }, [params.courseId])
-
-  const handleDownload = (resource: Resource) => {
-    const link = document.createElement("a")
-    link.href = resource.fileUrl
-    link.download = resource.fileName
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  const handleDownload = async (resource: Doc<"resources">) => {
+    const url = await convex.query(api.files.getUrl, { storageId: resource.storageId })
+    if (!url) {
+      alert("File not available")
+      return
+    }
+    try {
+      await downloadFromUrl(url, resource.fileName)
+    } catch (err) {
+      alert(`Download failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+    }
   }
 
   const getFileIcon = (fileType: string) => {
@@ -55,7 +47,7 @@ export default function CourseResourcesPage() {
     <div className="min-h-screen flex flex-col">
       <DashboardHeader />
       <main className="flex-1 container mx-auto px-4 py-8">
-        <Link href={`/courses/${params.courseId}`}>
+        <Link href={`/courses/${courseId}`}>
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Course
@@ -78,7 +70,7 @@ export default function CourseResourcesPage() {
             </Card>
           ) : (
             resources.map((resource) => (
-              <Card key={resource.id} className="hover:shadow-md transition-shadow">
+              <Card key={resource._id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">{getFileIcon(resource.fileType)}</div>

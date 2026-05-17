@@ -1,13 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle2, XCircle, TrendingUp, Award, Clock, FileText, Download } from "lucide-react"
-import type { Assessment, Course, AssessmentAttempt } from "@/lib/dummy-data"
-import { dummyAssessments, dummyCourses } from "@/lib/dummy-data"
+import { useQuery, useConvex } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Id } from "@/convex/_generated/dataModel"
+import { downloadFromUrl } from "@/lib/download-file"
 
 interface AssessmentResultsProps {
   courseId: string
@@ -16,24 +17,26 @@ interface AssessmentResultsProps {
 }
 
 export function AssessmentResults({ courseId, assessmentId, attemptId }: AssessmentResultsProps) {
-  const [attempt, setAttempt] = useState<AssessmentAttempt | null>(null)
-  const [assessment, setAssessment] = useState<Assessment | null>(null)
-  const [course, setCourse] = useState<Course | null>(null)
+  const convex = useConvex()
+  const attempt = useQuery(
+    api.attempts.get,
+    attemptId ? { id: attemptId as Id<"assessmentAttempts"> } : "skip",
+  )
+  const assessment = useQuery(api.assessments.get, { id: assessmentId as Id<"assessments"> })
+  const course = useQuery(api.courses.get, { id: courseId as Id<"courses"> })
 
-  useEffect(() => {
-    if (!attemptId) return
-
-    const attempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const found = attempts.find((a: AssessmentAttempt) => a.id === attemptId)
-
-    if (found) {
-      setAttempt(found)
-      const assessmentData = dummyAssessments.find((a) => a.id === found.assessmentId)
-      const courseData = dummyCourses.find((c) => c.id === courseId)
-      setAssessment(assessmentData || null)
-      setCourse(courseData || null)
+  const handleDownloadFile = async (file: { storageId: Id<"_storage">; fileName: string }) => {
+    const url = await convex.query(api.files.getUrl, { storageId: file.storageId })
+    if (!url) {
+      alert("File not available")
+      return
     }
-  }, [attemptId, courseId, assessmentId])
+    try {
+      await downloadFromUrl(url, file.fileName)
+    } catch (err) {
+      alert(`Download failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+    }
+  }
 
   if (!attempt || !assessment || !course) {
     return (
@@ -50,7 +53,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
   const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
   const earnedPoints = attempt.answers.reduce((acc, answer) => acc + (answer.pointsAwarded || 0), 0)
   const isPending = attempt.status === "pending"
-  const score = attempt.score || Math.round((earnedPoints / totalPoints) * 100)
+  const score = attempt.score ?? Math.round((earnedPoints / totalPoints) * 100)
   const isPassing = score >= 70
 
   return (
@@ -109,12 +112,12 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
           )}
 
           <div className="flex gap-3">
-            <Link href={`/courses/${course.id}`} className="flex-1">
+            <Link href={`/courses/${course._id}`} className="flex-1">
               <Button variant="outline" className="w-full bg-transparent">
                 Back to Course
               </Button>
             </Link>
-            <Link href={`/courses/${course.id}/assessments/${assessment.id}`} className="flex-1">
+            <Link href={`/courses/${course._id}/assessments/${assessment._id}`} className="flex-1">
               <Button variant="secondary" className="w-full">
                 Retake Assessment
               </Button>
@@ -128,6 +131,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
       <div className="space-y-6">
         {assessment.questions.map((question, qIndex) => {
           const answer = attempt.answers[qIndex]
+          if (!answer) return null
           const isAutoGraded = question.type === "multiple-choice"
           const isCorrect = answer.isCorrect
 
@@ -182,7 +186,6 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Multiple Choice Display */}
                 {question.type === "multiple-choice" && question.options && (
                   <div className="space-y-2">
                     {question.options.map((option, oIndex) => {
@@ -215,7 +218,6 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {/* Text Answer Display */}
                 {question.type === "text" && (
                   <div>
                     <h4 className="font-semibold mb-2">Your Answer:</h4>
@@ -225,8 +227,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {/* File Upload Display */}
-                {question.type === "file" && answer.value && (
+                {question.type === "file" && answer.value && typeof answer.value === "object" && (
                   <div>
                     <h4 className="font-semibold mb-2">Your Submission:</h4>
                     <div className="border-2 rounded-lg p-4 bg-muted/20">
@@ -240,7 +241,15 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                             </p>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handleDownloadFile(
+                              answer.value as { storageId: Id<"_storage">; fileName: string },
+                            )
+                          }
+                        >
                           <Download className="w-4 h-4 mr-2" />
                           Download
                         </Button>
@@ -249,7 +258,6 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {/* Explanation */}
                 {question.explanation && question.type === "multiple-choice" && (
                   <div className="bg-muted/50 p-4 rounded-lg">
                     <p className="text-sm font-semibold mb-1">Explanation:</p>
@@ -257,7 +265,6 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {/* Tutor Feedback */}
                 {answer.feedback && (
                   <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
                     <p className="text-sm font-semibold mb-1 text-blue-900">Tutor Feedback:</p>

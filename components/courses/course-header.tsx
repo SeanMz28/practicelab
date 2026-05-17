@@ -1,8 +1,8 @@
 import { BookOpen } from "lucide-react"
-import type { Course } from "@/lib/dummy-data"
+import type { Doc } from "@/convex/_generated/dataModel"
 
 interface CourseHeaderProps {
-  course: Course
+  course: Doc<"courses">
 }
 
 export function CourseHeader({ course }: CourseHeaderProps) {

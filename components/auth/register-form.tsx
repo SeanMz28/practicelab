@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { authClient } from "@/lib/auth-client"
 
 export function RegisterForm() {
   const router = useRouter()
@@ -16,24 +17,41 @@ export function RegisterForm() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match")
+      setError("Passwords do not match")
       return
     }
 
     setIsLoading(true)
+    const { error } = await authClient.signUp.email({
+      email,
+      password,
+      name,
+    })
+    setIsLoading(false)
 
-    // Simulate registration with dummy data
-    setTimeout(() => {
-      // In production, this would create a new user in the database
-      localStorage.setItem("user", JSON.stringify({ email, name }))
-      router.push("/dashboard")
-      setIsLoading(false)
-    }, 1000)
+    if (error) {
+      setError(error.message ?? "Registration failed")
+      return
+    }
+    router.push("/dashboard")
+  }
+
+  const handleGoogle = async () => {
+    setError(null)
+    setIsLoading(true)
+    const { error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    })
+    setIsLoading(false)
+    if (error) setError(error.message ?? "Google sign-up failed")
   }
 
   return (
@@ -75,7 +93,7 @@ export function RegisterForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
+              minLength={8}
             />
           </div>
           <div className="space-y-2">
@@ -87,13 +105,27 @@ export function RegisterForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              minLength={6}
+              minLength={8}
             />
           </div>
+          {error && <p className="text-sm text-destructive">{error}</p>}
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Creating account..." : "Create Account"}
           </Button>
         </form>
+
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">or</span>
+          </div>
+        </div>
+
+        <Button type="button" variant="outline" className="w-full" onClick={handleGoogle} disabled={isLoading}>
+          Continue with Google
+        </Button>
       </CardContent>
     </Card>
   )

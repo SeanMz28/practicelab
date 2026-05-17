@@ -1,32 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileText, ClipboardList, FolderOpen } from "lucide-react"
-import type { Course, Note, Assessment } from "@/lib/dummy-data"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import type { Doc } from "@/convex/_generated/dataModel"
 
 interface CourseContentProps {
-  course: Course
+  course: Doc<"courses">
 }
 
 export function CourseContent({ course }: CourseContentProps) {
-  const [courseNotes, setCourseNotes] = useState<Note[]>([])
-  const [courseAssessments, setCourseAssessments] = useState<Assessment[]>([])
-  const [resourceCount, setResourceCount] = useState(0)
-
-  useEffect(() => {
-    const notes = JSON.parse(localStorage.getItem("notes") || "[]")
-    setCourseNotes(notes.filter((note: Note) => note.courseId === course.id))
-
-    const assessments = JSON.parse(localStorage.getItem("assessments") || "[]")
-    setCourseAssessments(assessments.filter((assessment: Assessment) => assessment.courseId === course.id))
-
-    const resources = JSON.parse(localStorage.getItem("resources") || "[]")
-    setResourceCount(resources.filter((r: any) => r.courseId === course.id).length)
-  }, [course.id])
+  const courseNotes = useQuery(api.notes.listByCourse, { courseId: course._id }) ?? []
+  const courseAssessments = useQuery(api.assessments.listByCourse, { courseId: course._id }) ?? []
+  const resources = useQuery(api.resources.listByCourse, { courseId: course._id }) ?? []
+  const resourceCount = resources.length
 
   const getAssessmentTypeBadge = (type: string) => {
     const badges = {
@@ -56,7 +47,7 @@ export function CourseContent({ course }: CourseContentProps) {
         ) : (
           <div className="grid gap-4">
             {courseNotes.map((note) => (
-              <Card key={note.id} className="hover:shadow-md transition-shadow">
+              <Card key={note._id} className="hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FileText className="w-5 h-5 text-primary" />
@@ -65,7 +56,7 @@ export function CourseContent({ course }: CourseContentProps) {
                   <CardDescription>Last updated: {new Date(note.updatedAt).toLocaleDateString()}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/courses/${course.id}/notes/${note.id}`}>
+                  <Link href={`/courses/${course._id}/notes/${note._id}`}>
                     <Button>Read Note</Button>
                   </Link>
                 </CardContent>
@@ -88,7 +79,7 @@ export function CourseContent({ course }: CourseContentProps) {
             {courseAssessments.map((assessment) => {
               const badge = getAssessmentTypeBadge(assessment.type)
               return (
-                <Card key={assessment.id} className="hover:shadow-md transition-shadow">
+                <Card key={assessment._id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -114,7 +105,7 @@ export function CourseContent({ course }: CourseContentProps) {
                         </span>
                       ) : null}
                     </div>
-                    <Link href={`/courses/${course.id}/assessments/${assessment.id}`}>
+                    <Link href={`/courses/${course._id}/assessments/${assessment._id}`}>
                       <Button variant="secondary">
                         Start {assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1)}
                       </Button>
@@ -138,7 +129,7 @@ export function CourseContent({ course }: CourseContentProps) {
             </div>
             {resourceCount > 0 && (
               <div className="flex justify-center mt-4">
-                <Link href={`/courses/${course.id}/resources`}>
+                <Link href={`/courses/${course._id}/resources`}>
                   <Button>View All Resources</Button>
                 </Link>
               </div>

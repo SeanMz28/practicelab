@@ -1,0 +1,53 @@
+import { v } from "convex/values"
+import { mutation, query } from "./_generated/server"
+
+export const listByCourse = query({
+  args: { courseId: v.id("courses") },
+  handler: async (ctx, args) => {
+    return ctx.db
+      .query("notes")
+      .withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))
+      .collect()
+  },
+})
+
+export const get = query({
+  args: { id: v.id("notes") },
+  handler: async (ctx, args) => {
+    return ctx.db.get(args.id)
+  },
+})
+
+export const create = mutation({
+  args: {
+    courseId: v.id("courses"),
+    title: v.string(),
+    content: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const now = new Date().toISOString()
+    return ctx.db.insert("notes", { ...args, createdAt: now, updatedAt: now })
+  },
+})
+
+export const update = mutation({
+  args: {
+    id: v.id("notes"),
+    title: v.string(),
+    content: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, {
+      title: args.title,
+      content: args.content,
+      updatedAt: new Date().toISOString(),
+    })
+  },
+})
+
+export const remove = mutation({
+  args: { id: v.id("notes") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id)
+  },
+})

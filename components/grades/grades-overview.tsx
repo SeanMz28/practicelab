@@ -1,34 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, Award, Target, BarChart3 } from "lucide-react"
-
-interface AssessmentAttempt {
-  id: string
-  assessmentId: string
-  courseId: string
-  courseName: string
-  assessmentTitle: string
-  score: number
-  totalQuestions: number
-  completedAt: string
-}
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export function GradesOverview() {
-  const [attempts, setAttempts] = useState<AssessmentAttempt[]>([])
-
-  useEffect(() => {
-    const storedAttempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    setAttempts(storedAttempts)
-  }, [])
+  const attempts = useQuery(api.attempts.listForCurrentUser) ?? []
+  const graded = attempts.filter((a) => a.score !== null)
 
   const totalAssessments = attempts.length
   const averageScore =
-    attempts.length > 0 ? Math.round(attempts.reduce((acc, a) => acc + a.score, 0) / attempts.length) : 0
-  const perfectScores = attempts.filter((a) => a.score === 100).length
+    graded.length > 0 ? Math.round(graded.reduce((acc, a) => acc + (a.score ?? 0), 0) / graded.length) : 0
+  const perfectScores = graded.filter((a) => a.score === 100).length
   const passingRate =
-    attempts.length > 0 ? Math.round((attempts.filter((a) => a.score >= 70).length / attempts.length) * 100) : 0
+    graded.length > 0 ? Math.round((graded.filter((a) => (a.score ?? 0) >= 70).length / graded.length) * 100) : 0
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

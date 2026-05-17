@@ -1,36 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Eye, Trophy, Calendar, Clock } from "lucide-react"
-
-interface AssessmentAttempt {
-  id: string
-  assessmentId: string
-  courseId: string
-  courseName: string
-  assessmentTitle: string
-  answers: any[]
-  score: number | null
-  totalQuestions: number
-  completedAt: string
-  status: "submitted" | "graded" | "pending"
-}
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export function GradesList() {
-  const [attempts, setAttempts] = useState<AssessmentAttempt[]>([])
+  const attempts = useQuery(api.attempts.listForCurrentUser) ?? []
+  const assessments = useQuery(api.assessments.list) ?? []
+  const courses = useQuery(api.courses.list) ?? []
 
-  useEffect(() => {
-    const storedAttempts = JSON.parse(localStorage.getItem("assessmentAttempts") || "[]")
-    const sortedAttempts = storedAttempts.sort(
-      (a: AssessmentAttempt, b: AssessmentAttempt) =>
-        new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
-    )
-    setAttempts(sortedAttempts)
-  }, [])
+  const sorted = [...attempts].sort(
+    (a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
+  )
 
   const getScoreBadgeVariant = (score: number) => {
     if (score === 100) return "default"
@@ -39,7 +24,7 @@ export function GradesList() {
     return "destructive"
   }
 
-  if (attempts.length === 0) {
+  if (sorted.length === 0) {
     return (
       <Card>
         <CardContent className="py-12 text-center">
@@ -56,19 +41,21 @@ export function GradesList() {
 
   return (
     <div className="space-y-4">
-      {attempts.map((attempt) => {
+      {sorted.map((attempt) => {
+        const assessment = assessments.find((a) => a._id === attempt.assessmentId)
+        const course = assessment ? courses.find((c) => c._id === assessment.courseId) : undefined
         const isPending = attempt.status === "pending" || attempt.score === null
         const displayScore = isPending ? null : attempt.score
 
         return (
-          <Card key={attempt.id} className="hover:shadow-md transition-shadow">
+          <Card key={attempt._id} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">{attempt.assessmentTitle}</h3>
-                      <p className="text-sm text-muted-foreground">{attempt.courseName}</p>
+                      <h3 className="font-semibold text-lg mb-1">{assessment?.title ?? "Assessment"}</h3>
+                      <p className="text-sm text-muted-foreground">{course?.name ?? ""}</p>
                     </div>
                     {isPending ? (
                       <Badge variant="secondary" className="ml-2 bg-yellow-100 text-yellow-800">
@@ -91,19 +78,22 @@ export function GradesList() {
                       <span>Awaiting tutor review</span>
                     ) : (
                       <span>
-                        {Math.round((displayScore! / 100) * attempt.totalQuestions)}/{attempt.totalQuestions} correct
+                        {Math.round(((displayScore ?? 0) / 100) * attempt.totalQuestions)}/{attempt.totalQuestions}{" "}
+                        correct
                       </span>
                     )}
                   </div>
                 </div>
-                <Link
-                  href={`/courses/${attempt.courseId}/assessments/${attempt.assessmentId}/results?attemptId=${attempt.id}`}
-                >
-                  <Button variant="outline" className="bg-transparent">
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Results
-                  </Button>
-                </Link>
+                {course && assessment && (
+                  <Link
+                    href={`/courses/${course._id}/assessments/${assessment._id}/results?attemptId=${attempt._id}`}
+                  >
+                    <Button variant="outline" className="bg-transparent">
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Results
+                    </Button>
+                  </Link>
+                )}
               </div>
             </CardContent>
           </Card>

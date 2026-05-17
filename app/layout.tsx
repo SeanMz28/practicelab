@@ -2,7 +2,9 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { Providers } from "@/components/providers"
 import { DataInitializer } from "@/components/data-initializer"
+import { getToken } from "@/lib/auth-server"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -31,16 +33,20 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const initialToken = await getToken()
+
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        <DataInitializer />
-        {children}
+      <body className={`font-sans antialiased`} suppressHydrationWarning>
+        <Providers initialToken={initialToken}>
+          <DataInitializer />
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>
