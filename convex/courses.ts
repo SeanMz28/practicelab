@@ -1,5 +1,6 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { requireTutor } from "./users"
 
 export const list = query({
   args: {},
@@ -23,6 +24,7 @@ export const create = mutation({
     color: v.string(),
   },
   handler: async (ctx, args) => {
+    await requireTutor(ctx)
     return ctx.db.insert("courses", args)
   },
 })
@@ -36,6 +38,7 @@ export const update = mutation({
     color: v.string(),
   },
   handler: async (ctx, args) => {
+    await requireTutor(ctx)
     const { id, ...rest } = args
     await ctx.db.patch(id, rest)
   },
@@ -44,6 +47,7 @@ export const update = mutation({
 export const remove = mutation({
   args: { id: v.id("courses") },
   handler: async (ctx, args) => {
+    await requireTutor(ctx)
     await ctx.db.delete(args.id)
   },
 })

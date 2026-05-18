@@ -1,8 +1,22 @@
 import { v } from "convex/values"
-import { mutation, query } from "./_generated/server"
+import { query } from "./_generated/server"
+import type { QueryCtx, MutationCtx } from "./_generated/server"
 import { authComponent } from "./auth"
 
 type PublicUser = { id: string; name: string; email: string }
+
+export async function requireTutor(ctx: QueryCtx | MutationCtx) {
+  const authUser = await authComponent.getAuthUser(ctx)
+  if (!authUser) throw new Error("Not authenticated")
+
+  const profile = await ctx.db
+    .query("userProfiles")
+    .withIndex("by_userId", (q) => q.eq("userId", authUser._id))
+    .unique()
+
+  if (profile?.role !== "tutor") throw new Error("Tutor role required")
+  return authUser
+}
 
 export const getById = query({
   args: { id: v.string() },
@@ -43,25 +57,6 @@ export const me = query({
       email: authUser.email,
       image: authUser.image ?? null,
       role: profile?.role ?? "student",
-    }
-  },
-})
-
-export const setRole = mutation({
-  args: { role: v.union(v.literal("student"), v.literal("tutor")) },
-  handler: async (ctx, args) => {
-    const authUser = await authComponent.getAuthUser(ctx)
-    if (!authUser) throw new Error("Not authenticated")
-
-    const existing = await ctx.db
-      .query("userProfiles")
-      .withIndex("by_userId", (q) => q.eq("userId", authUser._id))
-      .unique()
-
-    if (existing) {
-      await ctx.db.patch(existing._id, { role: args.role })
-    } else {
-      await ctx.db.insert("userProfiles", { userId: authUser._id, role: args.role })
     }
   },
 })

@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { useEffect } from "react"
-import { useQuery, useMutation } from "convex/react"
+import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { authClient } from "@/lib/auth-client"
 
@@ -23,8 +23,8 @@ export function DashboardHeader() {
   const router = useRouter()
   const pathname = usePathname()
   const me = useQuery(api.users.me)
-  const setRole = useMutation(api.users.setRole)
-  const pendingAttempts = useQuery(api.attempts.listByStatus, { status: "pending" })
+  const isTutor = me?.role === "tutor"
+  const pendingAttempts = useQuery(api.attempts.listByStatus, isTutor ? { status: "pending" } : "skip")
   const pendingCount = pendingAttempts?.length ?? 0
 
   useEffect(() => {
@@ -36,13 +36,6 @@ export function DashboardHeader() {
     router.push("/")
   }
 
-  const handleToggleRole = async () => {
-    if (!me) return
-    const newRole = me.role === "tutor" ? "student" : "tutor"
-    await setRole({ role: newRole })
-    router.push(newRole === "tutor" ? "/tutor/grading" : "/dashboard")
-  }
-
   if (!me) return null
 
   const initials = (me.name || me.email)
@@ -51,8 +44,6 @@ export function DashboardHeader() {
     .join("")
     .toUpperCase()
     .slice(0, 2)
-
-  const isTutor = me.role === "tutor"
 
   return (
     <header className="border-b bg-card sticky top-0 z-50">
@@ -117,11 +108,6 @@ export function DashboardHeader() {
                   </Badge>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleToggleRole}>
-                <ClipboardCheck className="mr-2 h-4 w-4" />
-                Switch to {isTutor ? "Student" : "Tutor"} View
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />

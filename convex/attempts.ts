@@ -1,6 +1,7 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import { authComponent } from "./auth"
+import { requireTutor } from "./users"
 
 const fileSubmissionValidator = v.object({
   fileName: v.string(),
@@ -21,7 +22,10 @@ const answerValidator = v.object({
 
 export const list = query({
   args: {},
-  handler: async (ctx) => ctx.db.query("assessmentAttempts").collect(),
+  handler: async (ctx) => {
+    await requireTutor(ctx)
+    return ctx.db.query("assessmentAttempts").collect()
+  },
 })
 
 export const listForCurrentUser = query({
@@ -41,6 +45,7 @@ export const listByStatus = query({
     status: v.union(v.literal("submitted"), v.literal("graded"), v.literal("pending")),
   },
   handler: async (ctx, args) => {
+    await requireTutor(ctx)
     return ctx.db
       .query("assessmentAttempts")
       .withIndex("by_status", (q) => q.eq("status", args.status))
@@ -80,8 +85,7 @@ export const grade = mutation({
     score: v.number(),
   },
   handler: async (ctx, args) => {
-    const authUser = await authComponent.getAuthUser(ctx)
-    if (!authUser) throw new Error("Not authenticated")
+    const authUser = await requireTutor(ctx)
     await ctx.db.patch(args.id, {
       answers: args.answers,
       score: args.score,
