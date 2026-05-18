@@ -1,5 +1,5 @@
 import { v } from "convex/values"
-import { query } from "./_generated/server"
+import { mutation, query } from "./_generated/server"
 import type { QueryCtx, MutationCtx } from "./_generated/server"
 import { authComponent } from "./auth"
 
@@ -37,6 +37,22 @@ export const listByIds = query({
     return users
       .filter((u): u is NonNullable<typeof u> => u !== null)
       .map((u) => ({ id: u._id as string, name: u.name, email: u.email }))
+  },
+})
+
+export const ensureProfile = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const authUser = await authComponent.safeGetAuthUser(ctx)
+    if (!authUser) return null
+
+    const existing = await ctx.db
+      .query("userProfiles")
+      .withIndex("by_userId", (q) => q.eq("userId", authUser._id))
+      .unique()
+
+    if (existing) return existing._id
+    return ctx.db.insert("userProfiles", { userId: authUser._id, role: "student" })
   },
 })
 

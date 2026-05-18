@@ -1,14 +1,24 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { useMutation } from "convex/react"
+import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { dummyCourses, dummyNotes, dummyAssessments } from "@/lib/dummy-data"
 
 export function DataInitializer() {
   const seedIfEmpty = useMutation(api.seed.seedIfEmpty)
   const ensureCourseWithAssessment = useMutation(api.seed.ensureCourseWithAssessment)
+  const ensureProfile = useMutation(api.users.ensureProfile)
+  const me = useQuery(api.users.me)
+  const profileEnsured = useRef(false)
   const hasRun = useRef(false)
+
+  useEffect(() => {
+    if (profileEnsured.current) return
+    if (!me) return
+    profileEnsured.current = true
+    ensureProfile().catch((err) => console.error("ensureProfile failed", err))
+  }, [me, ensureProfile])
 
   useEffect(() => {
     if (hasRun.current) return
