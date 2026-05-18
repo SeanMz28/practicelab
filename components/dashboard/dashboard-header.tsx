@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { GraduationCap, LogOut, ClipboardCheck } from "lucide-react"
+import { GraduationCap, LogOut, ClipboardCheck, Eye } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,13 +18,19 @@ import { useEffect } from "react"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { authClient } from "@/lib/auth-client"
+import { useViewMode } from "@/hooks/use-view-mode"
 
 export function DashboardHeader() {
   const router = useRouter()
   const pathname = usePathname()
   const me = useQuery(api.users.me)
   const isTutor = me?.role === "tutor"
-  const pendingAttempts = useQuery(api.attempts.listByStatus, isTutor ? { status: "pending" } : "skip")
+  const [viewMode, setViewMode] = useViewMode(isTutor)
+  const showTutorView = isTutor && viewMode === "tutor"
+  const pendingAttempts = useQuery(
+    api.attempts.listByStatus,
+    showTutorView ? { status: "pending" } : "skip",
+  )
   const pendingCount = pendingAttempts?.length ?? 0
 
   useEffect(() => {
@@ -34,6 +40,12 @@ export function DashboardHeader() {
   const handleSignOut = async () => {
     await authClient.signOut()
     router.push("/")
+  }
+
+  const handleToggleView = () => {
+    const next = showTutorView ? "student" : "tutor"
+    setViewMode(next)
+    router.push(next === "tutor" ? "/tutor/grading" : "/dashboard")
   }
 
   if (!me) return null
@@ -48,7 +60,7 @@ export function DashboardHeader() {
   return (
     <header className="border-b bg-card sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href={isTutor ? "/tutor/grading" : "/dashboard"} className="flex items-center gap-2">
+        <Link href={showTutorView ? "/tutor/grading" : "/dashboard"} className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <GraduationCap className="w-5 h-5 text-primary-foreground" />
           </div>
@@ -56,7 +68,7 @@ export function DashboardHeader() {
         </Link>
 
         <nav className="flex items-center gap-4">
-          {isTutor ? (
+          {showTutorView ? (
             <>
               <Link href="/tutor/courses">
                 <Button variant={pathname.startsWith("/tutor/courses") ? "default" : "ghost"}>Courses</Button>
@@ -108,6 +120,15 @@ export function DashboardHeader() {
                   </Badge>
                 </div>
               </DropdownMenuLabel>
+              {isTutor && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleToggleView}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    Switch to {showTutorView ? "Student" : "Tutor"} View
+                  </DropdownMenuItem>
+                </>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
