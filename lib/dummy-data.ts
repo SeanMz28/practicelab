@@ -2071,6 +2071,381 @@ export const dummyAssessments: Assessment[] = [
       },
     ],
   },
+  {
+    id: "cyber-l5-quiz",
+    courseId: "7",
+    title: "Lecture 5 Quiz",
+    description:
+      "Lecture 5 — Human-Centered Security. Multiple-choice quiz covering cognitive psychology, secure UX, phishing, Cialdini's principles, insider threats, and human-side defences. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-19T11:00:00Z",
+    questions: [
+      {
+        id: "cyb-l5-q1",
+        type: "multiple-choice",
+        question:
+          "The slides quote Kevin Mitnick: 'The weakest link in the security chain is the human element.' The lecture's overall stance on this claim is best summarised as:",
+        points: 2,
+        options: [
+          "Fully agree — humans are inherently unreliable and the goal of security engineering is to remove them from the loop wherever possible",
+          "It is misleading: people fail because SYSTEMS are designed badly. Treat users as partners and shift more of the security burden onto the design",
+          "It only applies to users in non-technical roles; engineers and admins are not the weak link",
+          "It was true in the 1990s but no longer applies in modern enterprises with MFA",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides explicitly push back on Mitnick's quote. People fail because systems are designed badly; human-centred security treats users as PARTNERS, not as the problem.",
+      },
+      {
+        id: "cyb-l5-q2",
+        type: "multiple-choice",
+        question:
+          "According to Kahneman's dual-process theory as applied in the slides, which statement is correct?",
+        points: 2,
+        options: [
+          "System 2 is fast and automatic; System 1 is slow and deliberate",
+          "System 1 is fast and automatic and is what users default to under cognitive load; System 2 is slow, deliberate, and fatigues quickly",
+          "Both systems operate identically under stress",
+          "Routine security decisions in production interfaces should require System 2 thinking to ensure users pay attention",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "System 1 = fast, automatic, default-under-load. System 2 = slow, deliberate, fatigues. Users default to System 1 under cognitive pressure.",
+      },
+      {
+        id: "cyb-l5-q3",
+        type: "multiple-choice",
+        question:
+          "The course argues that routine security decisions should NOT require which kind of cognition?",
+        points: 2,
+        options: [
+          "System 1 — because attackers easily mimic familiar patterns that users accept automatically",
+          "System 2 — because under cognitive load users default to System 1, skip the decision, and accept defaults without reading",
+          "Either — secure defaults should remove the need to think at all",
+          "Heuristic thinking — because it is statistically unreliable",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slide states: 'Routine security decisions should not require System 2 thinking' — because users skip it under load and revert to System 1.",
+      },
+      {
+        id: "cyb-l5-q4",
+        type: "multiple-choice",
+        question:
+          "The three properties of GOOD human-side security design listed in the slides are:",
+        points: 2,
+        options: [
+          "Encryption, Authentication, Auditing",
+          "Speed, Simplicity, Convenience",
+          "Comprehensibility, Correctness Affordance, Forgiveness",
+          "Confidentiality, Integrity, Availability",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The three properties are Comprehensibility, Correctness Affordance, and Forgiveness. (d) is the CIA triad.",
+      },
+      {
+        id: "cyb-l5-q5",
+        type: "multiple-choice",
+        question:
+          "The course rejects the 'Security vs. Usability' trade-off as a false dichotomy. Which piece of evidence is cited?",
+        points: 2,
+        options: [
+          "Forced 90-day password rotations are universally loved by users",
+          "Google's 2017 deployment of security keys to 85,000 employees resulted in zero phishing AND faster login than OTP",
+          "CAPTCHAs increase both usability and security",
+          "Annual compliance training reduces phishing rates by 90%",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Usability-Security Myth' slide cites Google's 2017 security key deployment: zero phishing across 85,000 employees AND faster login than OTP.",
+      },
+      {
+        id: "cyb-l5-q6",
+        type: "multiple-choice",
+        question:
+          "The 'alert fatigue' slide reports that after week one, user engagement with security prompts drops by roughly:",
+        points: 2,
+        options: ["12%", "32%", "62%", "92%"],
+        correctAnswer: 2,
+        explanation:
+          "The 'Alert Fatigue Problem' slide reports a 62% drop in user engagement with security prompts after week one.",
+      },
+      {
+        id: "cyb-l5-q7",
+        type: "multiple-choice",
+        question:
+          "The slides contrast 'Optional MFA' with a 'Mandatory Flow.' Reported enrolment rates are:",
+        points: 2,
+        options: [
+          "Optional 8% vs Mandatory 94%",
+          "Optional 50% vs Mandatory 60%",
+          "Optional 30% vs Mandatory 35%",
+          "Both produce similar adoption — the difference is negligible",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Insecure Defaults' slide gives the exact numbers: optional MFA ≈ 8% enrolment vs mandatory flow ≈ 94%.",
+      },
+      {
+        id: "cyb-l5-q8",
+        type: "multiple-choice",
+        question:
+          "The course's 'Insecure Defaults' UX anti-pattern is best summarised as:",
+        points: 2,
+        options: [
+          "The secure option requires LESS effort than the insecure alternative — when this is reversed, users take the insecure path",
+          "Encryption must be optional so users can choose performance over security",
+          "Security prompts should appear as frequently as possible to maintain awareness",
+          "Default-on features create legal liability and should be avoided",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The secure option must require LESS effort than the insecure alternative. If it requires more, users find another way.",
+      },
+      {
+        id: "cyb-l5-q9",
+        type: "multiple-choice",
+        question:
+          "Which prompt is preferred by the course for 'Meaningful Confirmations'?",
+        points: 2,
+        options: [
+          "'Are you sure?' [Cancel] [OK]",
+          "'Type DELETE BACKUP to permanently delete the production database backup from 2025-06-14.'",
+          "'This action may have consequences. Continue?'",
+          "A modal with no buttons that disappears after 5 seconds",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'Meaningful Confirmations' slide: specific prompts ('Type DELETE BACKUP to ...') beat vague ones ('Are you sure?').",
+      },
+      {
+        id: "cyb-l5-q10",
+        type: "multiple-choice",
+        question:
+          "The 'Error-Tolerant Systems' approach in the slides advocates for which combination?",
+        points: 2,
+        options: [
+          "Permanent deletion of all records to minimise data exposure",
+          "Meaningful confirmations, soft deletes (e.g. 30-day recovery window), visible activity feeds, and clear session indicators",
+          "Removing all undo functionality so users learn from mistakes",
+          "Disabling all confirmations to reduce friction",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Error-Tolerant Systems' slides cover meaningful confirmations, soft deletes with recovery windows, visible activity feeds, and session indicators.",
+      },
+      {
+        id: "cyb-l5-q11",
+        type: "multiple-choice",
+        question: "The SignalGate 2025 case study is included to illustrate:",
+        points: 2,
+        options: [
+          "A failure of Signal's cryptography",
+          "A human-centred security failure — wrong tool for classified material, manual entry without verification, and no procedural check, despite the cryptography working perfectly",
+          "The superiority of consumer messaging apps over government systems",
+          "The need for stronger TLS configurations",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "SignalGate 2025 is included precisely because the cryptography worked — the failure was wrong tool, manual entry without verification, and no procedural check.",
+      },
+      {
+        id: "cyb-l5-q12",
+        type: "multiple-choice",
+        question:
+          "The course states that knowledge from annual phishing training typically decays within:",
+        points: 2,
+        options: ["1 week", "2–4 weeks", "3–6 months", "1 year"],
+        correctAnswer: 1,
+        explanation:
+          "The 'Why Phishing Training Fails' slide states knowledge decays within 2–4 weeks.",
+      },
+      {
+        id: "cyb-l5-q13",
+        type: "multiple-choice",
+        question:
+          "A company has run mandatory annual cybersecurity-awareness training (with one simulated phishing email per year) for ten years, yet its phishing success rate has not improved. According to the slides, the main research-based reasons are:",
+        points: 2,
+        options: [
+          "The training videos are too short and need to be longer",
+          "Knowledge decays within 2–4 weeks, generic tests don't transfer to novel attacks, and shame-based follow-up reduces reporting of real incidents",
+          "Phishing is now solved by spam filters, so training is irrelevant",
+          "The training is too expensive to scale beyond annual delivery",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slide lists three reasons: rapid decay, no transfer to novel attacks, and shame reducing reporting.",
+      },
+      {
+        id: "cyb-l5-q14",
+        type: "multiple-choice",
+        question:
+          "According to the slides, 'what actually works' instead of annual compliance training is:",
+        points: 2,
+        options: [
+          "Longer, more comprehensive yearly modules with formal certification at the end",
+          "Public leaderboards naming people who clicked the simulated phish",
+          "Short (5–10 min) scenario-based learning, teaching the FEELING of a phish, and a psychologically safe reporting culture",
+          "Removing email access for non-technical staff",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "'What Actually Works': short scenario-based learning, teaching the FEELING of a phish, and psychologically safe reporting.",
+      },
+      {
+        id: "cyb-l5-q15",
+        type: "multiple-choice",
+        question:
+          "An 'Adversary-in-the-Middle' (AiTM) proxy attack (e.g. using Evilginx2) succeeds against which of the following?",
+        points: 2,
+        options: [
+          "Push-based OTP from an authenticator app — the attacker can relay both credentials AND the OTP code in real time",
+          "FIDO2 / WebAuthn security keys — these prevent the relay because the cryptographic challenge is bound to the real domain",
+          "Long passwords with mixed character classes",
+          "Account recovery via security questions",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "AiTM proxies (Evilginx2) relay credentials AND OTP codes in real time. They DO NOT defeat FIDO2/WebAuthn keys, which are bound to the real domain.",
+      },
+      {
+        id: "cyb-l5-q16",
+        type: "multiple-choice",
+        question:
+          "Which of the following is described as 'phishing-resistant MFA' by the slides?",
+        points: 2,
+        options: [
+          "SMS-based one-time codes",
+          "Security questions about a pet's name",
+          "FIDO2 security keys or passkeys with WebAuthn",
+          "Email-based magic links",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "'Phishing-resistant MFA' = security keys / passkeys via WebAuthn. OTPs, SMS, and security questions are all phishable.",
+      },
+      {
+        id: "cyb-l5-q17",
+        type: "multiple-choice",
+        question:
+          "A user receives a 'document share' email from a convincing but off-brand domain, clicks, and unwittingly relays credentials and an OTP to an AiTM proxy. According to the slides, which of the following would NOT break this attack chain?",
+        points: 2,
+        options: [
+          "Security keys that prevent OTP relay",
+          "Unusual sign-in from a new ASN triggering token revocation",
+          "Sending the user a longer annual training module next year",
+          "App-password creation requiring step-up with device-bound authentication",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Longer annual training is the OPPOSITE of what works — it suffers from rapid knowledge decay. The other three all break the AiTM chain at a technical level.",
+      },
+      {
+        id: "cyb-l5-q18",
+        type: "multiple-choice",
+        question:
+          "Cialdini's six principles of persuasion, as listed in the slides, are:",
+        points: 2,
+        options: [
+          "Confidentiality, Integrity, Availability, Auditing, Access, Accountability",
+          "Authority, Scarcity, Reciprocity, Liking, Social Proof, Commitment/Consistency",
+          "Speed, Volume, Repetition, Pressure, Reward, Punishment",
+          "Empathy, Logic, Emotion, Trust, Familiarity, Comfort",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The six principles: Authority, Scarcity, Reciprocity, Liking, Social Proof, Commitment/Consistency.",
+      },
+      {
+        id: "cyb-l5-q19",
+        type: "multiple-choice",
+        question:
+          "An attacker emails a junior employee: 'Your colleagues Priya and Sam have already completed this confidentiality attestation; please complete yours by end of day.' Which of Cialdini's principles is being exploited MOST directly?",
+        points: 2,
+        options: ["Authority", "Scarcity", "Social Proof", "Reciprocity"],
+        correctAnswer: 2,
+        explanation:
+          "Social Proof — 'everyone else has already done it.' The slide example: 'Everyone on the team already completed this security training.'",
+      },
+      {
+        id: "cyb-l5-q20",
+        type: "multiple-choice",
+        question:
+          "A vishing attacker calls and says: 'Hi, this is the CFO. I need you to authorise this wire transfer before 5pm — the board meeting starts in 20 minutes.' Which combination of Cialdini's principles is at work?",
+        points: 2,
+        options: [
+          "Reciprocity and Liking",
+          "Authority and Scarcity/Urgency",
+          "Social Proof and Commitment",
+          "Liking and Consistency",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Authority ('the CFO') combined with Scarcity/Urgency ('before 5pm — meeting in 20 minutes'). The slide gives almost exactly this example.",
+      },
+      {
+        id: "cyb-l5-q21",
+        type: "multiple-choice",
+        question:
+          "The slides note that 'New Employee' is an especially effective pretexting angle. Why?",
+        points: 2,
+        options: [
+          "New employees have more system access than long-term staff",
+          "New employees are more technically skilled than average and harder to detect as fake",
+          "Targets feel helpful and don't want to seem unwelcoming, so questions that would seem suspicious from outsiders appear normal from new hires",
+          "Companies are legally required to assist new employees with any request",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Pretexting and Vishing' slide: targets feel helpful and don't want to seem unwelcoming, so suspicious questions appear routine from new hires.",
+      },
+      {
+        id: "cyb-l5-q22",
+        type: "multiple-choice",
+        question:
+          "Three months before resigning, an engineer downloads the company's entire customer database to her personal laptop 'for a side project,' then takes the laptop to her new employer. The course classifies this insider-threat type as:",
+        points: 2,
+        options: ["Negligent", "Compromised", "Malicious", "Accidental"],
+        correctAnswer: 2,
+        explanation:
+          "Malicious insider — deliberate exfiltration for personal gain (taking data to the new employer). Negligent = careless without intent; Compromised = manipulated without realising.",
+      },
+      {
+        id: "cyb-l5-q23",
+        type: "multiple-choice",
+        question:
+          "The slides list which of the following as BEHAVIOURAL indicators of an insider threat?",
+        points: 2,
+        options: [
+          "Frequent use of the company VPN during business hours",
+          "Working on weekends with company approval",
+          "Access to data outside normal job function, large downloads before resignation, and system access outside business hours from unusual locations",
+          "Asking the IT helpdesk for password resets",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Insider Threat Dimension' slide lists exactly these three behavioural indicators.",
+      },
+      {
+        id: "cyb-l5-q24",
+        type: "multiple-choice",
+        question:
+          "Refilwe Hospital requires wire transfers to NEW payees to have a mandatory 24-hour delay before processing. Which course principle does this MOST directly implement?",
+        points: 2,
+        options: [
+          "Defence in depth at the network layer",
+          "A cooling-off period that removes the URGENCY attackers rely on, even when the request looks authoritative",
+          "Least privilege for financial systems",
+          "Air-gapped backups",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Cooling-off periods are the slide's explicit countermeasure to authority+urgency attacks. 'Attackers rely on urgency. Time removes it entirely.'",
+      },
+    ],
+  },
 ]
 
 export const dummyAssessmentAttempts: AssessmentAttempt[] = [

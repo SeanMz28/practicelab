@@ -76,27 +76,29 @@ export function DataInitializer() {
         }
 
         const cyberCourse = dummyCourses.find((c) => c.code === "CYBR401")
-        const cyberQuiz = dummyAssessments.find(
-          (a) => a.courseId === cyberCourse?.id && a.title === "Lecture 4 Quiz",
-        )
-        if (cyberCourse && cyberQuiz) {
-          await ensureCourseWithAssessment({
-            course: {
-              name: cyberCourse.name,
-              code: cyberCourse.code,
-              description: cyberCourse.description,
-              color: cyberCourse.color,
-            },
-            assessment: {
-              title: cyberQuiz.title,
-              description: cyberQuiz.description,
-              type: cyberQuiz.type,
-              questions: cyberQuiz.questions,
-              timeLimit: cyberQuiz.timeLimit,
-              dueDate: cyberQuiz.dueDate,
-              createdAt: cyberQuiz.createdAt,
-            },
-          })
+        if (cyberCourse) {
+          const cyberQuizzes = dummyAssessments.filter(
+            (a) => a.courseId === cyberCourse.id && a.title.startsWith("Lecture "),
+          )
+          for (const quiz of cyberQuizzes) {
+            await ensureCourseWithAssessment({
+              course: {
+                name: cyberCourse.name,
+                code: cyberCourse.code,
+                description: cyberCourse.description,
+                color: cyberCourse.color,
+              },
+              assessment: {
+                title: quiz.title,
+                description: quiz.description,
+                type: quiz.type,
+                questions: quiz.questions,
+                timeLimit: quiz.timeLimit,
+                dueDate: quiz.dueDate,
+                createdAt: quiz.createdAt,
+              },
+            })
+          }
         }
       })
       .catch((err) => {
