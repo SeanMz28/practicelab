@@ -50,29 +50,54 @@ export function DataInitializer() {
         createdAt: a.createdAt,
       })),
     })
-      .then(() => {
+      .then(async () => {
         const pcCourse = dummyCourses.find((c) => c.code === "COMS3008A")
         const pcTest = dummyAssessments.find(
           (a) => a.courseId === pcCourse?.id && a.title === "Practice Test 1",
         )
-        if (!pcCourse || !pcTest) return
-        return ensureCourseWithAssessment({
-          course: {
-            name: pcCourse.name,
-            code: pcCourse.code,
-            description: pcCourse.description,
-            color: pcCourse.color,
-          },
-          assessment: {
-            title: pcTest.title,
-            description: pcTest.description,
-            type: pcTest.type,
-            questions: pcTest.questions,
-            timeLimit: pcTest.timeLimit,
-            dueDate: pcTest.dueDate,
-            createdAt: pcTest.createdAt,
-          },
-        })
+        if (pcCourse && pcTest) {
+          await ensureCourseWithAssessment({
+            course: {
+              name: pcCourse.name,
+              code: pcCourse.code,
+              description: pcCourse.description,
+              color: pcCourse.color,
+            },
+            assessment: {
+              title: pcTest.title,
+              description: pcTest.description,
+              type: pcTest.type,
+              questions: pcTest.questions,
+              timeLimit: pcTest.timeLimit,
+              dueDate: pcTest.dueDate,
+              createdAt: pcTest.createdAt,
+            },
+          })
+        }
+
+        const cyberCourse = dummyCourses.find((c) => c.code === "CYBR401")
+        const cyberQuiz = dummyAssessments.find(
+          (a) => a.courseId === cyberCourse?.id && a.title === "Lecture 4 Quiz",
+        )
+        if (cyberCourse && cyberQuiz) {
+          await ensureCourseWithAssessment({
+            course: {
+              name: cyberCourse.name,
+              code: cyberCourse.code,
+              description: cyberCourse.description,
+              color: cyberCourse.color,
+            },
+            assessment: {
+              title: cyberQuiz.title,
+              description: cyberQuiz.description,
+              type: cyberQuiz.type,
+              questions: cyberQuiz.questions,
+              timeLimit: cyberQuiz.timeLimit,
+              dueDate: cyberQuiz.dueDate,
+              createdAt: cyberQuiz.createdAt,
+            },
+          })
+        }
       })
       .catch((err) => {
         console.error("Seed failed", err)

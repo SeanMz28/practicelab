@@ -120,6 +120,13 @@ export const dummyCourses: Course[] = [
     description: "Foundations of parallel architectures, algorithms, and shared-memory programming with OpenMP",
     color: "bg-indigo-500",
   },
+  {
+    id: "7",
+    name: "Cyber Security",
+    code: "CYBR401",
+    description: "Security engineering principles: Least Privilege, Fail-Safe Defaults, Zero Trust, and the named traps.",
+    color: "bg-red-500",
+  },
 ]
 
 // Dummy notes
@@ -1669,6 +1676,398 @@ export const dummyAssessments: Assessment[] = [
         options: ["3", "4", "5", "6"],
         correctAnswer: 2,
         explanation: "There are 5 nouns: Dr. Smith (proper), students (common), homework (common), volcanoes (common), Hawaii (proper). 'their' is a pronoun!",
+      },
+    ],
+  },
+  {
+    id: "cyber-l4-quiz",
+    courseId: "7",
+    title: "Lecture 4 Quiz",
+    description:
+      "Lecture 4 — Security Engineering Principles. Multiple-choice quiz covering Least Privilege, Fail-Safe Defaults, Zero Trust, the named traps, and supporting engineering patterns. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-19T10:00:00Z",
+    questions: [
+      {
+        id: "cyb-l4-q1",
+        type: "multiple-choice",
+        question:
+          "The course frames security engineering around three pillars. Which set correctly names all three?",
+        points: 2,
+        options: [
+          "Confidentiality, Integrity, Availability",
+          "Least Privilege, Fail-Safe Defaults, Zero Trust",
+          "Authentication, Authorisation, Auditing",
+          "Defence in Depth, Encryption, Segmentation",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The three pillars are Least Privilege, Fail-Safe Defaults, and Zero Trust. (a) is the CIA triad — a separate concept.",
+      },
+      {
+        id: "cyb-l4-q2",
+        type: "multiple-choice",
+        question:
+          "According to the course, the three pillars relate to each other in which of the following ways?",
+        points: 2,
+        options: [
+          "They are interchangeable — applying any one of them is sufficient for a secure system",
+          "Least Privilege sets the SCOPE of capability, Fail-Safe Defaults handle AMBIGUITY by denying, and Zero Trust provides CONTEXT via explicit identity at every hop",
+          "Zero Trust replaces Least Privilege in cloud-native architectures",
+          "Fail-Safe Defaults are a special case of Defence in Depth and do not need to be considered separately",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides explicitly state: Least Privilege sets the scope, Fail-Safe handles ambiguity by denying, and Zero Trust provides the context that lets least-privilege decisions be made.",
+      },
+      {
+        id: "cyb-l4-q3",
+        type: "multiple-choice",
+        question: "The course defines least privilege as:",
+        points: 2,
+        options: [
+          "Restricting access only to the most senior staff in an organisation",
+          "Granting only the permissions needed to perform a task, for only as long as needed, scoped to only the resources required",
+          "Denying every action by default and never granting exceptions",
+          "Encrypting all data so that even privileged users cannot read it",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The exact definition from the slides: minimum permissions, minimum time, minimum resource scope.",
+      },
+      {
+        id: "cyb-l4-q4",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT one of the four categories the slides apply least privilege to?",
+        points: 2,
+        options: [
+          "People (users)",
+          "Services and workloads",
+          "Network bandwidth allocation",
+          "Code modules and libraries",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The four categories are People, Services & Workloads, Data, and Code Modules. Network bandwidth is not one.",
+      },
+      {
+        id: "cyb-l4-q5",
+        type: "multiple-choice",
+        question: "The Zero Trust pillar is best described as:",
+        points: 2,
+        options: [
+          "A specific vendor product that replaces traditional firewalls",
+          "A one-time architectural migration project",
+          "A philosophy/architectural approach with minimal implicit trust in the network — every request authenticated and authorised at every hop",
+          "A policy that distrusts all employees until they have passed a background check",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Zero Trust is a 'philosophy, not a product' — minimal implicit trust, verify everywhere.",
+      },
+      {
+        id: "cyb-l4-q6",
+        type: "multiple-choice",
+        question:
+          "The course argues that the 'old model' of network security (Inside = Safe, Outside = Danger) is broken because:",
+        points: 2,
+        options: [
+          "Modern firewalls cannot inspect encrypted traffic",
+          "Attackers enter via phishing, supply chain, and stolen credentials, then move laterally once inside the perimeter",
+          "Internal networks are now slower than external networks",
+          "Compliance frameworks no longer recognise perimeter defences",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Death of the Perimeter' slide: attackers enter via phishing, supply chain, and stolen credentials, then move laterally. Zero Trust assumes breach.",
+      },
+      {
+        id: "cyb-l4-q7",
+        type: "multiple-choice",
+        question:
+          "A team gives a single shared IAM role called 'backend-service' read/write access to the entire database because all 23 microservices need 'some' access to 'some' data. The course names this anti-pattern. The PRIMARY security risk is:",
+        points: 2,
+        options: [
+          "The role's name is not descriptive enough for auditing",
+          "Compromise of any one of the 23 services hands the attacker access to everything the shared role can do — the blast radius is the entire system",
+          "AWS charges more for shared roles than for per-service roles",
+          "The role will eventually exceed AWS's maximum permission size",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "This is the 'backend-service mega-role' trap. The blast radius of a compromise becomes the entire system because the shared role grants access to everything.",
+      },
+      {
+        id: "cyb-l4-q8",
+        type: "multiple-choice",
+        question:
+          "Which IAM policy snippet best illustrates least privilege as taught in the slides?",
+        points: 2,
+        options: [
+          "\"Action\": \"s3:*\", \"Resource\": \"*\"",
+          "\"Action\": [\"s3:GetObject\", \"s3:ListBucket\"], \"Resource\": \"arn:aws:s3:::app-data/tenants/acme/*\"",
+          "\"Action\": \"*\", \"Resource\": \"arn:aws:s3:::*\"",
+          "\"Action\": [\"s3:*\"], \"Resource\": \"arn:aws:s3:::production-*\"",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Specific actions on a specific tenant prefix is the canonical 'Cloud IAM: Good' example. (a), (c), and (d) all use wildcards.",
+      },
+      {
+        id: "cyb-l4-q9",
+        type: "multiple-choice",
+        question:
+          "For end-USER least privilege, the course recommends which pattern?",
+        points: 2,
+        options: [
+          "Use a single admin account for both day-to-day work and administrative tasks, but log every action",
+          "Day-to-day work on a standard account; admin is a distinct identity, elevation requires phishing-resistant MFA, and admin sessions are time-boxed",
+          "Disable all administrator accounts and use only the root account for everything",
+          "Give every developer permanent admin rights to reduce friction during deployment",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Least Privilege for Users' slide: separate accounts, step-up authentication for elevation, time-boxed admin sessions.",
+      },
+      {
+        id: "cyb-l4-q10",
+        type: "multiple-choice",
+        question:
+          "Which of the following is the course's recommendation for SERVICE-level least privilege?",
+        points: 2,
+        options: [
+          "One large shared service account spanning dev, staging, and production for operational simplicity",
+          "Long-lived static API keys, rotated annually",
+          "Per-workload identity with no shared service accounts, and short-lived tokens preferred over static keys",
+          "Service accounts inherit the permissions of the user who last deployed the code",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Least Privilege for Services' slide: per-workload identity, no shared service accounts, short-lived tokens.",
+      },
+      {
+        id: "cyb-l4-q11",
+        type: "multiple-choice",
+        question: "For DATA least privilege, the course recommends:",
+        points: 2,
+        options: [
+          "APIs return every available field so the client can pick what it needs",
+          "Debug endpoints stay on in production so issues can be diagnosed quickly",
+          "APIs expose only the minimum fields required by the caller's role; debug endpoints are off in production; verbose stack traces are not returned to callers",
+          "All data is returned encrypted so that the API does not need to enforce field-level access",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Least Privilege for Data' slide: expose minimum fields, disable debug endpoints in production, suppress verbose errors.",
+      },
+      {
+        id: "cyb-l4-q12",
+        type: "multiple-choice",
+        question:
+          "'Break-glass' (emergency) access in the course is best characterised by which combination of properties?",
+        points: 2,
+        options: [
+          "Frictionless to use so that responders can act quickly, with logging deferred until after the incident",
+          "Available only during business hours, with no audit trail",
+          "High-friction by design, with an immutable audit trail and immediate tamper-proof alerts on every use",
+          "Implemented by sharing the root password with the on-call engineer for the duration of the incident",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Break-glass access must exist, but must be high-friction by design with an immutable audit trail and immediate tamper-proof alerts.",
+      },
+      {
+        id: "cyb-l4-q13",
+        type: "multiple-choice",
+        question: "'Fail-safe defaults' (also called fail closed) means:",
+        points: 2,
+        options: [
+          "On error, the system should attempt to guess the user's intent and proceed",
+          "On error or ambiguity, the safe outcome is denial — the system must not guess 'allow'",
+          "The system should fail loudly with verbose error messages, including stack traces, to aid debugging",
+          "The system should silently retry until it succeeds",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Fail-safe = fail closed. Default to deny. When uncertain, the system must not guess 'allow'.",
+      },
+      {
+        id: "cyb-l4-q14",
+        type: "multiple-choice",
+        question:
+          "A new API endpoint accepts JSON documents with arbitrary keys. The developer maintains a blocklist of dangerous field names (__proto__, constructor, ...) and accepts everything else. The course's view is that this is:",
+        points: 2,
+        options: [
+          "Correct, provided the blocklist is regularly updated",
+          "Incorrect: an allowlist of permitted keys should be used, because blocklists fail open whenever an attacker uses something not yet on the list",
+          "Correct, because allowlists are too restrictive for modern APIs",
+          "Incorrect: input validation should happen only at the database layer",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Blocklists fail open whenever attackers find something not on the list. Allowlists are the fail-safe choice.",
+      },
+      {
+        id: "cyb-l4-q15",
+        type: "multiple-choice",
+        question:
+          "Which Content-Security-Policy directive demonstrates the fail-safe defaults pattern in browser security?",
+        points: 2,
+        options: [
+          "default-src *; script-src *",
+          "default-src 'none'; script-src 'self'; style-src 'self'",
+          "Content-Security-Policy-Report-Only with no enforcement",
+          "Disabling CSP entirely and relying on the WAF",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "default-src 'none' is the fail-safe — nothing is allowed unless explicitly listed. Strict CSP is the canonical browser fail-closed example in the slides.",
+      },
+      {
+        id: "cyb-l4-q16",
+        type: "multiple-choice",
+        question:
+          "A deployment pipeline rule states: 'If the security scanner is unreachable, the deploy is BLOCKED.' Why does the course consider this rule essential?",
+        points: 2,
+        options: [
+          "Because scanners are expensive and should always be used to justify their cost",
+          "Because allowing deploys when the scanner is offline creates a bypass: an attacker who disables the scanner gets free passage — fail-closed preserves the gate",
+          "Because audit standards mandate that no software ever deploys without a clean scan",
+          "Because the scanner contains the only copy of the deployment credentials",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "If the scanner is offline → block deploy. Otherwise an attacker (or accidental outage) bypasses the gate.",
+      },
+      {
+        id: "cyb-l4-q17",
+        type: "multiple-choice",
+        question:
+          "According to the course's 'Operational Fail-Safes' slide, which of the following is NOT one of the listed patterns?",
+        points: 2,
+        options: [
+          "Backups must fail loudly — silent backup failure is indistinguishable from no backup at all",
+          "Security scanner gates deployment — pipeline does not proceed if the scanner is offline",
+          "Failure is observable — every fail-closed event produces a metric, log, and alert",
+          "Failed authentication attempts trigger automatic account deletion after three tries",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "Automatic account DELETION after three failed attempts is not in the slides — that would be punitive, not fail-safe. The three real patterns are (a), (b), and (c).",
+      },
+      {
+        id: "cyb-l4-q18",
+        type: "multiple-choice",
+        question:
+          "The 'overbroad try/catch' is named in the course as a fail-safe trap. Why is it dangerous?",
+        points: 2,
+        options: [
+          "Try/catch blocks slow down production traffic",
+          "Swallowing a security-relevant exception (e.g. a failed authentication check) and proceeding allows the request through with no caller verified — turning a fail-closed check into fail-open",
+          "Try/catch blocks cannot be unit tested",
+          "The exception handler may log sensitive data to disk",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Overbroad try/catch' trap: swallowing a security exception (e.g. failed auth) and proceeding turns a fail-closed check into a fail-open one. The catch block must rethrow or return a denial — never continue.",
+      },
+      {
+        id: "cyb-l4-q19",
+        type: "multiple-choice",
+        question:
+          "An external user authenticates to a public API gateway with a long-lived OAuth bearer token. The gateway forwards that same token unchanged to seven internal microservices. The course considers this:",
+        points: 2,
+        options: [
+          "Correct — a single token authenticates the user uniformly across all services",
+          "Incorrect — the gateway should reject the request and force the user to re-authenticate at every internal hop",
+          "Incorrect — the gateway should terminate the external identity at the trust boundary and exchange the external token for strictly scoped internal service principals",
+          "Correct, provided every internal hop uses mutual TLS",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "'Edge Identity Termination' slide: never forward raw end-user bearer tokens deep into the backend; the gateway exchanges external identity for a strictly scoped internal service principal at the trust boundary.",
+      },
+      {
+        id: "cyb-l4-q20",
+        type: "multiple-choice",
+        question:
+          "According to the slides, what does the Identity-Aware Proxy pattern (and 'From Flat VPN to Application Access' model) change about how access is granted?",
+        points: 2,
+        options: [
+          "Access is granted to whole subnets after a single VPN login, but the connection is now encrypted",
+          "Access is granted to specific APPLICATIONS based on user identity AND device posture, not to network ranges based on VPN connection",
+          "Access is replaced entirely by API keys held by the user",
+          "Access is granted to IP ranges only, with no identity component",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'From Flat VPN to Application Access' slide: access is narrowed from a subnet to a specific API endpoint, granted based on identity + device posture.",
+      },
+      {
+        id: "cyb-l4-q21",
+        type: "multiple-choice",
+        question:
+          "The course warns against 'recreating a perimeter inside the mesh' by writing rules like 'allow any service in Namespace X'. Why is this a trap?",
+        points: 2,
+        options: [
+          "Namespaces are deprecated in modern Kubernetes",
+          "Network location is not identity — a compromised pod in the same namespace can exploit the namespace-wide trust and move laterally",
+          "Namespaces cannot enforce mTLS",
+          "Namespaces are a paid feature in most service meshes",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'Trap 1: The Internal Perimeter' — namespace membership is not cryptographic identity. Use SPIFFE/SPIRE-based workload identity, not namespace-wide trust.",
+      },
+      {
+        id: "cyb-l4-q22",
+        type: "multiple-choice",
+        question:
+          "In a service mesh (e.g. Istio) PeerAuthentication policy, what is the consequence of running with mode: PERMISSIVE in production?",
+        points: 2,
+        options: [
+          "Performance improves because TLS is optional",
+          "Plaintext connections are accepted alongside mTLS, which silently allows unencrypted lateral movement — defeating the purpose of mesh-wide encryption",
+          "Only authenticated services can connect; PERMISSIVE is stricter than STRICT",
+          "The mesh refuses to start until STRICT is configured",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "STRICT mandates mTLS; PERMISSIVE accepts plaintext connections too. In production this silently allows unencrypted lateral movement — the slide explicitly warns against it.",
+      },
+      {
+        id: "cyb-l4-q23",
+        type: "multiple-choice",
+        question:
+          "A procurement committee says: 'Let's buy MediCare v1.0 now, even though it lacks proper RBAC, separate backups, and log protection. The vendor promises to add all of these in v2.0 next year.' Which TRAP from the lecture does this most directly illustrate?",
+        points: 2,
+        options: [
+          "The 'Internal Perimeter' trap",
+          "'Zero Trust as a One-Time Project'",
+          "The 'We'll Tighten Later' trap — loose permissions and missing controls become entrenched technical/security debt that rarely gets addressed",
+          "The 'Hidden Privileges' trap",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "'Trap 1: We'll Tighten Later' — technical/security debt accumulates like interest. Once a system 'works', there is rarely incentive to go back and tighten. This is the exact trap the procurement scenario describes.",
+      },
+      {
+        id: "cyb-l4-q24",
+        type: "multiple-choice",
+        question:
+          "Which of the following statements about the three pillars is MOST consistent with the course's overall message?",
+        points: 2,
+        options: [
+          "The pillars are independent — apply whichever one fits the current project and skip the others",
+          "The pillars are sequential phases of a security programme — start with Least Privilege, then add Fail-Safe Defaults, then Zero Trust, then stop",
+          "The pillars work together: design with least privilege, fail safely when uncertain, and never trust the network implicitly. Together they shrink blast radius and force breaches to be loud rather than silent",
+          "The pillars are obsolete in cloud-native architectures and have been replaced by Defence in Depth alone",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The pillars are complementary, not independent or sequential. Together they shrink blast radius and make breaches detectable rather than silent.",
       },
     ],
   },
