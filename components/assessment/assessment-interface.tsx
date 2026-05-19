@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -38,6 +38,15 @@ interface AssessmentInterfaceProps {
   course: Doc<"courses">
 }
 
+function shuffleIndices(n: number): number[] {
+  const arr = Array.from({ length: n }, (_, i) => i)
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
 export function AssessmentInterface({ assessment, course }: AssessmentInterfaceProps) {
   const router = useRouter()
   const submitAttempt = useMutation(api.attempts.submit)
@@ -52,48 +61,55 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
       value: q.type === "multiple-choice" ? -1 : q.type === "text" ? "" : null,
     })),
   )
+  const [shuffledOrders] = useState<number[][]>(() =>
+    assessment.questions.map((q) =>
+      q.type === "multiple-choice" && q.options ? shuffleIndices(q.options.length) : [],
+    ),
+  )
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
   const [startTime, setStartTime] = useState<string | null>(null)
-  const [progress, setProgress] = useState(0)
-  const [answeredCount, setAnsweredCount] = useState(0)
 
   const question = assessment.questions[currentQuestion]
   const currentAnswer = answers[currentQuestion]
 
+  const answeredCount = useMemo(
+    () =>
+      answers.filter((a) => {
+        if (a.type === "multiple-choice") return typeof a.value === "number" && a.value !== -1
+        if (a.type === "text") return typeof a.value === "string" && a.value.trim() !== ""
+        if (a.type === "file") return a.value !== null
+        return false
+      }).length,
+    [answers],
+  )
+  const progress =
+    assessment.questions.length === 0 ? 0 : (answeredCount / assessment.questions.length) * 100
+
   const handleMultipleChoiceChange = (questionIndex: number, value: number) => {
-    const newAnswers = [...answers]
-    newAnswers[questionIndex].value = value
-    setAnswers(newAnswers)
-    updateAnsweredCount()
+    setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
   }
 
   const handleTextChange = (questionIndex: number, value: string) => {
-    const newAnswers = [...answers]
-    newAnswers[questionIndex].value = value
-    setAnswers(newAnswers)
-    updateAnsweredCount()
+    setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
   }
 
   const handleRemoveFile = (questionIndex: number) => {
-    const newAnswers = [...answers]
-    newAnswers[questionIndex].value = null
-    setAnswers(newAnswers)
-    updateAnsweredCount()
+    setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value: null } : a)))
   }
 
   const handleFileUpload = (questionIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      const newAnswers = [...answers]
-      newAnswers[questionIndex].value = {
-        file,
-        fileName: file.name,
-        fileSize: file.size,
-        fileType: file.type,
-      }
-      setAnswers(newAnswers)
-      updateAnsweredCount()
-    }
+    if (!file) return
+    setAnswers((prev) =>
+      prev.map((a, i) =>
+        i === questionIndex
+          ? {
+              ...a,
+              value: { file, fileName: file.name, fileSize: file.size, fileType: file.type },
+            }
+          : a,
+      ),
+    )
   }
 
   const handlePrevious = () => {
@@ -106,12 +122,6 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     if (currentQuestion < assessment.questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
-  }
-
-  const updateAnsweredCount = () => {
-    const count = answers.filter((answer) => answer.value !== null && answer.value !== "").length
-    setAnsweredCount(count)
-    setProgress((count / assessment.questions.length) * 100)
   }
 
   useEffect(() => {
@@ -361,26 +371,39 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         <CardContent>
           {question.type === "multiple-choice" && question.options && (
             <RadioGroup
-              value={currentAnswer.value !== null && currentAnswer.value !== -1 ? currentAnswer.value.toString() : undefined}
-              onValueChange={(value) => handleMultipleChoiceChange(currentQuestion, Number.parseInt(value))}
+              key={`q-${currentQuestion}`}
+              value={
+                typeof currentAnswer.value === "number" && currentAnswer.value !== -1
+                  ? currentAnswer.value.toString()
+                  : ""
+              }
+              onValueChange={(value) =>
+                handleMultipleChoiceChange(currentQuestion, Number.parseInt(value))
+              }
             >
               <div className="space-y-3">
-                {question.options.map((option, index) => (
-                  <div
-                    key={index}
-                    className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-colors cursor-pointer ${
-                      currentAnswer.value === index
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                    onClick={() => handleMultipleChoiceChange(currentQuestion, index)}
-                  >
-                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                      {option}
-                    </Label>
-                  </div>
-                ))}
+                {(shuffledOrders[currentQuestion] ?? question.options.map((_, i) => i)).map(
+                  (originalIndex) => {
+                    const option = question.options![originalIndex]
+                    const id = `q-${currentQuestion}-option-${originalIndex}`
+                    return (
+                      <div
+                        key={originalIndex}
+                        className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-colors cursor-pointer ${
+                          currentAnswer.value === originalIndex
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-primary/50"
+                        }`}
+                        onClick={() => handleMultipleChoiceChange(currentQuestion, originalIndex)}
+                      >
+                        <RadioGroupItem value={originalIndex.toString()} id={id} />
+                        <Label htmlFor={id} className="flex-1 cursor-pointer">
+                          {option}
+                        </Label>
+                      </div>
+                    )
+                  },
+                )}
               </div>
             </RadioGroup>
           )}
