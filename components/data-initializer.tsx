@@ -77,9 +77,7 @@ export function DataInitializer() {
 
         const cyberCourse = dummyCourses.find((c) => c.code === "CYBR401")
         if (cyberCourse) {
-          const cyberQuizzes = dummyAssessments.filter(
-            (a) => a.courseId === cyberCourse.id && a.title.startsWith("Lecture "),
-          )
+          const cyberQuizzes = dummyAssessments.filter((a) => a.courseId === cyberCourse.id)
           for (const quiz of cyberQuizzes) {
             await ensureCourseWithAssessment({
               course: {

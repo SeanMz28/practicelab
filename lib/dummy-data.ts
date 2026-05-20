@@ -2825,6 +2825,249 @@ export const dummyAssessments: Assessment[] = [
       },
     ],
   },
+  {
+    id: "cyber-mock-test-2",
+    courseId: "7",
+    title: "Mock Test 2",
+    description:
+      "Cybersecurity Mock Test 2 (SM1 2026). Covers Lectures 4–8: least privilege, Zero Trust, fail-safe defaults, human-centred security, digital forensics, secure SDLC, and network defence. 12 MCQs (24 marks), 3 short answers (12 marks), and 1 scenario (14 marks). Total: 50 marks.",
+    type: "test",
+    timeLimit: 90,
+    createdAt: "2026-05-20T10:00:00Z",
+    questions: [
+      {
+        id: "cyb-mt2-q1",
+        type: "multiple-choice",
+        question:
+          "A startup runs 23 microservices that all share a single IAM role called backend-service with wide read/write access to the entire database, 'to keep things simple.' The course names this anti-pattern explicitly. It is best described as:",
+        points: 2,
+        options: [
+          "The 'encryption without authorisation' trap",
+          "The 'backend-service mega-role' trap — compromise of one service grants access to all of them; the blast radius is the entire system",
+          "A correct application of least privilege at the system level",
+          "An acceptable consequence of microservice architectures, since the alternative is complex",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'backend-service mega-role' anti-pattern (L4). A single shared IAM role violates least privilege at the service level; compromise of any one service hands the attacker access to everything the shared role can do. The correct pattern is per-workload identity. Source: L4 — 'Least Privilege for Services' slide.",
+      },
+      {
+        id: "cyb-mt2-q2",
+        type: "multiple-choice",
+        question:
+          "An external user authenticates to a public API gateway with a long-lived OAuth bearer token. The gateway forwards that same token, unchanged, to seven internal microservices that each validate and use it. From a Zero-Trust perspective, this is:",
+        points: 2,
+        options: [
+          "Correct: a single token authenticates the user uniformly across the system",
+          "Incorrect: the gateway should exchange the external token for a strictly scoped internal service-principal at the trust boundary",
+          "Correct, provided every internal hop uses mutual TLS",
+          "Incorrect: the gateway should reject the request and force the user to re-authenticate at each hop",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Edge Identity Termination' pattern: never forward raw end-user bearer tokens deep into the backend. The edge gateway exchanges the external token for a strictly scoped internal service principal. mTLS solves transport identity, not unscoped propagation; re-authenticating at every hop is impractical. Source: L4 — 'Edge Identity Termination' slide.",
+      },
+      {
+        id: "cyb-mt2-q3",
+        type: "multiple-choice",
+        question:
+          "A new endpoint accepts JSON documents with arbitrary keys. The developer maintains a blocklist of dangerous field names (__proto__, constructor, ...) and accepts everything else. From the course's perspective, this approach is:",
+        points: 2,
+        options: [
+          "Correct, provided the blocklist is updated regularly",
+          "Incorrect: an allowlist of permitted keys should be used, because blocklists fail open whenever an attacker uses something not yet on the list",
+          "Correct, because parsing all input gives more flexibility to downstream code",
+          "Incorrect: input validation should be done at the database, not the API layer",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Fail-safe defaults applied to input validation. Blocklists FAIL OPEN (anything not listed gets through); allowlists FAIL CLOSED (anything not explicitly permitted is rejected). Source: L4 — 'Fail-Safe in Code' slide ('Whitelist, not blacklist').",
+      },
+      {
+        id: "cyb-mt2-q4",
+        type: "multiple-choice",
+        question:
+          "The slides argue, drawing on Kahneman, that routine security decisions in production interfaces should NOT require which kind of cognition?",
+        points: 2,
+        options: [
+          "System 1 — fast, automatic thinking, because attackers easily mimic familiar patterns",
+          "System 2 — slow, deliberate thinking, because under load users default to System 1 and skip the decision",
+          "Either system: secure defaults remove the need to think at all",
+          "Heuristic thinking, because it is statistically unreliable",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "System 2 is slow, deliberate, and fatigues; under load users default to System 1 and skip required deliberation. The question asks which cognition should NOT be REQUIRED — System 2. (c) is tempting but the question is about the type of cognition, not whether thinking is needed at all. Source: L5 — Dual-process cognition (Kahneman).",
+      },
+      {
+        id: "cyb-mt2-q5",
+        type: "multiple-choice",
+        question:
+          "Three months before resigning, an engineer downloads the company's entire customer database to her personal laptop 'for a side project,' then takes the laptop to her new employer. The course classifies this kind of insider threat as:",
+        points: 2,
+        options: ["Negligent", "Compromised", "Malicious", "Accidental"],
+        correctAnswer: 2,
+        explanation:
+          "Deliberate exfiltration for personal gain = MALICIOUS insider. Negligent = careless without intent; Compromised = manipulated without realising. Behavioural indicators (data outside normal job function, large downloads before resignation) fit. Source: L5 — 'Insider Threat Dimension' slide.",
+      },
+      {
+        id: "cyb-mt2-q6",
+        type: "multiple-choice",
+        question:
+          "An attacker emails a junior employee: 'Your colleagues Priya and Sam have already completed this confidentiality attestation; please complete yours by end of day.' Which of Cialdini's principles is being exploited MOST directly?",
+        points: 2,
+        options: ["Authority", "Scarcity", "Social proof", "Reciprocity"],
+        correctAnswer: 2,
+        explanation:
+          "SOCIAL PROOF — people look to peer behaviour. 'Priya and Sam have already completed this' matches the slide example almost verbatim. 'End of day' is a secondary scarcity/urgency pressure, but the PRIMARY mechanism is the appeal to peers. Source: L5 — Cialdini's Principles.",
+      },
+      {
+        id: "cyb-mt2-q7",
+        type: "multiple-choice",
+        question:
+          "A bank stores its security logs in an S3 bucket with object-versioning, MFA-required-for-delete, and a retention lock preventing deletion for seven years. This configuration is best described as which course concept?",
+        points: 2,
+        options: [
+          "Role-based access control (RBAC)",
+          "Write-Once-Read-Many (WORM) storage",
+          "Defence in depth at the network layer",
+          "An air-gapped backup",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Object-versioning + MFA-delete + retention lock is the canonical AWS implementation of WORM storage — logs become immutable until retention expires. An air-gapped backup requires physical disconnection; this bucket is online. Source: L6 — 'Log Protection Strategies' slide.",
+      },
+      {
+        id: "cyb-mt2-q8",
+        type: "multiple-choice",
+        question:
+          "During an incident, the response lead does the following in this order: (1) isolates the compromised host from the network; (2) revokes its service tokens; (3) removes the webshell the attacker installed; (4) patches the vulnerability that let them in. According to the course's incident-response phases, where is the boundary between containment and eradication?",
+        points: 2,
+        options: [
+          "Step 1 is containment; steps 2–4 are eradication",
+          "Steps 1–2 are containment; steps 3–4 are eradication",
+          "All four steps are containment; eradication has not yet started",
+          "Only step 4 is eradication; the rest are recovery",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Containment = cut the attacker's reach (isolate host, revoke tokens). Eradication = remove what the attacker installed and close the hole (remove webshell, patch vulnerability). Source: L6 — SANS Step 3 (Containment) and Step 4 (Eradication and Remediation).",
+      },
+      {
+        id: "cyb-mt2-q9",
+        type: "multiple-choice",
+        question:
+          "A defect found in the design (planning) stage costs roughly 1 unit to fix. According to the 'shift-left' cost curve used in the course, the same defect discovered in production typically costs approximately:",
+        points: 2,
+        options: ["5×", "25×", "100×", "1000×"],
+        correctAnswer: 2,
+        explanation:
+          "The shift-left cost curve (L7): Requirements 1×, Design 5×, Implementation 10×, Verification 25×, Production 100×. This justifies shifting security testing left into design, code, and CI. Source: L7 — 'Shift-Left Security' slide.",
+      },
+      {
+        id: "cyb-mt2-q10",
+        type: "multiple-choice",
+        question:
+          "A container image is deployed with the following properties: it runs as a non-root user; its root filesystem is mounted read-only; all Linux capabilities are dropped (and none re-added); and its database password is read from the orchestrator's secret store rather than an environment variable. Which security principle most broadly governs this combination?",
+        points: 2,
+        options: [
+          "Defence in depth via memory-safe languages",
+          "Least privilege, applied to the workload",
+          "Zero Trust networking between services",
+          "Fail-safe defaults for incoming requests",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Each control (non-root, read-only FS, dropped capabilities, secrets from the orchestrator) narrows what the container is ALLOWED to do — the overarching principle is least privilege applied to the workload. None of the controls touch service-to-service networking or error handling. Source: L7 — 'Running Containers Safely'; L4 — Least Privilege categories.",
+      },
+      {
+        id: "cyb-mt2-q11",
+        type: "multiple-choice",
+        question:
+          "Most major data-exfiltration incidents exploit a particular network-design weakness. Which is it?",
+        points: 2,
+        options: [
+          "Insufficient encryption of data at rest",
+          "Permissive outbound (egress) network access",
+          "Absence of intrusion detection on inbound traffic",
+          "Use of HTTPS rather than HTTP for sensitive APIs",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Exfiltration happens via EGRESS — attacker tools call home (C2), upload data, and pull payloads, all outbound. The prescription is default-deny egress with allowlisted destinations via a proxy. Source: L8 — 'Egress Control' slide.",
+      },
+      {
+        id: "cyb-mt2-q12",
+        type: "multiple-choice",
+        question:
+          "An Identity-Aware Proxy sits in front of a private internal application. Which statement best describes how this changes the application's exposure?",
+        points: 2,
+        options: [
+          "The application is exposed to the public internet, but only over TLS",
+          "The application never sees the public internet; the proxy validates the user's SSO identity and device posture before forwarding the request",
+          "The proxy removes the need for authentication inside the application",
+          "The proxy grants the user network-level access to the entire subnet the application lives in",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The Identity-Aware Proxy (L8): the app sits on a private network with no public IP; the proxy is the only ingress, validates the SSO token and device posture, then forwards over an authenticated channel. (d) describes a flat VPN — the wrong pattern; the point is app-level, not network-level, access. Source: L8 — 'Modern Access Pattern: Identity-Aware Proxy' slide.",
+      },
+      {
+        id: "cyb-mt2-q13",
+        type: "text",
+        question:
+          "Short answer (4 marks). A company has run mandatory annual cybersecurity-awareness training (with one simulated phishing email per year) for ten years, yet its phishing success rate has not improved. State two research-based reasons (from the slides) that this kind of training is largely ineffective, and ONE concrete intervention that the literature suggests works better.",
+        points: 4,
+        explanation:
+          "MODEL ANSWER — Two reasons (1 mark each, any two): (1) Knowledge decay — phishing training knowledge decays within 2–4 weeks, so annual delivery retains almost nothing for the other 11 months. (2) No transfer to novel attacks — generic simulated phish don't transfer to the variety of real-world lures. (3) Shame reduces reporting — shame-based follow-up makes staff hide mistakes, so real incidents go unreported. One intervention that works better (2 marks, must be concrete): short (5–10 min) scenario-based learning delivered frequently; teaching the FEELING of a phish (urgency/authority/off-pattern); a psychologically safe reporting culture; or a one-click report button wired to the SOC. Marking: 1 mark per reason (max 2); 2 marks for a specific intervention ('do more training' = 0). Source: L5 — 'Why Phishing Training Fails' / 'What Actually Works'.",
+      },
+      {
+        id: "cyb-mt2-q14",
+        type: "text",
+        question:
+          "Short answer (4 marks). A deployment pipeline has the following rule: if any security gate (SAST, secrets scanner, dependency scanner, IaC scanner) fails, the deploy is blocked. If the security scanner itself is unreachable, the deploy is also blocked. (a) Name the security principle being applied here. (b) Why is the 'scanner offline → block' rule essential?",
+        points: 4,
+        explanation:
+          "MODEL ANSWER — (a) Fail-safe defaults (also accept 'fail closed' / 'deny by default'). (b) The rule preserves the integrity of the gate: if 'scanner offline = deploy allowed' were the default, an attacker who disables/DoSes the scanner gains free passage (every malicious deploy goes unscanned), and accidental outages would also let unscanned code reach production — the gate would provide no real assurance. Blocking on unavailability ensures the gate cannot be silently bypassed and every deploy is provably scanned. Marking (per published scheme): (a) 1 mark for the term; (b) 1 mark for the bypass risk + 1 mark for the consequence. Source: L4 — 'Operational Fail-Safes' slide.",
+      },
+      {
+        id: "cyb-mt2-q15",
+        type: "text",
+        question:
+          "Short answer (4 marks). A small company offers all its engineers a full-tunnel VPN from their personal laptops into a flat corporate network containing development, staging, AND production servers. Identify two distinct security weaknesses of this architecture, and for each one, briefly describe a Zero-Trust-aligned alternative.",
+        points: 4,
+        explanation:
+          "MODEL ANSWER — Weakness 1 (1 mark): Flat network / no segmentation — once on the VPN, anyone (or a stolen credential) can reach dev, staging, AND production; lateral movement is trivial. ZT alternative (1 mark): application-level access via an identity-aware proxy, granting access to specific applications by identity/role, with each environment separately gated. Weakness 2 (1 mark): No device posture check / personal laptops — unknown patch level, possible malware, unmanaged; dragged straight inside the perimeter. ZT alternative (1 mark): device-aware conditional access verifying device health (MDM, disk encryption, OS patch, EDR) on every request, plus phishing-resistant MFA (passkeys/FIDO2). Other acceptable weaknesses: long-lived sessions vs short-lived/time-bound access; network-level trust vs identity-based continuous verification; no service-to-service auth vs mTLS/workload identity. Marking: 1 mark per distinct weakness (max 2) + 1 mark per matching ZT alternative (max 2); penalise duplicate weaknesses. Source: L8 — 'From Flat VPN to Application Access' and 'Device-Aware Conditional Access'.",
+      },
+      {
+        id: "cyb-mt2-q16a",
+        type: "text",
+        question:
+          "Scenario — Refilwe Memorial Hospital (8 marks). A hospital group (1,200 staff across 18 clinics) is procuring a new electronic patient-records system. The vendor's proposed version 1.0 has the following design:\n• A single 'Hospital Staff' role is assigned to all 1,200 users — doctors, nurses, admin staff, cleaning contractors, and IT contractors alike — each with read/write access to all patient records.\n• Administration uses one shared 'superuser' account; its password is rotated every 90 days and stored in a shared OneNote accessible to the whole IT team.\n• A flat IPSec VPN connects all 18 clinics to head office, and once connected, all hospital services are reachable.\n• Security awareness is a 30-minute e-learning module once a year, plus one simulated phishing email per year.\n• Backups are written nightly to a NAS in the same data centre as the source system and kept for 30 days.\n• Logs are kept for 30 days on the same server that generates them, then rotated.\n\nIdentify FOUR distinct security weaknesses in this proposal. For each, name the relevant principle, concept, or trap from the course that it violates. (2 marks per weakness.)",
+        points: 8,
+        explanation:
+          "MODEL ANSWER (any FOUR, 2 marks each = 1 weakness + 1 principle): (1) Single 'Hospital Staff' role for all 1,200 users with full patient-record access → violates LEAST PRIVILEGE / no role separation (RBAC failure); blast radius of one phished credential is the whole database. (2) Shared 'superuser' account with password in OneNote → violates LEAST PRIVILEGE (users) AND ACCOUNTABILITY / NON-REPUDIATION; no individual attribution; admin must be a distinct per-user identity with phishing-resistant MFA. (3) Flat IPSec VPN where all services are reachable → violates ZERO TRUST / flat network / no segmentation; alternative is app-level access via identity-aware proxy with device posture. (4) Annual 30-min e-learning + 1 phish/year → violates the 'Why Phishing Training Fails' research (2–4 week decay); use frequent scenario-based learning + safe reporting. (5) Backups on a NAS in the same data centre, 30-day retention → violates backup isolation / forensic readiness; same blast radius, no WORM immutability, below the 90–400 day minimum. (6) Logs 30 days on the same server then rotated → violates Log Protection Strategies (L6); logs must be WORM/versioned in a separate security account; 30 days is below the 90–400 day minimum. Marking: 1 mark per weakness + 1 mark per correct principle, max 4 weaknesses (8 marks); penalise duplicates mapping to the same principle.",
+      },
+      {
+        id: "cyb-mt2-q16b",
+        type: "text",
+        question:
+          "Scenario — Refilwe Memorial Hospital, continued (3 marks). Choose ONE of the weaknesses you identified in part (a). Propose a specific, concrete redesign for it, and name the principle the redesign now satisfies.",
+        points: 3,
+        explanation:
+          "MODEL ANSWER (example using the single 'Hospital Staff' role): implement RBAC with clinically-justified, minimum-scoped roles — Doctors: read/write only to records of patients under their active care (relationship-based); Nurses: only their ward/shift; Admin: demographic/billing fields only, no clinical notes; Cleaning contractors: NO patient-record access; IT contractors: time-bound, audit-logged access for specific maintenance, no routine clinical access. Plus: every access logged with user/time/patient/reason, and out-of-pattern access alerts. PRINCIPLE NOW SATISFIED: least privilege (applied to users and data). Other valid redesigns: identity-aware proxy + per-clinic segmentation; WORM logs in a separate security account; isolated immutable backups. Marking: 1 mark for choosing a weakness and addressing it; 1 mark for being SPECIFIC/CONCRETE ('improve permissions' = 0; 'split into 4 named roles with these scopes' earns it); 1 mark for naming the principle.",
+      },
+      {
+        id: "cyb-mt2-q16c",
+        type: "text",
+        question:
+          "Scenario — Refilwe Memorial Hospital, continued (3 marks). A procurement-committee member responds: 'Let's just buy this version now because the vendor has promised to add proper role-based permissions, separate backups, and better logging in version 2.0 next year.' Drawing on a specific TRAP named in the course, explain why this plan is itself a security risk.",
+        points: 3,
+        explanation:
+          "MODEL ANSWER — This is the 'WE'LL TIGHTEN LATER' trap (L4). Properties: (1) Technical debt = security debt — loose permissions accumulate like compound interest; the longer it runs with broad access, the more processes depend on it, making tightening harder. (2) You rarely go back — once it 'works' in production, commercial/operational pressure pushes tightening down the backlog; v2.0 may slip or its controls may be optional/poorly adopted. (3) Start strict — grant access explicitly as requirements are proven, not broadly upfront with promises of future restriction. Refilwe specifics: patient data is high-sensitivity (POPIA-regulated), 1,200 users and 18 clinics are already active, and retrofitting RBAC after a year of 'everyone can access everything' is a far harder migration. The right move: require these controls in v1.0 as a condition of purchase, or choose another product. Marking: 1 mark for naming the trap; 1 mark for why it's a trap (debt / you rarely go back / harder later); 1 mark for connecting it to the scenario (regulated data; entrenched broad access; diminishing vendor incentives post-sale).",
+      },
+    ],
+  },
 ]
 
 export const dummyAssessmentAttempts: AssessmentAttempt[] = [
