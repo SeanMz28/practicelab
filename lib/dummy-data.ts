@@ -3068,6 +3068,780 @@ export const dummyAssessments: Assessment[] = [
       },
     ],
   },
+  {
+    id: "cyber-l7-quiz",
+    courseId: "7",
+    title: "Lecture 7 Quiz",
+    description:
+      "Lecture 7 — Secure Software Development Lifecycle. Multiple-choice quiz covering SDLC phases, shift-left, threat modeling, abuse cases, web/cloud/mobile/embedded security, containers, and testing. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-20T11:00:00Z",
+    questions: [
+      {
+        id: "cyb-l7-q1",
+        type: "multiple-choice",
+        question: "The course states the AIM of a secure SDLC as:",
+        points: 2,
+        options: [
+          "Run a separate security audit only at the end of the project, just before release",
+          "Catch issues EARLY when they are cheap to fix, build in guardrails so common mistakes don't ship, and keep enough visibility to prove what you shipped matches what you intended",
+          "Hire enough security engineers to manually review every pull request before merge",
+          "Replace developers with security specialists for any production code",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The L7 preface states this exact aim: catch early, build guardrails, keep visibility to prove what shipped.",
+      },
+      {
+        id: "cyb-l7-q2",
+        type: "multiple-choice",
+        question:
+          "According to the shift-left cost curve in the slides, a defect found in the requirements/planning stage costs roughly 1 unit. The same defect discovered in production costs approximately:",
+        points: 2,
+        options: ["5×", "25×", "100×", "1000×"],
+        correctAnswer: 2,
+        explanation: "The shift-left cost curve gives ~100× for production.",
+      },
+      {
+        id: "cyb-l7-q3",
+        type: "multiple-choice",
+        question:
+          "The shift-left cost curve in L7 gives which sequence of approximate cost multipliers?",
+        points: 2,
+        options: [
+          "1× → 2× → 4× → 8× → 16× (across the five stages)",
+          "1× → 5× → 10× → 25× → 100× (Planning → Design → Implementation → Verification → Production)",
+          "10× → 25× → 50× → 75× → 100×",
+          "The cost is roughly constant across all stages",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The exact numbers from the slide: 1 (planning) → 5 (design) → 10 (implementation) → 25 (verification) → 100 (production).",
+      },
+      {
+        id: "cyb-l7-q4",
+        type: "multiple-choice",
+        question: "The course describes a 'mature SDLC' as one that:",
+        points: 2,
+        options: [
+          "Slows teams down to ensure thorough review",
+          "Removes toil by providing PAVED PATHS that are secure by default",
+          "Reviews every line of code manually before merging",
+          "Maintains a separate security team that runs in parallel with developers",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'A mature SDLC does not slow teams down. It removes toil by providing paved paths that are secure by default.'",
+      },
+      {
+        id: "cyb-l7-q5",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT one of the SDLC phases listed in the L7 'SDLC at a glance' section?",
+        points: 2,
+        options: [
+          "Requirements and use cases with security and privacy goals alongside functionality",
+          "Architecture and threat modeling to surface abuse cases early",
+          "Annual external penetration test as the only verification",
+          "Verification using static analysis, dependency checks, code review, and targeted dynamic tests",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "An annual external pen test is NOT a phase. The seven listed phases are Requirements, Architecture/threat modeling, Design, Implementation, Verification, Pre-release hardening, Handover.",
+      },
+      {
+        id: "cyb-l7-q6",
+        type: "multiple-choice",
+        question: "The STRIDE threat model in L7 stands for:",
+        points: 2,
+        options: [
+          "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege",
+          "Security, Trust, Resilience, Integrity, Defence, Encryption",
+          "Scan, Test, Review, Iterate, Deploy, Evaluate",
+          "Static, Transit, Runtime, Identity, Dynamic, Egress",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "STRIDE: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege.",
+      },
+      {
+        id: "cyb-l7-q7",
+        type: "multiple-choice",
+        question:
+          "A team is building a file-upload feature where users upload profile documents. The slides give two example abuse cases for this feature. Which are they?",
+        points: 2,
+        options: [
+          "Slow upload speeds and large file sizes",
+          "Malware hidden inside uploads, AND exfiltration via large file uploads",
+          "Users forgetting their passwords, AND broken thumbnails",
+          "Browser incompatibility, AND missing image previews",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'For Every Use Case, Write Abuse Cases' slide lists exactly these two for file uploads.",
+      },
+      {
+        id: "cyb-l7-q8",
+        type: "multiple-choice",
+        question:
+          "The slides give an example of a 'well-formed security requirement' written as a user story: 'As an operator, I need all admin actions to be logged with subject, action, and result so that I can audit changes.' What three properties does the slide say this requirement has?",
+        points: 2,
+        options: [
+          "Written like any other user story, testable and specific, linked to abuse cases",
+          "Long, technical, signed off by the CISO",
+          "Mandated by ISO 27001, GDPR, and SOX simultaneously",
+          "Implemented in a separate service from the main application",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Capture Security in the Backlog' slide lists: written like any user story, testable & specific, linked to abuse cases.",
+      },
+      {
+        id: "cyb-l7-q9",
+        type: "multiple-choice",
+        question:
+          "The L7 'fast' threat-modeling approach recommends which set of activities?",
+        points: 2,
+        options: [
+          "A two-week formal STRIDE workshop with all stakeholders before any code is written",
+          "Drawing data flows, marking trust boundaries, listing the top five risks with proposed controls, and revisiting when the design changes",
+          "Outsourcing threat modeling to an external consultancy once a year",
+          "Skipping threat modeling for agile teams since the backlog covers it",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Architecture and threat modeling, fast' section: light and regular — draw flows, mark trust boundaries, list top 5 risks, revisit when design changes.",
+      },
+      {
+        id: "cyb-l7-q10",
+        type: "multiple-choice",
+        question:
+          "A new endpoint accepts JSON documents with arbitrary keys. The developer maintains a blocklist of dangerous field names (__proto__, constructor, ...) and accepts everything else. From the course's perspective, this approach is:",
+        points: 2,
+        options: [
+          "Correct, provided the blocklist is updated regularly",
+          "Incorrect: an ALLOWLIST of permitted keys should be used, because blocklists fail open whenever an attacker uses something not yet on the list",
+          "Correct, because parsing all input gives more flexibility to downstream code",
+          "Incorrect: input validation should be done at the database, not the API layer",
+        ],
+        correctAnswer: 1,
+        explanation: "Blocklists fail open; allowlists are the fail-safe default.",
+      },
+      {
+        id: "cyb-l7-q11",
+        type: "multiple-choice",
+        question:
+          "The L7 web-security threat focus lists IDOR (Insecure Direct Object Reference) and 'broken object-level authorization in APIs.' The recommended design countermeasure is:",
+        points: 2,
+        options: [
+          "Encrypt all object IDs with AES-256",
+          "Hide the IDs behind a separate microservice",
+          "A SINGLE access-check function used before handlers, enforced in code review; check ownership on EVERY resource — not just role at login",
+          "Use sequential numeric IDs to make caching easier",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Threat focus → Design countermeasures' sections: a single access-check function used before handlers, and check ownership on every resource.",
+      },
+      {
+        id: "cyb-l7-q12",
+        type: "multiple-choice",
+        question:
+          "A REST endpoint /v1/tenants/:tid/reports/:id is being written. According to the L7 sample handler, what authorization checks should occur BEFORE returning the report?",
+        points: 2,
+        options: [
+          "Only check that the user has a valid session token",
+          "Check that req.user.tenant === tid (or the user has a trusted support role), AND that the report's tenant field also matches tid before returning the row",
+          "Check role permissions in the database layer only",
+          "No authorization check is needed if the URL contains the tenant ID",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The sample handler enforces tenant match (or trusted support role) AND checks the report's own tenant field — both checks before returning data.",
+      },
+      {
+        id: "cyb-l7-q13",
+        type: "multiple-choice",
+        question:
+          "Which set of test types is recommended on the L7 'Test Egress Controls — SSRF Resistance' slide?",
+        points: 2,
+        options: [
+          "Block 169.254.169.254 (the metadata endpoint), block all link-local 169.254.x.x addresses, block private IP ranges (10.x, 172.16.x, 192.168.x), and re-check resolved IPs after DNS lookup to prevent DNS rebinding",
+          "Allow all outbound traffic and rely on the WAF to filter",
+          "Block only port 80 and 443",
+          "Use a global allowlist of 'good' URLs maintained by the security team",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "'Test Egress Controls — SSRF Resistance' slide lists: block metadata endpoint, block link-local, block private IP ranges, safe DNS resolution.",
+      },
+      {
+        id: "cyb-l7-q14",
+        type: "multiple-choice",
+        question:
+          "The 'client-side security' recommendations in L7 include which of the following?",
+        points: 2,
+        options: [
+          "Disable Content-Security-Policy to allow flexibility",
+          "Allow inline scripts to simplify templating",
+          "Enable a STRICT Content-Security-Policy, forbid inline scripts, load third-party scripts cautiously, and use Subresource Integrity where possible",
+          "Trust all scripts from major CDNs without verification",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Strict CSP, forbid inline scripts, cautious third-party scripts, Subresource Integrity — exactly as listed in the L7 'Client-side security' section.",
+      },
+      {
+        id: "cyb-l7-q15",
+        type: "multiple-choice",
+        question: "The course says that 'most cloud incidents' trace back to:",
+        points: 2,
+        options: [
+          "Novel zero-day vulnerabilities in cloud-provider services",
+          "Insufficient bandwidth between regions",
+          "Identity, misconfiguration, or over-broad roles — rather than novel vulnerabilities",
+          "Hardware failures in the data centre",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The L7 cloud preface: 'Most cloud incidents trace back to identity, misconfiguration, or over-broad roles rather than novel vulnerabilities.'",
+      },
+      {
+        id: "cyb-l7-q16",
+        type: "multiple-choice",
+        question:
+          "Which of the following is listed as a CLOUD-specific threat focus in L7?",
+        points: 2,
+        options: [
+          "Insufficient TLS version in browser caches",
+          "Public exposure through misconfigured buckets, privilege escalation via wildcard IAM, metadata service abuse, and supply-chain risks in base images",
+          "Cosmic-ray bit flips in production memory",
+          "Vendor lock-in to a single cloud provider",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The L7 'Threat focus' for cloud: public exposure, privilege escalation, metadata abuse, supply chain.",
+      },
+      {
+        id: "cyb-l7-q17",
+        type: "multiple-choice",
+        question:
+          "A container image is deployed with these properties: runs as a non-root user; root filesystem mounted read-only; all Linux capabilities dropped (none re-added); database password read from the orchestrator's secret store rather than an environment variable. Which security principle most broadly governs this combination?",
+        points: 2,
+        options: [
+          "Defence in depth via memory-safe languages",
+          "LEAST PRIVILEGE, applied to the workload",
+          "Zero Trust networking between services",
+          "Fail-safe defaults for incoming requests",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The single overarching principle is least privilege applied to the workload.",
+      },
+      {
+        id: "cyb-l7-q18",
+        type: "multiple-choice",
+        question:
+          "The slides' 'Field-Ready IoT Defences' list includes which set?",
+        points: 2,
+        options: [
+          "Force credential change on first boot, authenticated update servers (TLS mutual auth), firmware transparency (SBOMs + signed manifests), and kernel update strategy with A/B partition rollback",
+          "Allow factory-default admin passwords for ease of deployment",
+          "Push updates over plain HTTP to save bandwidth",
+          "Disable all firmware signing to allow community modifications",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Field-Ready IoT Defences' slide lists exactly these four.",
+      },
+      {
+        id: "cyb-l7-q19",
+        type: "multiple-choice",
+        question:
+          "Which of the following is the L7 recommendation for handling SECRETS in MOBILE apps?",
+        points: 2,
+        options: [
+          "Embed static API keys in the app binary, since users can't easily extract them",
+          "Keep secrets off the device entirely; use backend-issued tokens bound to device properties where possible, and treat your API like a public client",
+          "Store secrets in plain text in the app's shared preferences for performance",
+          "Use the device's IMEI as a hard-coded secret",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'Keep secrets off the device. Do not embed static API keys. Use backend-issued tokens. Treat your API like a public client.' (L7 Mobile section.)",
+      },
+      {
+        id: "cyb-l7-q20",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT among the L7 IoT design countermeasures?",
+        points: 2,
+        options: [
+          "Force initial credential change or ship with no default admin access",
+          "TLS-authenticated update servers with pinned trust anchors",
+          "Firmware transparency: SBOMs, reproducible builds, signed manifests",
+          "Allow any signed firmware from third-party community sources to be installed automatically",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "Auto-installing community-signed firmware bypasses the device's trust anchor — the OPPOSITE of secure-boot practice. The other three are all listed countermeasures.",
+      },
+      {
+        id: "cyb-l7-q21",
+        type: "multiple-choice",
+        question: "The L7 'Six Security Test Categories' are:",
+        points: 2,
+        options: [
+          "Unit, integration, end-to-end, smoke, sanity, regression",
+          "SAST, Dependency/SBOM, Secrets Scanning, IaC Scanning, DAST/Smoke Tests, Header Snapshot Tests",
+          "Manual review, code review, peer review, lead review, VP review, CISO review",
+          "Pen test, red team, purple team, blue team, tiger team, SOC review",
+        ],
+        correctAnswer: 1,
+        explanation: "The 'Six Security Test Categories' slide.",
+      },
+      {
+        id: "cyb-l7-q22",
+        type: "multiple-choice",
+        question:
+          "SAST (Static Application Security Testing) and DAST (Dynamic Application Security Testing) differ in that:",
+        points: 2,
+        options: [
+          "SAST runs only in production, DAST runs only in development",
+          "SAST analyses the SOURCE CODE (without executing it), while DAST exercises the RUNNING APPLICATION (e.g. ZAP Baseline in staging)",
+          "SAST is for web apps only, DAST is for mobile only",
+          "They are the same thing under different names",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "SAST = static (no execution), DAST = dynamic (running app). The L7 categories explicitly include 'DAST / Smoke Tests — ZAP Baseline in staging.'",
+      },
+      {
+        id: "cyb-l7-q23",
+        type: "multiple-choice",
+        question:
+          "The L7 'Evidence for sign-off' approach replaces the statement 'it feels secure' with:",
+        points: 2,
+        options: [
+          "'The product owner says it's secure'",
+          "'We can SHOW it' — threat model checked in, automated test results, dependency and secrets scans clean, reviewed IaC, and documented residual risks",
+          "'The CISO has signed a memo'",
+          "'We've run a penetration test in the past 12 months'",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Evidence for sign-off' section: from 'it feels secure' to 'we can show it' — with threat model, scan results, code review evidence, etc.",
+      },
+      {
+        id: "cyb-l7-q24",
+        type: "multiple-choice",
+        question:
+          "The lecture's overarching message about secure SDLC is best captured by which statement?",
+        points: 2,
+        options: [
+          "Security is a separate track that runs in parallel with development",
+          "Security should be done once, at the end, by a dedicated team",
+          "Catch issues EARLY when they are cheap, build GUARDRAILS so common mistakes don't ship, and maintain VISIBILITY so you can prove what shipped matches what was intended",
+          "Security is best handled by external auditors after deployment",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The L7 preface summarises the entire chapter in exactly these three goals: catch early, guardrails, visibility.",
+      },
+    ],
+  },
+  {
+    id: "cyber-l8-quiz",
+    courseId: "7",
+    title: "Lecture 8 Quiz",
+    description:
+      "Lecture 8 — Communication & Network Security. Multiple-choice quiz covering Zero Trust networking, VPN vs IAP, egress control, segmentation, OSI/firewall layers, mTLS, modern detection, and PAM. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-20T12:00:00Z",
+    questions: [
+      {
+        id: "cyb-l8-q1",
+        type: "multiple-choice",
+        question: "The L8 summary states the lecture's central message as:",
+        points: 2,
+        options: [
+          "Treat the network as a trust boundary; defend the perimeter with stronger firewalls",
+          "Treat the network as a DELIVERY MECHANISM, not a trust boundary; build trust with identity, encrypt by default, and write policies in terms of who can do what, not where they are",
+          "Encrypt only sensitive data; leave internal traffic plaintext for performance",
+          "Trust internal traffic by default; suspect only external",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The L8 summary explicitly says: 'Treat the network as a delivery mechanism, not as a trust boundary.'",
+      },
+      {
+        id: "cyb-l8-q2",
+        type: "multiple-choice",
+        question:
+          "The 'Core Zero Trust Concepts' slide lists four concepts. Which set is correct?",
+        points: 2,
+        options: [
+          "Credentials Everywhere, Device Posture, Gateway Termination, Identity-Based Access",
+          "Encryption, Authentication, Authorisation, Auditing",
+          "Inside-Safe, Outside-Dangerous, Perimeter, Castle",
+          "VPN, Firewall, Antivirus, Backup",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Core Zero Trust Concepts' slide lists exactly these four: Credentials Everywhere, Device Posture, Gateway Termination, Identity-Based Access.",
+      },
+      {
+        id: "cyb-l8-q3",
+        type: "multiple-choice",
+        question:
+          "Under Zero Trust, 'Identity-Based Access' means access is defined by:",
+        points: 2,
+        options: [
+          "IP addresses and subnet membership",
+          "The user's physical location in the office",
+          "Identity and application — not IP addresses",
+          "Whether the user is connected to the corporate VPN",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "'Access defined by identity and application — not IP addresses.' (Slide quote.)",
+      },
+      {
+        id: "cyb-l8-q4",
+        type: "multiple-choice",
+        question: "'Device Posture' in the Zero Trust model contributes:",
+        points: 2,
+        options: [
+          "Optional information that may or may not be checked",
+          "Health and posture signals ALONGSIDE identity, used in the access decision",
+          "A replacement for user identity",
+          "Audit data only, not access-decision data",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slide states devices contribute health and posture signals ALONGSIDE identity, not as a replacement.",
+      },
+      {
+        id: "cyb-l8-q5",
+        type: "multiple-choice",
+        question:
+          "According to the 'Device-Aware Conditional Access' slide, how many signals feed into a single access decision, and what are they?",
+        points: 2,
+        options: [
+          "Two: username and password",
+          "Three: user identity (group membership), device compliance (MDM enrolled and policy-compliant), and sign-in risk score",
+          "Four: identity, device, location, biometric",
+          "One: a single SSO token",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'Device-Aware Conditional Access — three signals, one decision: user identity, device compliance, sign-in risk.'",
+      },
+      {
+        id: "cyb-l8-q6",
+        type: "multiple-choice",
+        question:
+          "The 'From Flat VPN to Application Access' slide contrasts the two models as:",
+        points: 2,
+        options: [
+          "Both grant identical access; the difference is only marketing",
+          "Traditional VPN: 'You are on the VPN → you can reach ALL servers.' Application Access Proxy: 'You are on a compliant device → you can reach the Orders API.'",
+          "VPN is more secure than IAP in all scenarios",
+          "IAP requires the user to install custom client software",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "This is the exact contrast from the 'From Flat VPN to Application Access' slide.",
+      },
+      {
+        id: "cyb-l8-q7",
+        type: "multiple-choice",
+        question:
+          "An Identity-Aware Proxy sits in front of a private internal application. The slides describe its effect as:",
+        points: 2,
+        options: [
+          "The application is exposed to the public internet but only over TLS",
+          "The application NEVER sees the public internet; the proxy validates the user's SSO identity and device posture before forwarding the request",
+          "The proxy removes the need for any authentication inside the application",
+          "The proxy grants the user network-level access to the entire subnet",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The application never sees the public internet; the proxy validates identity AND device posture.",
+      },
+      {
+        id: "cyb-l8-q8",
+        type: "multiple-choice",
+        question:
+          "In the Identity-Aware Proxy flow, what type of request does the proxy forward to the backend?",
+        points: 2,
+        options: [
+          "The user's original IP address, unmodified",
+          "Anonymous requests, since the proxy has handled auth",
+          "Requests authenticated with mTLS, from the proxy CIDR only, with the user's validated identity attached",
+          "Raw TCP packets from the public internet",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Modern Access Pattern' slide: only the proxy CIDR is allowed inbound, with mTLS; the proxy validated SSO token + device health first.",
+      },
+      {
+        id: "cyb-l8-q9",
+        type: "multiple-choice",
+        question:
+          "A small company offers all its engineers a full-tunnel VPN from their personal laptops into a flat corporate network containing dev, staging, and production. Identify the TWO strongest weaknesses described in the slides.",
+        points: 2,
+        options: [
+          "The VPN protocol is too slow, and the encryption keys are too short",
+          "Flat network = trivial lateral movement (no segmentation), AND personal laptops bypass device-posture / health checks",
+          "The VPN costs too much money to operate",
+          "Only one engineer can connect at a time",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "These are the two structural weaknesses: no segmentation (lateral movement) and no device-posture check (personal laptops drag malware inside).",
+      },
+      {
+        id: "cyb-l8-q10",
+        type: "multiple-choice",
+        question:
+          "When the slides DO allow a VPN as appropriate, the 'Appropriate VPN Use Cases' slide requires which set of accompanying controls?",
+        points: 2,
+        options: [
+          "Default username/password for ease of use",
+          "Indefinite session length to reduce reconnect friction",
+          "Aggressive segmentation WITHIN the VPN, phishing-resistant MFA, device-posture checks, and short time-bound sessions",
+          "Flat networks inside the VPN so engineers can reach any server",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "'Appropriate VPN Use Cases': segment aggressively within the VPN, phishing-resistant MFA, device posture, short sessions.",
+      },
+      {
+        id: "cyb-l8-q11",
+        type: "multiple-choice",
+        question:
+          "Most major data-exfiltration incidents exploit a particular network-design weakness. Which is it?",
+        points: 2,
+        options: [
+          "Insufficient encryption of data at rest",
+          "Permissive OUTBOUND (egress) network access",
+          "Absence of intrusion detection on inbound traffic",
+          "Use of HTTPS rather than HTTP for sensitive APIs",
+        ],
+        correctAnswer: 1,
+        explanation: "Most data-exfil incidents exploit permissive egress.",
+      },
+      {
+        id: "cyb-l8-q12",
+        type: "multiple-choice",
+        question:
+          "The L8 'segmentation that actually helps' recommends which sequence?",
+        points: 2,
+        options: [
+          "Allow all internal traffic by default and add deny rules as problems are found",
+          "Inventory flows → deny by default → open narrowly (only required destinations/ports, preferably identity-aware) → monitor and prune",
+          "Buy the most expensive next-gen firewall available",
+          "Place all services in a single flat subnet for performance",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'segmentation that actually helps' four-step sequence: inventory flows, deny by default, open narrowly, monitor and prune.",
+      },
+      {
+        id: "cyb-l8-q13",
+        type: "multiple-choice",
+        question:
+          "The slides advocate 'Identity over IP' for firewall policy. Why?",
+        points: 2,
+        options: [
+          "IPs are easier to memorise",
+          "IP-based policies can be bypassed by NAT, IP hopping, or recycling — identity is the only reliable handle in cloud environments",
+          "Identity-based rules are cheaper to license",
+          "IPs are deprecated in IPv6",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Firewall Best Practices' slide: 'Identity over IP. Where possible, enforce identity-aware policies at the proxy or mesh layer so that IP hopping or NAT does not bypass intent.'",
+      },
+      {
+        id: "cyb-l8-q14",
+        type: "multiple-choice",
+        question:
+          "The L8 mTLS-via-service-mesh example uses Istio with mtls: mode: STRICT. The slides warn that running with mode: PERMISSIVE in production is dangerous because:",
+        points: 2,
+        options: [
+          "PERMISSIVE rejects all mTLS connections",
+          "PERMISSIVE accepts plaintext alongside mTLS — silently allowing unencrypted lateral movement",
+          "PERMISSIVE requires a paid Istio licence",
+          "PERMISSIVE forces certificate rotation every minute",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "STRICT rejects plaintext entirely; PERMISSIVE accepts both and silently allows unencrypted lateral movement.",
+      },
+      {
+        id: "cyb-l8-q15",
+        type: "multiple-choice",
+        question:
+          "The 'Service-to-Service Trust' slide lists three principles. Which set is correct?",
+        points: 2,
+        options: [
+          "Mutual TLS (both sides present certificates); do NOT rely on source IP (spoofable, NAT, recycling); service meshes (Istio/Linkerd) enforce mTLS at the infrastructure layer",
+          "HTTPS only; trust the corporate VPN; rotate IPs daily",
+          "Symmetric encryption with a shared password",
+          "Use plaintext internally for performance; TLS only at the edge",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Service-to-Service Trust' slide lists exactly these three.",
+      },
+      {
+        id: "cyb-l8-q16",
+        type: "multiple-choice",
+        question:
+          "According to the L8 'Practical network hardening checklist,' which set best matches the recommended controls?",
+        points: 2,
+        options: [
+          "Single shared admin account; long-lived credentials; no monitoring; trust internal traffic",
+          "Inventory & map assets; encrypt everywhere (TLS for all services, internal databases and queues included); deny lateral movement by default; control egress; patch surface devices; monitor DNS, control plane, endpoints; test failure modes",
+          "Open all ports for ease of debugging",
+          "Allow all outbound traffic; block only inbound",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Practical network hardening checklist' lists exactly these items.",
+      },
+      {
+        id: "cyb-l8-q17",
+        type: "multiple-choice",
+        question:
+          "A Web Application Firewall (WAF) operates primarily at which OSI layer?",
+        points: 2,
+        options: [
+          "Layer 2 (Data Link)",
+          "Layer 3 (Network)",
+          "Layer 4 (Transport)",
+          "Layer 7 (Application)",
+        ],
+        correctAnswer: 3,
+        explanation: "WAFs inspect HTTP headers and payloads — Layer 7 (Application).",
+      },
+      {
+        id: "cyb-l8-q18",
+        type: "multiple-choice",
+        question:
+          "Which firewall type best matches 'tracks the state of active TCP/UDP connections — allowing only legitimate response traffic, understanding TCP handshakes and session states'?",
+        points: 2,
+        options: [
+          "Packet-filtering firewall (Layer 3-4)",
+          "Stateful firewall (Layer 4)",
+          "Application firewall / WAF (Layer 7)",
+          "Proxy firewall",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Stateful firewalls operate at Layer 4 (Transport) and track TCP/UDP connection state.",
+      },
+      {
+        id: "cyb-l8-q19",
+        type: "multiple-choice",
+        question:
+          "The L8 OSI table maps 'VLANs and MAC filtering' to which layer?",
+        points: 2,
+        options: [
+          "Layer 7 (Application)",
+          "Layer 4 (Transport)",
+          "Layer 3 (Network)",
+          "Layer 2 (Data Link)",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "MAC filtering and VLAN traffic isolation are Layer 2 (Data Link) controls.",
+      },
+      {
+        id: "cyb-l8-q20",
+        type: "multiple-choice",
+        question: "The 'Firewall Best Practices' slide lists which set?",
+        points: 2,
+        options: [
+          "Deny by default (inbound AND lateral); identity over IP; egress control; rules as code with change control and drift detection",
+          "Allow all by default; tighten when problems are reported by users",
+          "Configure rules manually in each firewall; never version-control them",
+          "Permit all outbound traffic to avoid breaking legitimate apps",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Firewall Best Practices' slide lists exactly these: deny by default, identity over IP, egress control, rules as code with drift detection.",
+      },
+      {
+        id: "cyb-l8-q21",
+        type: "multiple-choice",
+        question:
+          "A Next-Generation Firewall (NGFW) is described as operating across which OSI layers?",
+        points: 2,
+        options: [
+          "Layer 2 only",
+          "Layer 3 only",
+          "Layers 3 through 7, combining packet filtering, stateful inspection, and deep packet inspection with application awareness and IPS",
+          "Layer 7 only",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "NGFW combines packet filtering (L3), stateful inspection (L4), and deep packet inspection (L7) with IPS.",
+      },
+      {
+        id: "cyb-l8-q22",
+        type: "multiple-choice",
+        question:
+          "Because most modern transport is encrypted, the L8 detection-stack recommendations have shifted toward which set of sources?",
+        points: 2,
+        options: [
+          "Decrypting all internal traffic via MITM appliances at every hop",
+          "EDR (process lineage, file ops, in-memory signals); DNS and egress analytics (bad-reputation domains, DGA patterns, unusual exfiltration); cloud control-plane logs (CloudTrail / Audit Logs revealing IAM abuse)",
+          "Manual review of every packet capture",
+          "Disabling encryption to make inspection easier",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Modern detection stack' slide lists exactly EDR, DNS/egress analytics, and cloud control-plane logs.",
+      },
+      {
+        id: "cyb-l8-q23",
+        type: "multiple-choice",
+        question:
+          "The L8 Privileged Access Management (PAM) section recommends which pattern for admin access, INSTEAD of a persistent VPN?",
+        points: 2,
+        options: [
+          "Permanent admin credentials shared via team chat",
+          "Bastion / access proxy with NO direct network access; session recording for audit; JUST-IN-TIME elevation with no standing privilege; time-bound credentials that auto-expire",
+          "A single shared root password rotated quarterly",
+          "Direct SSH from the engineer's personal laptop to production with a static key",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The L8 PAM section lists bastion/access proxy, session recording, just-in-time elevation, and time-bound credentials.",
+      },
+      {
+        id: "cyb-l8-q24",
+        type: "multiple-choice",
+        question:
+          "The L8 summary states that 'detection shifts toward endpoints, DNS, and control planes as transport encrypts.' The deeper point is:",
+        points: 2,
+        options: [
+          "Network-layer detection is irrelevant in modern systems",
+          "Firewalls and IDS/IPS still matter, but they SERVE identity- and application-aware access; segmentation shrinks blast radius; build trust with identity, not network location",
+          "All security can be replaced by encryption",
+          "Cloud providers handle all security automatically",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The L8 summary's deeper point: firewalls/IDS still matter but serve identity-aware access; segmentation shrinks blast radius; trust comes from identity.",
+      },
+    ],
+  },
 ]
 
 export const dummyAssessmentAttempts: AssessmentAttempt[] = [
