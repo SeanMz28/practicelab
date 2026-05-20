@@ -2446,6 +2446,385 @@ export const dummyAssessments: Assessment[] = [
       },
     ],
   },
+  {
+    id: "cyber-l6-quiz",
+    courseId: "7",
+    title: "Lecture 6 Quiz",
+    description:
+      "Lecture 6 — Digital Forensics Fundamentals. Multiple-choice quiz covering the forensic process, frameworks (SANS/NIST/ISO), evidence preservation, OS/cloud artefacts, incident response, and post-incident improvement. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-19T12:00:00Z",
+    questions: [
+      {
+        id: "cyb-l6-q1",
+        type: "multiple-choice",
+        question: "The course defines digital forensics as:",
+        points: 2,
+        options: [
+          "Hacking back against attackers to recover stolen data",
+          "Identifying, preserving, analysing, and reporting digital evidence",
+          "Encrypting evidence so that only the SOC can read it",
+          "Restoring services to normal operation after an incident",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slide definition: 'Identifying, preserving, analysing, and reporting digital evidence.'",
+      },
+      {
+        id: "cyb-l6-q2",
+        type: "multiple-choice",
+        question:
+          "The slides note that 'most standards look something like this.' Which sequence of phases is shown on that slide?",
+        points: 2,
+        options: [
+          "Detect, Respond, Recover, Report, Restart",
+          "Preparation, Identification, Preservation, Analysis, Reporting",
+          "Containment, Eradication, Recovery, Review, Restart",
+          "Plan, Build, Run, Audit, Retire",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Most Standards Look Something Like This' slide lists Preparation → Identification → Preservation → Analysis → Reporting as the common pattern.",
+      },
+      {
+        id: "cyb-l6-q3",
+        type: "multiple-choice",
+        question: "The SANS six-step process for incident response is:",
+        points: 2,
+        options: [
+          "Plan, Build, Test, Deploy, Monitor, Retire",
+          "Detect, Triage, Investigate, Contain, Restore, Report",
+          "Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned",
+          "Identification, Authorisation, Acquisition, Analysis, Reporting, Archive",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "SANS six steps: Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned.",
+      },
+      {
+        id: "cyb-l6-q4",
+        type: "multiple-choice",
+        question:
+          "NIST SP 800-61 is described in the slides as best suited to which use case?",
+        points: 2,
+        options: [
+          "Quick, field-friendly action under pressure",
+          "Legal admissibility and formal certification",
+          "Mature programmes — expanding on roles, communications, metrics, and documentation",
+          "Cloud-only environments",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "NIST SP 800-61 is described as 'ideal for mature programmes' because it adds rigour around metrics, communication trees, and documentation.",
+      },
+      {
+        id: "cyb-l6-q5",
+        type: "multiple-choice",
+        question:
+          "ISO/IEC 27035 and 27037–27043 are positioned in the slides as:",
+        points: 2,
+        options: [
+          "Cloud-native incident response frameworks for hyperscale environments",
+          "The most rigorous standards — focused on governance, admissibility of evidence, and certification",
+          "Lightweight alternatives to SANS for small teams",
+          "Deprecated standards superseded by NIST",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "ISO frameworks (27035, 27037–27043) are presented as the most rigorous — focus on governance, admissibility, and certification.",
+      },
+      {
+        id: "cyb-l6-q6",
+        type: "multiple-choice",
+        question: "The slides call which phase 'the most overlooked'?",
+        points: 2,
+        options: ["Identification", "Preparation", "Recovery", "Reporting"],
+        correctAnswer: 1,
+        explanation:
+          "The slide explicitly calls Preparation 'The Most Overlooked Phase.'",
+      },
+      {
+        id: "cyb-l6-q7",
+        type: "multiple-choice",
+        question:
+          "Step 1 (Preparation, Before the Incident) requires which set of artefacts?",
+        points: 2,
+        options: [
+          "Forensic disk images of every employee laptop, refreshed weekly",
+          "On-call roster, key contacts (legal, PR, executive sponsors), runbooks per scenario, pre-positioned tools, and tabletop exercises",
+          "A signed memorandum from law enforcement",
+          "Annual SOC 2 audit reports stored in the SIEM",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The Preparation slide lists exactly these artefacts: on-call roster, key contacts, runbooks, pre-positioned tools, tabletop exercises.",
+      },
+      {
+        id: "cyb-l6-q8",
+        type: "multiple-choice",
+        question: "During Identification (SANS Step 2), the analyst should:",
+        points: 2,
+        options: [
+          "Immediately wipe the affected system to prevent further damage",
+          "Detect (alerts/user reports), triage real vs false positive, bound the affected systems, estimate blast radius, and escalate if warranted",
+          "Skip straight to credential rotation",
+          "Begin drafting the post-incident review",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Identification (Step 2) involves detection, triage, bounding, blast radius estimation, and escalation.",
+      },
+      {
+        id: "cyb-l6-q9",
+        type: "multiple-choice",
+        question:
+          "During an incident, the response lead does the following in this order: (1) isolates the compromised host from the network; (2) revokes its service tokens; (3) removes the webshell the attacker installed; (4) patches the vulnerability that let them in. Where is the boundary between containment and eradication?",
+        points: 2,
+        options: [
+          "Step 1 is containment; steps 2–4 are eradication",
+          "Steps 1–2 are containment; steps 3–4 are eradication",
+          "All four steps are containment; eradication has not yet started",
+          "Only step 4 is eradication; the rest are recovery",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Isolating the host (step 1) and revoking service tokens (step 2) both stop the attacker's reach = containment. Removing the webshell (step 3) and patching the vulnerability (step 4) remove the threat = eradication.",
+      },
+      {
+        id: "cyb-l6-q10",
+        type: "multiple-choice",
+        question:
+          "The slide titled 'Containment: Stop the Bleeding' lists which of the following actions?",
+        points: 2,
+        options: [
+          "Patch the vulnerability and reset all credentials",
+          "Isolate and revoke (network isolation, token revocation, account disable), block indicators (IPs, domains, hashes), preserve evidence, communicate",
+          "Restore from clean backups and obtain business sign-off",
+          "Form hypotheses and build timelines",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'Containment: Stop the Bleeding' lists Isolate & Revoke, Block Indicators, Preserve Evidence, Communicate.",
+      },
+      {
+        id: "cyb-l6-q11",
+        type: "multiple-choice",
+        question:
+          "According to the 'Eradication and Remediation' slide, which of the following is NOT a listed action?",
+        points: 2,
+        options: [
+          "Remove malware (backdoors, droppers, webshells)",
+          "Eliminate persistence (scheduled tasks, registry keys, crontabs)",
+          "Patch and harden — close the vulnerability that was exploited",
+          "Notify the public via press release before internal investigation completes",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "Public notification is NOT in the eradication slide. The four listed actions are Remove Malware, Eliminate Persistence, Patch & Harden, Reset Credentials.",
+      },
+      {
+        id: "cyb-l6-q12",
+        type: "multiple-choice",
+        question: "The slide on Recovery (Step 5) emphasises which sequence?",
+        points: 2,
+        options: [
+          "Restore everything immediately to minimise downtime; investigate afterwards",
+          "Restore from clean backups (verify integrity BEFORE restoring, not during), validate before reconnecting, gradual reintroduction with monitoring, and formal business sign-off",
+          "Hand over to a third-party MSP and stop internal work",
+          "Notify regulators before restoring any services",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Recovery requires verifying backup integrity BEFORE restoring (not during), validating before reconnecting, gradual reintroduction, and business sign-off.",
+      },
+      {
+        id: "cyb-l6-q13",
+        type: "multiple-choice",
+        question:
+          "The slides state that during Preservation (Phase 3), evidence should be collected in which order?",
+        points: 2,
+        options: [
+          "Disk images first, then memory if there's time",
+          "Volatile data (memory and running processes) FIRST, then less volatile sources",
+          "Logs first, then memory, then disk",
+          "The order does not matter as long as everything is hashed",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Phase 3 (Preservation): 'Volatile Data First — memory and running processes before anything else.' Volatile data disappears when power is lost.",
+      },
+      {
+        id: "cyb-l6-q14",
+        type: "multiple-choice",
+        question: "The hashing algorithm the slides specify for evidence is:",
+        points: 2,
+        options: [
+          "MD5",
+          "SHA-1",
+          "SHA-256, computed both before AND after acquisition",
+          "CRC-32",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slides specify SHA-256, computed both before AND after acquisition, to prove integrity.",
+      },
+      {
+        id: "cyb-l6-q15",
+        type: "multiple-choice",
+        question:
+          "The example Chain-of-Custody record in the slides includes ALL of the following EXCEPT:",
+        points: 2,
+        options: [
+          "Case ID and acquisition authorisation",
+          "Analyst name and role",
+          "The personal opinion of the analyst about who is to blame",
+          "Tool and version used, plus SHA-256 hashes",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Analyst opinion / blame attribution is NOT part of the CoC record. CoC documents facts only: case ID, who performed, timestamps (UTC), tools & versions, hashes, storage & transfers.",
+      },
+      {
+        id: "cyb-l6-q16",
+        type: "multiple-choice",
+        question:
+          "A bank stores its security logs in an S3 bucket with object-versioning, MFA-required-for-delete, and a retention lock preventing deletion for seven years. This configuration is best described as:",
+        points: 2,
+        options: [
+          "Role-based access control (RBAC)",
+          "Write-Once-Read-Many (WORM) storage",
+          "Defence in depth at the network layer",
+          "An air-gapped backup",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Object-versioning + MFA-required-for-delete + retention lock = WORM storage (immutable evidence).",
+      },
+      {
+        id: "cyb-l6-q17",
+        type: "multiple-choice",
+        question:
+          "The 'Log Protection Strategies' slide lists four techniques. Which set is correct?",
+        points: 2,
+        options: [
+          "Frequent rotation, public mirroring, weekly archival, quarterly review",
+          "Write-once storage, separate security accounts, integrity checks (hash on ingest, re-verify on access), encryption at rest with key management separate from data",
+          "Single-user write access, encryption with the same key as the database, daily overwrite, indefinite retention",
+          "Local storage on each application server, with hourly sync to a single central server",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Log Protection Strategies' slide lists Write-Once Storage, Separate Security Accounts, Integrity Checks, and Encryption at Rest with separate key management.",
+      },
+      {
+        id: "cyb-l6-q18",
+        type: "multiple-choice",
+        question:
+          "On a Windows host triage, which of the following best matches 'execution evidence'?",
+        points: 2,
+        options: [
+          "Registry hives (SAM, SYSTEM, SOFTWARE) and NTUSER.DAT",
+          "Prefetch files, ShimCache, AmCache, and EDR process trees",
+          "Scheduled tasks and WMI subscriptions",
+          "Security event logs (4624, 4625, 4688)",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Execution evidence on Windows = Prefetch, ShimCache, AmCache, EDR process trees. The other answers are different categories on the same slide (registry, persistence, event logs).",
+      },
+      {
+        id: "cyb-l6-q19",
+        type: "multiple-choice",
+        question: "Which Windows Security event IDs map to the actions listed?",
+        points: 2,
+        options: [
+          "4624 = successful logon, 4625 = failed logon, 4688 = process creation",
+          "4624 = process creation, 4625 = successful logon, 4688 = failed logon",
+          "4624 = service start, 4625 = service stop, 4688 = scheduled task created",
+          "4624 = file deletion, 4625 = file creation, 4688 = registry change",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "4624 = successful logon, 4625 = failed logon, 4688 = process creation. These are the three security event IDs explicitly listed in the Windows Host Triage slide.",
+      },
+      {
+        id: "cyb-l6-q20",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT listed on the 'Linux Host Triage' slide?",
+        points: 2,
+        options: [
+          "Auth logs, sudo logs, auditd, systemd journals",
+          ".ssh/authorized_keys and known_hosts",
+          "Crontab entries, systemd timers, setuid files, modified binaries in privileged paths",
+          "Windows Prefetch and ShimCache",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "Prefetch and ShimCache are WINDOWS artefacts, not Linux. The Linux slide lists auth/sudo/auditd/journal logs, .ssh keys, bash history, cron/systemd timers, setuid files, processes and sockets, container metadata.",
+      },
+      {
+        id: "cyb-l6-q21",
+        type: "multiple-choice",
+        question:
+          "For cloud investigations, the slides list which of the following as primary evidence sources?",
+        points: 2,
+        options: [
+          "IdP sign-in logs, token issuance records, SaaS audit trails, object storage logs, and build-system logs",
+          "The marketing team's CRM",
+          "Customer-facing application UI screenshots",
+          "Public DNS records only",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Cloud Investigation Sources' slide lists IdP sign-in logs, token issuance, SaaS audit trails, object storage logs, and build-system logs.",
+      },
+      {
+        id: "cyb-l6-q22",
+        type: "multiple-choice",
+        question:
+          "The slides give a 'Test Readiness' question to ask of any critical system: if it were compromised last week, could you reconstruct which of the following?",
+        points: 2,
+        options: [
+          "The CEO's personal calendar",
+          "Who logged in, what they ran, what data left, and what config changed",
+          "The exact financial impact in USD",
+          "The motivations of the attacker",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Test Readiness' slide asks exactly these four reconstruction questions. If you can't answer them, your logging is inadequate.",
+      },
+      {
+        id: "cyb-l6-q23",
+        type: "multiple-choice",
+        question:
+          "According to the 'How Long to Keep Evidence' slide, high-value telemetry has an operational minimum retention of approximately:",
+        points: 2,
+        options: ["7–14 days", "30 days", "90–400 days", "10 years"],
+        correctAnswer: 2,
+        explanation:
+          "The 'How Long to Keep Evidence' slide gives 90–400 days as the operational minimum for high-value telemetry.",
+      },
+      {
+        id: "cyb-l6-q24",
+        type: "multiple-choice",
+        question:
+          "The 'Learn and Improve' (Step 6) slide states that the post-incident review should focus on:",
+        points: 2,
+        options: [
+          "Identifying which individual to blame and what disciplinary action to take",
+          "Systems, not blame — updating runbooks with what actually worked, improving telemetry to fill gaps, and tracking remediation items to completion with owners and deadlines",
+          "Producing a press release for external stakeholders before any internal review",
+          "Closing the case quickly so the team can move on",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "'Learn and Improve' (Step 6) explicitly states 'Focus on systems, not blame' and lists updating runbooks, improving telemetry, and tracking remediation to completion with owners and deadlines.",
+      },
+    ],
+  },
 ]
 
 export const dummyAssessmentAttempts: AssessmentAttempt[] = [
