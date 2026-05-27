@@ -4216,6 +4216,1147 @@ export const dummyAssessments: Assessment[] = [
       },
     ],
   },
+  {
+    id: "cyber-l2-quiz",
+    courseId: "7",
+    title: "Lecture 2 Quiz",
+    description:
+      "Lecture 2 — Vulnerabilities and Threats. Multiple-choice quiz covering CVE/CWE/CVSS, the 10-category taxonomy, injection, authentication & session, access control, cryptographic misuse, XSS, CSRF, supply chain, memory safety, misconfiguration, and business logic flaws. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-20T14:00:00Z",
+    questions: [
+      {
+        id: "cyb-l2-q1",
+        type: "multiple-choice",
+        question:
+          "Which statement BEST captures the difference between CVE and CWE, as taught in the slides?",
+        points: 2,
+        options: [
+          "CVE is the taxonomy of types; CWE is the list of specific instances",
+          "CVE lists specific INSTANCES (e.g. CVE-2023-34362 in MOVEit); CWE is the TAXONOMY of vulnerability TYPES (e.g. CWE-89 SQL Injection)",
+          "CVE and CWE are the same thing under different names",
+          "CVE is for hardware bugs; CWE is for software bugs",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "CVE = the instance ('broken lock on your door'); CWE = the category ('broken locks in general'). CVE-2023-34362 (MOVEit) is an instance of CWE-89 (SQL Injection). 'CVEs are crimes; CWEs are types of crimes.'",
+      },
+      {
+        id: "cyb-l2-q2",
+        type: "multiple-choice",
+        question:
+          "The slides explicitly note that some cloud/SaaS breaches do NOT receive a CVE identifier. The PRIMARY reason given is:",
+        points: 2,
+        options: [
+          "Cloud vendors are exempt from CVE assignment",
+          "CVEs are only issued for vulnerabilities in specific versions of software packages; if the software worked as designed and the IMPLEMENTATION was insecure (e.g., a weak password or open database), no CVE is assigned",
+          "MITRE refuses to issue CVEs for cloud platforms",
+          "Cloud breaches are never severe enough to warrant a CVE",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Under 'A Note on Missing CVEs': cloud/SaaS breaches often occur due to misconfiguration (weak password, open database) rather than a bug in the software CODE. The software worked as designed; the implementation was insecure. The Tea App breach is the cited example.",
+      },
+      {
+        id: "cyb-l2-q3",
+        type: "multiple-choice",
+        question:
+          "A vulnerability has the CVSS vector AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H, scoring 9.8 Critical. Which property of this vector contributes MOST to making exploitation broadly automated and dangerous?",
+        points: 2,
+        options: [
+          "AV:N (Attack Vector = Network) and UI:N (no user interaction required) — the flaw is remotely exploitable without tricking a user",
+          "AC:L (low complexity) alone — complexity has the biggest weight",
+          "S:U (Scope = Unchanged) — Unchanged scope is the worst",
+          "C:H alone — only confidentiality impact matters",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "AV:N (hit it over the network from anywhere) and UI:N (no need to trick a user), combined with PR:N (no auth), are what make 9.8 Critical CVEs mass-exploitable at internet scale. Option (c) is backwards: Changed scope is worse than Unchanged.",
+      },
+      {
+        id: "cyb-l2-q4",
+        type: "multiple-choice",
+        question:
+          "The slides emphasise that 'CVSS measures severity, not risk.' Which extra factors do they recommend adding to determine ACTUAL risk to your environment?",
+        points: 2,
+        options: [
+          "Reachability in your deployment, public exploit availability, and blast radius",
+          "The age of the vulnerability and the size of the vendor",
+          "The number of CVEs issued in the same year",
+          "The number of news articles published about it",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The notes: 'Ask if the vulnerability is REACHABLE in your deployment, if there is a PUBLIC EXPLOIT, and what the BLAST RADIUS is.' These three turn raw severity into real-world risk.",
+      },
+      {
+        id: "cyb-l2-q5",
+        type: "multiple-choice",
+        question:
+          "The 10-category vulnerability taxonomy used in the lecture is described as:",
+        points: 2,
+        options: [
+          "The official OWASP standard, replacing CWE",
+          "An educational framework that groups common security failures into 10 understandable categories, drawing heavily on the OWASP Top 10 and CWE Top 25",
+          "A South African-only taxonomy maintained by Wits",
+          "A subset of CVSS impact metrics",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides: 'This is an educational framework... It is not an official standard like CVE or CWE, but it draws heavily from the OWASP Top 10 and CWE Top 25.'",
+      },
+      {
+        id: "cyb-l2-q6",
+        type: "multiple-choice",
+        question:
+          "The MOVEit Transfer breach (CVE-2023-34362) is used in the slides as the case study for which category?",
+        points: 2,
+        options: [
+          "Cross-Site Scripting (XSS)",
+          "Injection & Deserialization (specifically SQL Injection, CWE-89)",
+          "Misconfiguration & Default Secrets",
+          "Memory Safety & Concurrency",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "MOVEit sits under Category 1 (Injection & Deserialization): 'Attackers used SQL injection to bypass login screens and execute arbitrary database queries, stealing file lists and administrative keys.'",
+      },
+      {
+        id: "cyb-l2-q7",
+        type: "multiple-choice",
+        question:
+          "The CORE concept of an injection vulnerability, as stated in the slides, is:",
+        points: 2,
+        options: [
+          "The attacker needs root access to launch the attack",
+          "The interpreter cannot distinguish between trusted commands and untrusted data when they are concatenated together",
+          "The database server is misconfigured",
+          "The user's session has expired",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The lecture's framing word-for-word: 'The interpreter cannot distinguish between trusted commands and untrusted data when they're concatenated together.' Mantra: 'Never trust user input. Never.'",
+      },
+      {
+        id: "cyb-l2-q8",
+        type: "multiple-choice",
+        question:
+          "The slides list three XSS variants. A payload that is saved to the database and then served back to every user who views the affected page is:",
+        points: 2,
+        options: ["Reflected XSS", "Stored XSS", "DOM-based XSS", "CSRF"],
+        correctAnswer: 1,
+        explanation:
+          "Stored XSS — payload saved to the database, affecting every viewer of that content. Reflected XSS is in URL parameters reflected immediately; DOM-based XSS is client-side JS writing unsanitised input into the DOM.",
+      },
+      {
+        id: "cyb-l2-q9",
+        type: "multiple-choice",
+        question:
+          "Which set of XSS defences is given in the lecture's 'Defence Layers' slide?",
+        points: 2,
+        options: [
+          "Anti-CSRF tokens, SameSite cookies, double-submit cookies",
+          "Input validation (whitelist), context-aware output encoding, Content Security Policy (CSP) headers, and HttpOnly cookies",
+          "Encryption at rest, encryption in transit, and key rotation",
+          "Stack canaries, ASLR, DEP/NX, and CFI",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The four XSS 'Defence Layers': input validation (whitelist), context-aware output encoding, CSP headers, and HttpOnly cookies. Option (a) is the CSRF defence set; option (d) is the memory-safety mitigation set.",
+      },
+      {
+        id: "cyb-l2-q10",
+        type: "multiple-choice",
+        question:
+          "The Windows 'CurveBall' vulnerability (CVE-2020-0601) is presented in the slides as a case study of:",
+        points: 2,
+        options: [
+          "Injection & Deserialization",
+          "Cryptographic Misuse — specifically a flaw in how Windows validated Elliptic Curve Cryptography certificates, allowing forged code-signing certs",
+          "Cross-Site Request Forgery",
+          "Supply Chain & Dependencies",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "CurveBall is the textbook crypto-misuse case study: 'A mathematical error in how Windows crypt32.dll validated Elliptic Curve Cryptography (ECC) certificates,' allowing attackers to craft fake code-signing certificates Windows accepted as legitimate.",
+      },
+      {
+        id: "cyb-l2-q11",
+        type: "multiple-choice",
+        question:
+          "The slides warn that JWT payloads are not encrypted by default — just Base64-encoded. Which kind of data should therefore NEVER be placed in JWT claims?",
+        points: 2,
+        options: [
+          "Public usernames and role names",
+          "Token expiry timestamps",
+          "Passwords, PII, credit card numbers, medical records",
+          "The issuer ('iss') and audience ('aud') fields",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slides: 'JWTs are not encrypted by default. The payload is merely Base64-encoded... Never place sensitive data (passwords, PII, credit card numbers, medical records) in JWT claims.' Roles, expiry, iss/aud are fine — they are not secrets.",
+      },
+      {
+        id: "cyb-l2-q12",
+        type: "multiple-choice",
+        question:
+          "The GitLab Account Takeover case study (CVE-2022-1162) is used in the slides to illustrate which category?",
+        points: 2,
+        options: [
+          "Cross-Site Scripting",
+          "Authentication & Session Management — specifically a hardcoded password left in the OmniAuth module that allowed login to any account using a third-party provider",
+          "Memory Safety",
+          "Business Logic & Abuse",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Category 2: 'A hardcoded password was accidentally left in the GitLab authentication module for accounts using OmniAuth providers. Attackers could log in to any account that used a third-party provider by using this static, universal password found in the code.'",
+      },
+      {
+        id: "cyb-l2-q13",
+        type: "multiple-choice",
+        question:
+          "The slides explicitly distinguish authentication from authorisation. Which pairing is correct?",
+        points: 2,
+        options: [
+          "AuthN = 'What can you do?'; AuthZ = 'Who are you?'",
+          "AuthN = 'Who are you?' (identity verification); AuthZ = 'What can you do?' (permission verification)",
+          "AuthN and AuthZ both mean 'What can you do?'",
+          "AuthN is a stronger form of AuthZ",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "From the 'Authentication vs Authorisation' slide: AuthN proves identity ('Who are you?'); AuthZ enforces what that identity can access ('What can you do?'). One without the other is insufficient.",
+      },
+      {
+        id: "cyb-l2-q14",
+        type: "multiple-choice",
+        question:
+          "A logged-in user changes the URL from api.example.com/user/123/profile to api.example.com/user/124/profile and gains access to another person's profile. This is a textbook example of:",
+        points: 2,
+        options: [
+          "Cross-Site Scripting",
+          "Vertical privilege escalation",
+          "Insecure Direct Object Reference (IDOR) — a form of broken access control / horizontal escalation",
+          "SQL Injection",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The IDOR slide uses this exact URL pattern. It is horizontal escalation — accessing ANOTHER user's data at the SAME privilege level, not gaining admin rights (which would be vertical escalation).",
+      },
+      {
+        id: "cyb-l2-q15",
+        type: "multiple-choice",
+        question:
+          "The slides note that replacing sequential integer IDs with random UUIDs 'helps but doesn't solve' IDOR. Why not?",
+        points: 2,
+        options: [
+          "UUIDs are easy to guess with modern compute",
+          "UUIDs still need a SERVER-SIDE authorisation check on every request ('does this user OWN this resource?') — the URL identifier alone never authorises access",
+          "UUIDs collide too frequently to be safe",
+          "UUIDs cannot be used in REST APIs",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slide: 'Random UUIDs are HARDER TO GUESS than sequential integers, but you still need server-side authorisation.' Every request must check 'Does this authenticated user OWN this resource?' Security through obscurity is not security.",
+      },
+      {
+        id: "cyb-l2-q16",
+        type: "multiple-choice",
+        question: "According to the slides, a CSRF attack succeeds because:",
+        points: 2,
+        options: [
+          "The attacker has the victim's password",
+          "The application uses HTTPS",
+          "The browser automatically attaches the victim's session cookie to cross-site requests, and the server cannot distinguish forged requests from legitimate ones",
+          "The Same-Origin Policy is disabled by default",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slide: 'The browser automatically sends cookies for bank.com with the request — the server can't distinguish legitimate requests from forged ones.' The attack hinges on this default browser behaviour.",
+      },
+      {
+        id: "cyb-l2-q17",
+        type: "multiple-choice",
+        question:
+          "Which of the following is the PRIMARY (server-side) defensive control against CSRF on state-changing endpoints, as named in the slides?",
+        points: 2,
+        options: [
+          "HttpOnly cookies",
+          "Content Security Policy",
+          "Anti-CSRF tokens (Synchroniser Token Pattern)",
+          "Multi-Factor Authentication",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The Synchroniser Token Pattern is the primary defence: 'Server embeds random token in forms and validates it on POST requests. Token is unpredictable to attacker.' HttpOnly defends against XSS, not CSRF — a common distractor.",
+      },
+      {
+        id: "cyb-l2-q18",
+        type: "multiple-choice",
+        question:
+          "In a dependency confusion attack, the package manager installs the malicious public package because:",
+        points: 2,
+        options: [
+          "Internal packages are never digitally signed",
+          "The package manager may prefer the HIGHER VERSION NUMBER found in the public registry over the lower version on the internal registry",
+          "Private registries automatically mirror all public packages",
+          "CI/CD pipelines always skip integrity checks",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slide: an attacker registers the internal package name on the public registry with a higher version (e.g. 99.0.0); npm sees both and CHOOSES THE PUBLIC ONE due to higher semantic versioning, installing malicious code.",
+      },
+      {
+        id: "cyb-l2-q19",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT listed in the slides as a supply-chain attack pattern?",
+        points: 2,
+        options: [
+          "Dependency confusion",
+          "Typosquatting (e.g., colorama vs colourama)",
+          "Account compromise of legitimate maintainers",
+          "IDOR through sequential package IDs",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "The four supply-chain patterns are Dependency Confusion, Typosquatting, Account Compromise (event-stream), and Malicious Updates (ua-parser-js). IDOR is an access-control category, not a supply-chain pattern.",
+      },
+      {
+        id: "cyb-l2-q20",
+        type: "multiple-choice",
+        question:
+          "A C function calls strcpy(buffer, user_input) without bounds checking. An attacker supplies a very long input that overwrites the saved return address with the address of injected shellcode. This is a classic example of:",
+        points: 2,
+        options: [
+          "SQL injection",
+          "Stack buffer overflow leading to remote code execution",
+          "CSRF",
+          "Race condition",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Buffer Overflow Technical Explanation' slide: strcpy without bounds checking writes past the buffer, overwriting the return address; on return, execution jumps to the attacker's shellcode. Classic stack-smashing (Memory Safety, Category 8).",
+      },
+      {
+        id: "cyb-l2-q21",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT one of the modern memory-safety mitigations listed in the slides?",
+        points: 2,
+        options: [
+          "ASLR (Address Space Layout Randomisation)",
+          "DEP / NX (Data Execution Prevention)",
+          "Stack canaries",
+          "HttpOnly cookies",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "The memory-safety mitigations are ASLR, DEP/NX, stack canaries, and CFI. HttpOnly is a cookie flag defending against XSS reading session tokens — a web-tier control, not a memory-tier one.",
+      },
+      {
+        id: "cyb-l2-q22",
+        type: "multiple-choice",
+        question:
+          "A developer accidentally commits a database password in plaintext to a public GitHub repository. According to the 10-category taxonomy, this is BEST classified as:",
+        points: 2,
+        options: [
+          "Cross-Site Scripting (XSS)",
+          "Misconfiguration & Default Secrets",
+          "Business Logic Abuse",
+          "Memory Safety Violation",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Category 9: 'the software worked as designed; the implementation was insecure.' Plaintext secrets in source control is the canonical example. Not XSS (no script injection), not business logic (code did nothing wrong), not memory safety (no buffer issue).",
+      },
+      {
+        id: "cyb-l2-q23",
+        type: "multiple-choice",
+        question:
+          "The slides emphasise that an SQL injection vulnerability is NOT a business logic flaw. Why?",
+        points: 2,
+        options: [
+          "Because SQL injection always requires admin access",
+          "Because business logic flaws never affect databases",
+          "Because SQL injection exploits the INTERPRETER mixing data with commands; business logic flaws are cases where the code works as written but the application RULES allow abuse",
+          "Because business logic flaws are not in the taxonomy",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "SQL injection (Category 1) exploits the database interpreter's inability to separate trusted commands from untrusted data. Business logic flaws (Category 10) are different: the code works exactly as written, but the logic lets users manipulate business rules.",
+      },
+      {
+        id: "cyb-l2-q24",
+        type: "multiple-choice",
+        question:
+          "A user discovers that calling the URL /payment/confirm directly — skipping the payment form entirely — still marks the order as 'paid.' This is BEST described as:",
+        points: 2,
+        options: [
+          "SQL injection",
+          "A business logic flaw (process-flow bypass): the code runs correctly, but the application incorrectly trusts that users follow the intended sequence of steps",
+          "Cross-Site Scripting",
+          "Misconfiguration",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides give this exact pattern under business logic flaws: 'Process flow bypass — call confirmation URL directly, skipping payment.' Defence: server-side validation of state transitions; never trust the client to follow the intended sequence.",
+      },
+    ],
+  },
+  {
+    id: "cyber-l3-quiz",
+    courseId: "7",
+    title: "Lecture 3 Quiz",
+    description:
+      "Lecture 3 — Authentication, Authorisation & Trust. Multiple-choice quiz covering MFA factors, password storage, sessions vs JWTs, JWT structure and attacks, refresh tokens, OAuth 2.0 / OIDC, WebAuthn, Kerberos, LDAP, SAML, TPM/HSM/PUF, RBAC vs ABAC, and Policy-as-Code (OPA / Rego). 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-20T15:00:00Z",
+    questions: [
+      {
+        id: "cyb-l3-q1",
+        type: "multiple-choice",
+        question:
+          "The slides define MFA as requiring multiple independent types of evidence. Which set correctly names the three factors as taught?",
+        points: 2,
+        options: [
+          "Username, Password, IP Address",
+          "Something You Know, Something You Have, Something You Are",
+          "Authentication, Authorisation, Auditing",
+          "MFA, SSO, OIDC",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The MFA slide: Know (password, PIN), Have (phone, YubiKey, authenticator app), Are (fingerprint, facial scan, iris). Combining factors from different categories is what makes MFA strong.",
+      },
+      {
+        id: "cyb-l3-q2",
+        type: "multiple-choice",
+        question:
+          "Why does the lecture single out WebAuthn / FIDO2 as phishing-RESISTANT, while SMS OTP and even TOTP are NOT?",
+        points: 2,
+        options: [
+          "WebAuthn uses longer codes than SMS or TOTP",
+          "The authenticator verifies the ORIGIN (domain) before using the credential — if you registered the key on bank.com and a phishing site mimics it as examp1e-bank.com, the browser refuses to use the credential",
+          "WebAuthn always requires biometrics",
+          "WebAuthn codes have shorter expiry times",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Origin-Bound Credentials' slide: the authenticator checks the origin and refuses on mismatch, making phishing structurally impossible regardless of how well-crafted the phishing site is. SMS and TOTP let the user type a code into any site.",
+      },
+      {
+        id: "cyb-l3-q3",
+        type: "multiple-choice",
+        question:
+          "The slides say session tokens stored in cookies must use which three security flags?",
+        points: 2,
+        options: [
+          "HttpOnly, Secure, SameSite",
+          "Public, Static, Long-Lived",
+          "Persistent, Cleartext, Wildcard",
+          "Admin, Audit, Anon",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Critical Cookie Attributes' slide: HttpOnly (JS can't read it — XSS defence), Secure (HTTPS only), SameSite (restricts cross-site sending — CSRF defence). These three are the modern session-cookie baseline.",
+      },
+      {
+        id: "cyb-l3-q4",
+        type: "multiple-choice",
+        question:
+          "The slides explicitly warn against storing passwords with which hashing algorithm(s)?",
+        points: 2,
+        options: [
+          "bcrypt and Argon2",
+          "MD5 and SHA1 — vulnerable to rainbow-table attacks",
+          "PBKDF2 and scrypt",
+          "AES-256 — it is not a hashing algorithm but is fine for storage",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides: 'Use bcrypt or Argon2 with unique salts. Never MD5 or SHA1 — vulnerable to rainbow table attacks.' MD5/SHA1 are fast hashes (billions/sec on a GPU). AES is a cipher, not a hash, so (d) is doubly wrong.",
+      },
+      {
+        id: "cyb-l3-q5",
+        type: "multiple-choice",
+        question:
+          "The slides note that SMS OTP, TOTP authenticator apps, and WebAuthn keys are not equally strong. Which of the following is the PRIMARY weakness of SMS OTP that TOTP apps avoid?",
+        points: 2,
+        options: [
+          "SMS codes are too short",
+          "SMS is vulnerable to SIM swapping, SS7 protocol exploits, and real-time interception in the carrier network — TOTP codes are generated locally and cannot be intercepted in transit",
+          "SMS codes expire too quickly",
+          "SMS apps cost more to develop",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides list MFA Bypass Risks for SMS: SIM swapping, push fatigue, SMS OTP interception. The SMS code travels through the carrier network the user doesn't control; TOTP computes the code locally. (TOTP is still phishable in real time — only WebAuthn/FIDO2 eliminates that.)",
+      },
+      {
+        id: "cyb-l3-q6",
+        type: "multiple-choice",
+        question: "The slides cover 'Session Fixation.' The recommended defence is:",
+        points: 2,
+        options: [
+          "Always store the session ID in a URL parameter",
+          "Regenerate session IDs after successful login and privilege escalation; never accept session IDs from URL parameters",
+          "Use the same session ID for the user's entire account lifetime",
+          "Encrypt the cookie with the user's password",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Session Fixation Defence' slide: 'Regenerate session IDs after successful login. Never accept session IDs from URL parameters.' ID regeneration on login breaks the attack where an attacker plants a known session ID on the victim.",
+      },
+      {
+        id: "cyb-l3-q7",
+        type: "multiple-choice",
+        question:
+          "The slides state JWTs exist because the two pre-JWT options for cross-service identity were both unsatisfying. Which two?",
+        points: 2,
+        options: [
+          "Shared session database (tight coupling, single point of failure) and call-back to the auth service on every request (latency, load)",
+          "Encrypted email and SMS OTP",
+          "Kerberos and SAML",
+          "RBAC and ABAC",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The 'Problem JWTs Solve' slide: a shared DB creates tight coupling and a single point of failure; calling the auth service every request adds latency/load and fails if the service is down. JWTs are a third option — cryptographically signed claims any service can verify locally.",
+      },
+      {
+        id: "cyb-l3-q8",
+        type: "multiple-choice",
+        question: "Which JWT HEADER claim specifies the signing algorithm used?",
+        points: 2,
+        options: ["typ", "sub", "alg", "iat"],
+        correctAnswer: 2,
+        explanation:
+          "The JWT Header: alg (signing algorithm), typ (token type, always 'JWT'), kid (key ID). sub and iat are payload claims (subject and issued-at).",
+      },
+      {
+        id: "cyb-l3-q9",
+        type: "multiple-choice",
+        question:
+          "The 2015 'algorithm confusion' attack against JWT libraries allowed an attacker to forge tokens by:",
+        points: 2,
+        options: [
+          "Brute-forcing the HMAC secret in a few hours",
+          "Replaying a captured token before its exp claim expired",
+          "Setting the alg header to 'none' and removing the signature",
+          "Switching alg from RS256 to HS256 and signing with the SERVER'S PUBLIC KEY used as the HMAC secret — the vulnerable library then 'verified' the forged token",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "The attacker takes a valid RS256 token, changes the header to HS256, and signs with the server's PUBLIC KEY treated as an HMAC secret. A vulnerable library fetches the public key and uses HMAC-SHA256 to 'verify' — and it works. Fix: whitelist algorithms. Option (c) is the related but distinct 'alg: none' attack.",
+      },
+      {
+        id: "cyb-l3-q10",
+        type: "multiple-choice",
+        question:
+          "The slides list a strict JWT verification checklist. Which step is on it?",
+        points: 2,
+        options: [
+          "Reject 'alg': 'none'; whitelist allowed algorithms (e.g. algorithms: ['RS256']); verify the signature BEFORE reading any claims",
+          "Read claims first, then validate the signature",
+          "Trust the alg header without question",
+          "Always use HS256 in production",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The checklist: 'If the signature is invalid, STOP IMMEDIATELY. Don't even look at the claims.' Reading claims before verifying lets attackers trick you with tampered tokens. 'alg: none' must always be rejected.",
+      },
+      {
+        id: "cyb-l3-q11",
+        type: "multiple-choice",
+        question:
+          "The slides recommend a 'hybrid' pattern: short-lived access tokens combined with refresh tokens. Why?",
+        points: 2,
+        options: [
+          "To make tokens harder to read",
+          "To balance the SCALABILITY of stateless JWTs with the ability to REVOKE access — access tokens expire quickly (5–15 min); refresh tokens are stored server-side and can be revoked instantly",
+          "To support older browsers",
+          "To increase the number of network round-trips",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Best of Both Worlds — Hybrid Approach' slide: short-lived stateless access tokens (5–15 min, fast verification) plus long-lived opaque refresh tokens (stored server-side, instant revocation) balance security, performance, and revocation.",
+      },
+      {
+        id: "cyb-l3-q12",
+        type: "multiple-choice",
+        question:
+          "The slides emphasise refresh-token ROTATION with REUSE DETECTION. The point of reuse detection is:",
+        points: 2,
+        options: [
+          "To save server storage",
+          "If an 'old' refresh token is presented after rotation, it likely indicates theft — the server treats it as a security event and revokes the entire token chain",
+          "To allow the same refresh token to be used twice",
+          "To extend the access token lifetime indefinitely",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Security Through Rotation' slide: 'If old refresh token used again, server detects replay attack and revokes entire chain.' The legitimate user rotates to a new token, so an 'old' one resurfacing signals compromise.",
+      },
+      {
+        id: "cyb-l3-q13",
+        type: "multiple-choice",
+        question:
+          "The slides are emphatic that 'OAuth 2.0 is NOT an authentication protocol.' Which statement BEST captures why?",
+        points: 2,
+        options: [
+          "OAuth 2.0 is just an old name for SAML",
+          "OAuth 2.0 is an authorisation framework — it lets a user grant a third-party app limited access to their resources WITHOUT sharing the password; it does not by itself tell the third party WHO the user is. OpenID Connect (OIDC) adds the identity layer (ID tokens) on top",
+          "OAuth 2.0 does not use tokens",
+          "OAuth 2.0 only works with passwords",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The dedicated slide: 'OAuth 2.0 does NOT tell PrintShop who you are — it only gives them a token to access your photos.' OpenID Connect adds an ID Token (a JWT with the user's identity) on top to provide authentication.",
+      },
+      {
+        id: "cyb-l3-q14",
+        type: "multiple-choice",
+        question:
+          "For a server-side web application authenticating users, the recommended OAuth 2.0 grant type is:",
+        points: 2,
+        options: [
+          "Implicit",
+          "Resource Owner Password Credentials",
+          "Authorization Code (with PKCE)",
+          "Client Credentials",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Different Clients, Different Flows' table: Web App (Backend) → Authorization Code + PKCE, because the backend is a confidential client. PKCE is recommended for all clients (mandatory in OAuth 2.1). Implicit and ROPC are deprecated; Client Credentials is for server-to-server with no user.",
+      },
+      {
+        id: "cyb-l3-q15",
+        type: "multiple-choice",
+        question: "The CLIENT CREDENTIALS grant is appropriate for:",
+        points: 2,
+        options: [
+          "A user logging into a web app via the browser",
+          "A backend service-to-service call where no human user is involved",
+          "A smart TV with no keyboard",
+          "A mobile app authenticating a user",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The table: 'Backend Service → Server-to-server → Client Credentials → No user interaction.' Client Credentials authenticates the SERVICE itself, not a user.",
+      },
+      {
+        id: "cyb-l3-q16",
+        type: "multiple-choice",
+        question:
+          "The slides describe an OAuth flow used by GitHub CLI, AWS CLI SSO, Azure CLI, and gcloud — where the CLI shows a short code and the user authorises on a phone or laptop. This is:",
+        points: 2,
+        options: [
+          "Authorization Code with PKCE",
+          "Device Authorization Grant (Device Flow)",
+          "Client Credentials",
+          "Implicit",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "These are the canonical Device Authorization Grant examples (gh auth login, aws sso login, az login, gcloud auth login). Device Flow is designed for clients without a browser/keyboard — the user authorises on a separate device and the CLI polls for completion.",
+      },
+      {
+        id: "cyb-l3-q17",
+        type: "multiple-choice",
+        question:
+          "LDAP is most commonly used in enterprise environments to:",
+        points: 2,
+        options: [
+          "Sign SAML assertions between IdPs and SPs",
+          "Centralise authentication and authorisation data by querying a directory of users, groups, and devices",
+          "Issue X.509 certificates from a certificate authority",
+          "Delegate authorisation tokens to third-party applications",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Directory Services: LDAP' slide: 'LDAP provides centralised storage and querying for organisational data: users, groups, devices, and permissions.' Flow: connect → bind → query. Always use LDAPS (TLS on port 636) — plain LDAP sends credentials in cleartext.",
+      },
+      {
+        id: "cyb-l3-q18",
+        type: "multiple-choice",
+        question:
+          "The slides give Kerberos as the protocol underpinning Windows Active Directory. Which is a known Kerberos attack?",
+        points: 2,
+        options: [
+          "IDOR",
+          "CSRF",
+          "Kerberoasting — requesting Service Tickets for accounts with weak passwords and cracking them offline",
+          "Buffer overflow",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slides list Golden Ticket, Kerberoasting, and Pass-the-Ticket. Kerberoasting targets weak service-account passwords (crack Service Tickets offline); mitigation is strong random passwords or Group Managed Service Accounts.",
+      },
+      {
+        id: "cyb-l3-q19",
+        type: "multiple-choice",
+        question:
+          "The slides describe a TPM (Trusted Platform Module). Its key SECURITY PROPERTY is:",
+        points: 2,
+        options: [
+          "It encrypts the entire hard drive using AES-256",
+          "Private keys are generated and stored inside the chip and never exported in plaintext",
+          "It supplies biometric fingerprint authentication to the OS",
+          "It acts as a VPN concentrator for remote access",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The TPM's defining property: 'Keys generated inside TPM never leave chip — protected from memory scraping. Sign, encrypt, decrypt without exposing keys to OS.' BitLocker is a USE of TPM, not its defining property — option (a) is the trap.",
+      },
+      {
+        id: "cyb-l3-q20",
+        type: "multiple-choice",
+        question: "An HSM differs from a TPM PRIMARILY in that an HSM is:",
+        points: 2,
+        options: [
+          "Soldered onto the motherboard and cannot be removed",
+          "A dedicated, tamper-resistant EXTERNAL device used for high-volume cryptographic operations (e.g., by certificate authorities, payment processors, cloud KMS)",
+          "Used exclusively to store biometric credentials",
+          "Only compatible with Windows environments",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "TPM is a discrete chip on the motherboard, one per machine. HSM is a dedicated external device, tamper-resistant, used by CAs, payment processors, and cloud KMS for high-volume crypto that many systems share. HSMs are typically certified to FIPS 140-2 Level 3+.",
+      },
+      {
+        id: "cyb-l3-q21",
+        type: "multiple-choice",
+        question:
+          "According to the slides, a Physical Unclonable Function (PUF) generates a device fingerprint by:",
+        points: 2,
+        options: [
+          "Asking the user to set a unique PIN at first boot",
+          "Exploiting natural manufacturing variations in silicon to produce a unique, repeatable response that cannot be cloned — ideal for IoT devices too small for a discrete security chip",
+          "Storing a hash of the MAC address",
+          "Generating a UUID at boot time",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The 'Hardware Roots of Trust' slide: PUFs exploit 'manufacturing variations in silicon as a unique fingerprint. Ideal for IoT devices too resource-constrained for discrete security chips.' Each chip gives a unique, repeatable, unclonable response to a challenge.",
+      },
+      {
+        id: "cyb-l3-q22",
+        type: "multiple-choice",
+        question:
+          "Attribute-Based Access Control (ABAC) differs from RBAC primarily because ABAC:",
+        points: 2,
+        options: [
+          "Only grants access based on group membership",
+          "Evaluates multiple attributes (user, resource, environment, time) at access time",
+          "Stores permissions in a static ACL on each resource",
+          "Requires all decisions to be made offline before the session begins",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "ABAC: 'Policies dynamically evaluate attributes of the SUBJECT, RESOURCE, ACTION, and ENVIRONMENT.' This handles rules RBAC can't, e.g. 'Alice can read orders for her own tenant only' or 'this API key only works from the office IP during working hours.'",
+      },
+      {
+        id: "cyb-l3-q23",
+        type: "multiple-choice",
+        question:
+          "Open Policy Agent (OPA) uses the Rego language to implement which paradigm?",
+        points: 2,
+        options: [
+          "Mandatory Access Control (MAC)",
+          "Discretionary Access Control (DAC)",
+          "Policy-as-Code: machine-readable, version-controlled authorisation policies, externalised from each microservice",
+          "Role-Based Access Control stored in LDAP groups",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The 'Policy-as-Code — Externalising Authorisation' slide lists OPA (Rego), Cedar (AWS), and Casbin. The point: move authz logic out of each microservice into a dedicated, declarative, version-controlled engine — solving '50 microservices each implementing authz differently.'",
+      },
+      {
+        id: "cyb-l3-q24",
+        type: "multiple-choice",
+        question:
+          "The slides give an example OPA policy with the line `default allow = false`. The PRINCIPLE this expresses is:",
+        points: 2,
+        options: [
+          "Default permit — allow everything unless an explicit rule denies it",
+          "Default deny / fail-secure — nothing is permitted unless an explicit rule allows it; this prevents accidental authorisation through policy omissions",
+          "Open access for all engineers",
+          "Audit-only mode (log requests but do not block)",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The OPA example: 'Default deny principle: Nothing is permitted unless a rule explicitly allows it. This fail-secure approach prevents accidental authorisation through policy omissions.' An empty or typo'd policy should deny by default — the same Fail-Safe Defaults principle revisited in Lecture 4.",
+      },
+    ],
+  },
+  {
+    id: "cyber-mock-test-1",
+    courseId: "7",
+    title: "Mock Test 1",
+    description:
+      "Cybersecurity Mock Test 1 (SM1 2026). Scope: Lectures 1–3 (Introduction to Cybersecurity; Vulnerabilities and Threats; Authentication, Authorisation & Trust). Section A: 17 MCQs (34 marks); Section B: 4 True/False (4 marks); Section C: 3 short answers (6 marks); Section D: 1 scenario (6 marks). Total: 50 marks.",
+    type: "test",
+    timeLimit: 90,
+    createdAt: "2026-05-20T09:00:00Z",
+    questions: [
+      {
+        id: "cyb-mt1-q1",
+        type: "multiple-choice",
+        question:
+          "Which element of the CIA triad is most directly concerned with ensuring data has not been altered by unauthorised parties?",
+        points: 2,
+        options: ["Confidentiality", "Integrity", "Availability", "Authentication"],
+        correctAnswer: 1,
+        explanation:
+          "Integrity ensures data is accurate and has not been tampered with (e.g. an attacker modifying a transaction from $10 to $10,000). Mechanisms: Hashing (SHA-256), Digital Signatures, HMAC. Authentication is not part of the CIA triad. Source: L1 — 'The Three Pillars of CIA' slide.",
+      },
+      {
+        id: "cyb-mt1-q2",
+        type: "multiple-choice",
+        question:
+          "In the Asset-Adversary-Mechanism threat modelling framework, which best describes an 'adversary'?",
+        points: 2,
+        options: [
+          "A database containing sensitive customer records",
+          "An SQL injection payload used to extract data",
+          "A nation-state actor seeking to exfiltrate intellectual property",
+          "A firewall rule blocking inbound traffic",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Asset = what you protect (the database); Adversary = the ACTOR with capability and intent (the nation-state); Payload = the tool wielded (the SQL injection string); Mechanism = the defensive control (the firewall rule). An attack payload is not the adversary itself. Source: L1 — Threat Modelling slide.",
+      },
+      {
+        id: "cyb-mt1-q3",
+        type: "multiple-choice",
+        question:
+          "At which stage of the Cyber Kill Chain does an attacker typically install a persistent backdoor on the victim's system?",
+        points: 2,
+        options: ["Reconnaissance", "Weaponisation", "Installation", "Delivery"],
+        correctAnswer: 2,
+        explanation:
+          "Installation = establishing persistence: backdoor/rootkit, startup-location scripts, scheduled tasks, registry modification — to survive reboots and detection. Exploitation is the 'boom' moment; Installation makes that access persistent. Source: L1 — 'Kill Chain Stage 5: Installation' slide.",
+      },
+      {
+        id: "cyb-mt1-q4",
+        type: "multiple-choice",
+        question:
+          "A company mandates annual security awareness training for all staff. This is best classified as a:",
+        points: 2,
+        options: [
+          "Technical control",
+          "Physical control",
+          "Administrative / policy control",
+          "Cryptographic control",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Administrative controls are policies, procedures, and training that define expected behaviour and rely on human compliance. Training is a textbook administrative control. 'Cryptographic control' is not a category in the lecture's taxonomy. Source: L1 — 'Security Controls Overview' slide.",
+      },
+      {
+        id: "cyb-mt1-q5",
+        type: "multiple-choice",
+        question:
+          "Which JWT header claim specifies the algorithm used to sign the token?",
+        points: 2,
+        options: ["typ", "kid", "alg", "sub"],
+        correctAnswer: 2,
+        explanation:
+          "alg = signing algorithm (HS256, RS256, ES256). typ = token type ('JWT'). kid = key ID for rotation. sub is a PAYLOAD claim (the subject/user ID), not a header claim. Source: L3 — 'JWT Header' slide.",
+      },
+      {
+        id: "cyb-mt1-q6",
+        type: "multiple-choice",
+        question:
+          "The 2015 algorithm confusion attack against multiple JWT libraries allowed attackers to forge tokens by:",
+        points: 2,
+        options: [
+          "Brute-forcing the HMAC secret",
+          "Setting alg to 'none' and removing the signature",
+          "Switching alg from RS256 to HS256 and signing with the public key as the HMAC secret",
+          "Replaying a captured token before its exp claim expired",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The attacker changes a valid RS256 token's header to HS256 and computes HMAC-SHA256 using the server's (public) key as the shared secret; a vulnerable library fetches that key and 'verifies' successfully. Option (b) is the distinct 'alg: none' attack. Fix: whitelist algorithms. Source: L3 — 'Algorithm Confusion Attack'.",
+      },
+      {
+        id: "cyb-mt1-q7",
+        type: "multiple-choice",
+        question:
+          "A Trusted Platform Module (TPM) provides which key security property?",
+        points: 2,
+        options: [
+          "It encrypts the entire hard drive with AES-256",
+          "Private keys are generated and stored inside the chip and never exported in plaintext",
+          "It acts as a VPN concentrator for remote access sessions",
+          "It supplies biometric fingerprint authentication to the OS",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The TPM's defining property is hardware-bound key storage: keys generated inside never leave the chip, protected from memory scraping. BitLocker is a USE of TPM, not its defining property (option a is the trap). Source: L3 — 'TPM' slide.",
+      },
+      {
+        id: "cyb-mt1-q8",
+        type: "multiple-choice",
+        question: "LDAP is most commonly used in enterprise environments to:",
+        points: 2,
+        options: [
+          "Sign SAML assertions between identity providers and service providers",
+          "Centralise authentication by querying a directory of users and groups",
+          "Issue X.509 certificates from a certificate authority",
+          "Delegate authorisation tokens to third-party applications",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "LDAP queries/modifies directory services (Active Directory, OpenLDAP): connect → bind → query attributes. SAML assertions = SAML; X.509 issuance = CAs; token delegation = OAuth 2.0. Always use LDAPS (TLS, port 636). Source: L3 — 'Directory Services: LDAP' slide.",
+      },
+      {
+        id: "cyb-mt1-q9",
+        type: "multiple-choice",
+        question:
+          "Which OAuth 2.0 grant type is recommended for a server-side web application authenticating users?",
+        points: 2,
+        options: [
+          "Client Credentials",
+          "Implicit",
+          "Resource Owner Password Credentials",
+          "Authorization Code",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "A server-side web app is a confidential client (can store a secret) → Authorization Code (with PKCE). Client Credentials is service-to-service; Implicit and ROPC are deprecated. OAuth 2.1 mandates PKCE for all clients. Source: L3 — OAuth flow selection table.",
+      },
+      {
+        id: "cyb-mt1-q10",
+        type: "multiple-choice",
+        question:
+          "Attribute-Based Access Control (ABAC) differs from RBAC primarily because ABAC:",
+        points: 2,
+        options: [
+          "Only grants access based on group membership",
+          "Evaluates multiple attributes (user, resource, environment) at access time",
+          "Stores permissions in a static ACL on each resource",
+          "Requires all decisions to be made offline before the session begins",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "ABAC dynamically evaluates attributes of subject, resource, action, and environment at access time (e.g. 'this API key only works from the office IP during working hours'). Option (a) describes RBAC, (c) describes classic ACLs, (d) is invented. Source: L3 — 'RBAC vs ABAC' slides.",
+      },
+      {
+        id: "cyb-mt1-q11",
+        type: "multiple-choice",
+        question:
+          "A developer commits a database password in plaintext to a public GitHub repository. This is an example of:",
+        points: 2,
+        options: [
+          "Cross-Site Scripting (XSS)",
+          "Misconfiguration and Default Secrets",
+          "Business Logic Abuse",
+          "Memory Safety Violation",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Category 9: the software worked as designed; the implementation was insecure. Plaintext secrets in source control is the canonical example. Not XSS (no script injection), not business logic (code did nothing wrong), not memory safety. Source: L2 — '10 Vulnerability Categories'.",
+      },
+      {
+        id: "cyb-mt1-q12",
+        type: "multiple-choice",
+        question:
+          "A CSRF attack succeeds because the target application relies solely on:",
+        points: 2,
+        options: [
+          "Multi-factor authentication via SMS OTP",
+          "A session cookie automatically sent by the browser with every cross-origin request",
+          "A Content Security Policy header restricting script sources",
+          "An HttpOnly flag on the session cookie",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The browser automatically attaches the session cookie to the cross-site request, so the server can't distinguish forged from legitimate. MFA happens at login (not per request); CSP restricts script sources; HttpOnly stops JS reading the cookie (XSS defence), not the browser sending it. Source: L2 — 'CSRF' slide.",
+      },
+      {
+        id: "cyb-mt1-q13",
+        type: "multiple-choice",
+        question:
+          "In a dependency confusion attack, the package manager installs the malicious public package because:",
+        points: 2,
+        options: [
+          "Internal packages are never digitally signed",
+          "Package managers may prefer the higher version number found in the public registry",
+          "Private registries automatically mirror all public packages",
+          "Most CI/CD pipelines skip integrity checks for small packages",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The attacker registers the internal package name publicly at a higher version (e.g. 99.0.0); npm sees both and chooses the public one due to higher semantic versioning. The version trick is the whole mechanism. Prevention: scoped packages, proxying private registry, lock files with integrity hashes. Source: L2 — 'Dependency Confusion Attack' slide.",
+      },
+      {
+        id: "cyb-mt1-q14",
+        type: "multiple-choice",
+        question: "A CVSS base score primarily measures:",
+        points: 2,
+        options: [
+          "The financial cost of remediating the vulnerability",
+          "The intrinsic severity of a vulnerability independent of time or environment",
+          "The number of public exploits available",
+          "The likelihood of exploitation within 30 days",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The Base score captures intrinsic properties (attack vector, complexity, privileges, UI, scope, C/I/A) without time (Temporal) or deployment (Environmental). 'CVSS measures severity, not risk.' Option (c) is Temporal; (d) approximates EPSS. Source: L2 — CVSS slides.",
+      },
+      {
+        id: "cyb-mt1-q15",
+        type: "multiple-choice",
+        question:
+          "Under the South African Cybercrimes Act (Act 19 of 2020), which activity most likely constitutes a criminal offence even when no data is stolen?",
+        points: 2,
+        options: [
+          "Reading publicly available government security advisories",
+          "Running a port scan on your own authorised systems",
+          "Intentionally and without permission intercepting data transmissions",
+          "Reporting a vulnerability to a vendor via responsible disclosure",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The Act criminalises unlawful access, unlawful interception of data, and possession of malware with intent. 'Intent is not enough; you must have authorisation.' Theft is not required — the unauthorised interception itself is the offence. The other options are all lawful. Source: L1 — 'Ethics, Law, and Culture'.",
+      },
+      {
+        id: "cyb-mt1-q16",
+        type: "multiple-choice",
+        question: "An HSM differs from a TPM primarily in that an HSM is:",
+        points: 2,
+        options: [
+          "Soldered onto the motherboard and cannot be removed",
+          "A dedicated, tamper-resistant external device used for high-volume cryptographic operations",
+          "Used exclusively to store biometric credentials",
+          "Only compatible with Windows environments",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Both share the property that private keys never leave the hardware. The difference is form factor and scale: TPM is an integrated chip (one per machine); HSM is an external, shared, tamper-resistant device for high-volume crypto (CAs, payment processors, cloud KMS; FIPS 140-2 Level 3+). Source: L3 — 'Hardware Roots of Trust' slide.",
+      },
+      {
+        id: "cyb-mt1-q17",
+        type: "multiple-choice",
+        question:
+          "Open Policy Agent (OPA) uses Rego to implement which access control paradigm?",
+        points: 2,
+        options: [
+          "Mandatory Access Control (MAC)",
+          "Discretionary Access Control (DAC)",
+          "Policy-as-Code: machine-readable, version-controlled authorisation policies",
+          "Role-Based Access Control stored in LDAP groups",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "OPA (CNCF) and Rego are the canonical Policy-as-Code example (alongside Cedar and Casbin): externalise authz logic from each microservice into a dedicated, version-controlled engine. OPA can encode RBAC/ABAC, but it IS Policy-as-Code, not any single classical paradigm. Source: L3 — 'Policy-as-Code' slide.",
+      },
+      {
+        id: "cyb-mt1-q18",
+        type: "multiple-choice",
+        question:
+          "True or False: A Physical Unclonable Function (PUF) generates a device fingerprint by exploiting natural manufacturing variations in silicon.",
+        points: 1,
+        options: ["True", "False"],
+        correctAnswer: 0,
+        explanation:
+          "TRUE. PUFs exploit microscopic random manufacturing imperfections in silicon to produce a unique, repeatable, unclonable response — ideal for IoT devices too constrained for a discrete TPM/HSM. Source: L3 — 'Hardware Roots of Trust' slide.",
+      },
+      {
+        id: "cyb-mt1-q19",
+        type: "multiple-choice",
+        question:
+          "True or False: Setting the JWT alg header to 'none' means the token is signed with a null byte and can still be verified securely.",
+        points: 1,
+        options: ["True", "False"],
+        correctAnswer: 1,
+        explanation:
+          "FALSE. 'alg': 'none' means the token is UNSIGNED — no signature at all. Early libraries that accepted it let attackers forge any claims. Always reject 'alg': 'none'. This is distinct from the RS256→HS256 algorithm confusion attack. Source: L3 — JWT verification checklist.",
+      },
+      {
+        id: "cyb-mt1-q20",
+        type: "multiple-choice",
+        question:
+          "True or False: SAML 2.0 uses XML-based assertions to convey authentication and authorisation data between an identity provider and a service provider.",
+        points: 1,
+        options: ["True", "False"],
+        correctAnswer: 0,
+        explanation:
+          "TRUE. SAML 2.0 is an XML-based SSO protocol: the IdP (Okta, Azure AD) creates a signed XML assertion the SP validates. Trade-off: XML is verbose and signature validation is error-prone (canonicalisation, signature-wrapping attacks). Source: L3 — 'SAML 2.0: XML-Based SSO' slide.",
+      },
+      {
+        id: "cyb-mt1-q21",
+        type: "multiple-choice",
+        question:
+          "True or False: An SQL injection vulnerability is classified as a business logic flaw because it requires the attacker to understand application workflow.",
+        points: 1,
+        options: ["True", "False"],
+        correctAnswer: 1,
+        explanation:
+          "FALSE. SQL injection is Injection (Category 1) — it exploits the interpreter mixing data and commands. Business logic flaws (Category 10) are cases where the code works as written but the application rules allow abuse. Classification is by failure mechanism, not by whether the attacker understands the app. Source: L2 — Categories 1 and 10.",
+      },
+      {
+        id: "cyb-mt1-q22",
+        type: "text",
+        question:
+          "Short answer (2 marks). Why do long-lived refresh tokens represent a significant security risk in mobile applications?",
+        points: 2,
+        explanation:
+          "MODEL ANSWER — (1 mark) Mobile devices are an exposed storage medium: refresh tokens in local storage, keychains, or device backups can be extracted via decompiled APKs, jailbroken/rooted devices, malware, or restored backups; static client secrets baked into the binary can also be extracted. (1 mark) Without rotation or expiry, a single stolen token grants INDEFINITE access — the attacker keeps minting access tokens until the password changes or the breach is detected; real incidents have caused mass account takeover. Mitigations: rotate refresh tokens on every use; reuse detection (revoke the chain if an old token reappears); bind tokens to a device/hardware key; PKCE instead of static secrets; finite lifetime (e.g. 30 days). Source: L3 — Refresh token rotation; MS notes 'Long-Lived Refresh Token Theft (Mobile Apps)'.",
+      },
+      {
+        id: "cyb-mt1-q23",
+        type: "text",
+        question:
+          "Short answer (2 marks). Name the primary defensive control used to mitigate CSRF attacks on state-changing HTTP endpoints.",
+        points: 2,
+        explanation:
+          "MODEL ANSWER — The ANTI-CSRF TOKEN (Synchroniser Token Pattern). (1 mark) Mechanism: the server generates a random, unpredictable per-session (or per-request) token, embeds it in forms, and validates it on every state-changing POST/PUT/DELETE. (1 mark) Why it works: an attacker on evil.com cannot read the token (Same-Origin Policy blocks cross-origin reads), so cannot include a valid token in a forged request; the browser still attaches the cookie, but without the matching token the server rejects it. Acceptable complements: SameSite=Lax/Strict cookies, double-submit cookie, Origin/Referer checks, JWT in the Authorization header. For full marks: name the control AND explain why a cross-origin attacker cannot supply a valid token. Source: L2 — 'CSRF Technical Defences' slide.",
+      },
+      {
+        id: "cyb-mt1-q24",
+        type: "text",
+        question:
+          "Short answer (2 marks). Explain the difference between a policy and a technical control, giving one example of each.",
+        points: 2,
+        explanation:
+          "MODEL ANSWER — (1 mark) Definitions: a POLICY (administrative) control is a documented rule/procedure defining expected human behaviour; strength = low cost, weakness = relies on voluntary compliance. A TECHNICAL control is software/hardware that ENFORCES security automatically; strength = consistent enforcement, weakness = cost/usability impact. (1 mark) Examples: Policy — 'All staff must change their password every 90 days' (relies on users remembering); Technical — the auth system automatically forces a change at 90 days, blocking login until done. Other valid pairs: USB policy vs OS port blocking; mandatory training vs email gateway quarantining attachments. Framing: a policy says what should happen; a technical control makes it happen regardless of cooperation. Layering both = Defence in Depth. Source: L1 — 'Security Controls Overview' / 'Layering Control Types'.",
+      },
+      {
+        id: "cyb-mt1-q25i",
+        type: "text",
+        question:
+          "Scenario (2 marks). A fintech startup has deployed a REST API using RS256-signed JWTs and long-lived refresh tokens stored in the mobile app's local storage. A penetration tester reports three findings:\n(i) The API accepts tokens where the alg header has been changed from RS256 to HS256.\n(ii) Refresh tokens never expire and are not rotated after use.\n(iii) The /admin endpoint grants access based on an admin role embedded in the JWT.\n\nFinding (i): State (a) the vulnerability or attack it enables, and (b) one specific remediation.",
+        points: 2,
+        explanation:
+          "MODEL ANSWER — (a) [1 mark] ALGORITHM CONFUSION ATTACK: the API does not whitelist the expected signing algorithm. An attacker takes a valid RS256 token, changes the header to HS256, and recomputes the signature using the server's PUBLIC KEY as the HMAC shared secret; the vulnerable verifier fetches the public key, uses it as the HMAC key, and 'verifies' the forged token — enabling forgery of tokens for any user, including admins. (b) [1 mark] Whitelist the algorithm explicitly: verify(token, publicKey, { algorithms: ['RS256'] }); reject mismatched alg headers; keep key separation (never reuse RSA key material for HMAC). Generic answers earn 0 for the remediation half.",
+      },
+      {
+        id: "cyb-mt1-q25ii",
+        type: "text",
+        question:
+          "Scenario, continued (2 marks). Same fintech JWT API. Finding (ii): Refresh tokens never expire and are not rotated after use. State (a) the vulnerability or attack it enables, and (b) one specific remediation.",
+        points: 2,
+        explanation:
+          "MODEL ANSWER — (a) [1 mark] INDEFINITE TOKEN REPLAY / ACCOUNT TAKEOVER: a refresh token extracted from the device (decompiled APK, rooted device, stolen backup, malware) grants permanent access; because it never expires or rotates, the attacker keeps minting access tokens indefinitely, and there is no way to detect theft — legitimate user and attacker can use it simultaneously with no alert. (b) [1 mark] Implement REFRESH TOKEN ROTATION WITH REUSE DETECTION: issue a new refresh token on each use, invalidate the old one, and if an already-rotated token reappears, treat it as theft and REVOKE THE ENTIRE CHAIN. Also enforce a finite lifetime (e.g. 30 days) and bind the token to a device/hardware-backed key. Naming 'refresh token theft'/'long-lived replay' earns the vuln mark; remediation must mention rotation OR reuse detection OR expiry (ideally rotation+reuse detection).",
+      },
+      {
+        id: "cyb-mt1-q25iii",
+        type: "text",
+        question:
+          "Scenario, continued (2 marks). Same fintech JWT API. Finding (iii): The /admin endpoint grants access based on an admin role embedded in the JWT. State (a) the vulnerability or attack it enables, and (b) one specific remediation.",
+        points: 2,
+        explanation:
+          "MODEL ANSWER — (a) [1 mark] BROKEN ACCESS CONTROL / OVER-RELIANCE ON CLIENT-PROVIDED CLAIMS: the endpoint trusts the JWT's role claim as its sole authz check. Combined with finding (i), an attacker who can forge tokens can forge their own admin role; even without forgery, a role baked into a long-lived token can't be revoked (a demoted user keeps 'admin' until expiry). (b) [1 mark] Perform SERVER-SIDE AUTHORISATION on every privileged request against an authoritative source (database or policy engine such as OPA); treat the JWT only as proof of identity and look up the current role at request time; apply default-deny. Better still: step-up MFA, just-in-time elevation, IP allowlisting, and audit logging on /admin. Remediation must move authz OUT of the JWT to the server, not just 'improve the token'.",
+      },
+    ],
+  },
 ]
 
 export const dummyAssessmentAttempts: AssessmentAttempt[] = [
