@@ -3842,6 +3842,380 @@ export const dummyAssessments: Assessment[] = [
       },
     ],
   },
+  {
+    id: "cyber-l1-quiz",
+    courseId: "7",
+    title: "Lecture 1 Quiz",
+    description:
+      "Lecture 1 — Introduction to Cybersecurity. Multiple-choice quiz covering the CIA Triad, threat modelling (Asset-Adversary-Mechanism), the Cyber Kill Chain, security controls, risk, Defence in Depth vs Zero Trust, CVE/CWE/CVSS, and South African legal context. 24 questions, 2 marks each (48 marks total).",
+    type: "quiz",
+    timeLimit: 30,
+    createdAt: "2026-05-20T13:00:00Z",
+    questions: [
+      {
+        id: "cyb-l1-q1",
+        type: "multiple-choice",
+        question:
+          "A ransomware attack encrypts a hospital's patient-record database, making it unreadable to staff during a critical shift. Which element of the CIA triad is MOST directly violated?",
+        points: 2,
+        options: ["Confidentiality", "Integrity", "Availability", "Non-repudiation"],
+        correctAnswer: 2,
+        explanation:
+          "Ransomware that encrypts records makes them inaccessible to authorised staff — the textbook definition of an availability failure. The data has not been disclosed (not confidentiality) or altered to a wrong value (not integrity). The slides explicitly list ransomware and DDoS as availability failures.",
+      },
+      {
+        id: "cyb-l1-q2",
+        type: "multiple-choice",
+        question:
+          "An attacker silently modifies a banking transaction in transit from $10 to $10,000. The mechanism BEST suited to detect this kind of attack is:",
+        points: 2,
+        options: [
+          "AES-256 encryption of the transaction payload",
+          "An HMAC or digital signature over the transaction",
+          "A faster CDN to deliver the transaction",
+          "Rate limiting on the API endpoint",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Integrity is the property concerned with tampering. The slides list Hashing (SHA-256), Digital Signatures, and HMAC as integrity mechanisms. AES protects confidentiality but does not detect modification; a CDN and rate limiting protect availability.",
+      },
+      {
+        id: "cyb-l1-q3",
+        type: "multiple-choice",
+        question:
+          "The slides give the example of an air-gapped system that is completely isolated from networks. This illustrates a trade-off between which two CIA properties?",
+        points: 2,
+        options: [
+          "Confidentiality vs. Integrity",
+          "Confidentiality vs. Availability",
+          "Integrity vs. Availability",
+          "Availability vs. Authenticity",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides use this exact example: 'Maximum confidentiality = air-gapped system... Result: Not remotely available to legitimate users.' The system is maximally confidential but unusable remotely.",
+      },
+      {
+        id: "cyb-l1-q4",
+        type: "multiple-choice",
+        question:
+          "The slides describe blockchain as providing extremely high integrity through distributed consensus, but at a cost. What is that cost?",
+        points: 2,
+        options: [
+          "Reduced confidentiality, since all ledger entries are public",
+          "Slow write operations and reduced availability for high-throughput applications",
+          "Weaker integrity, because consensus can be overridden by a 51% attack",
+          "Loss of all three CIA properties under normal load",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The second worked trade-off in the slides: 'Blockchain = extremely high integrity through distributed consensus. Result: Slow write operations, reduced availability.' Option (c) misreads it — the slides present blockchain integrity as very high, not weak.",
+      },
+      {
+        id: "cyb-l1-q5",
+        type: "multiple-choice",
+        question:
+          "Which of the following is NOT a mechanism for enforcing confidentiality, according to the slides?",
+        points: 2,
+        options: [
+          "AES / TLS encryption",
+          "Access Control Lists (ACLs)",
+          "Multi-Factor Authentication",
+          "HMAC over the message body",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "HMAC is an INTEGRITY mechanism (detects modification), not a confidentiality one. Encryption, ACLs, and MFA are listed as confidentiality mechanisms in the lecture.",
+      },
+      {
+        id: "cyb-l1-q6",
+        type: "multiple-choice",
+        question:
+          "A team writes the requirement: 'We need to prevent network attackers from reading message content using end-to-end encryption.' Which three elements of the Asset-Adversary-Mechanism framework are present in this single sentence?",
+        points: 2,
+        options: [
+          "Asset = 'network attackers'; Adversary = 'message content'; Mechanism = 'end-to-end encryption'",
+          "Asset = 'message content'; Adversary = 'network attackers'; Mechanism = 'end-to-end encryption'",
+          "Asset = 'end-to-end encryption'; Adversary = 'message content'; Mechanism = 'network attackers'",
+          "Asset = 'the team'; Adversary = 'the requirement'; Mechanism = 'the sentence'",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The Asset is what you protect (message content), the Adversary is the actor with the capability to attack (network attacker), and the Mechanism is the defensive control (E2EE).",
+      },
+      {
+        id: "cyb-l1-q7",
+        type: "multiple-choice",
+        question:
+          "In the messaging-app threat model from the slides, 'Rate Limiting + a Content Delivery Network' is given as the defensive mechanism. Which threat model does it serve?",
+        points: 2,
+        options: [
+          "Confidentiality — protecting message content from network attackers",
+          "Integrity — protecting message content from a compromised relay server",
+          "Availability — protecting the service from a botnet flooding the chat server with fake requests",
+          "Authentication — proving that messages came from the claimed sender",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "From Threat Model 3 in the slides: rate limiting + CDN is the mechanism for the availability scenario where the adversary is a botnet owner commanding 100,000 IoT devices.",
+      },
+      {
+        id: "cyb-l1-q8",
+        type: "multiple-choice",
+        question:
+          "The slides state security fails when the Mechanism cannot enforce the Policy against the Adversary. Which scenario is BEST described as a 'bypassed mechanism' failure mode?",
+        points: 2,
+        options: [
+          "AES-128 encryption broken by a future quantum computer",
+          "Rate limit of 1,000 req/sec defeated by 1 million IPs each sending 10 req/sec",
+          "A high-security door lock defeated by a lock-picking expert or by someone climbing through a window",
+          "A signed assertion rejected because the clock skew is too large",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slides name three failure modes: weak mechanism vs advanced adversary (a), overwhelmed mechanism (b), and bypassed mechanism (c). The window-climber goes AROUND the lock rather than breaking it — classic bypass.",
+      },
+      {
+        id: "cyb-l1-q9",
+        type: "multiple-choice",
+        question:
+          "The slides explicitly contrast threat modelling 'before' and 'after.' What is the PRIMARY problem with the pre-threat-modelling statement 'We need to secure our chat app'?",
+        points: 2,
+        options: [
+          "It uses the word 'secure' instead of 'safe'",
+          "It is too vague to act upon — no asset, adversary, or mechanism is specified, so the requirement cannot be tested or implemented",
+          "It does not mention a budget",
+          "It is too specific and leaves no room for design flexibility",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides contrast 'We need to secure our chat app' (vague, not testable) with 'We need to prevent network attackers from reading message content using end-to-end encryption' (specific, actionable, testable). Threat modelling forces precision.",
+      },
+      {
+        id: "cyb-l1-q10",
+        type: "multiple-choice",
+        question:
+          "A security team observes an employee receiving a phishing email with a malicious PDF attachment. The email passed through the corporate mail server but has not yet been opened. Which Kill Chain stage is the attack currently in?",
+        points: 2,
+        options: ["Reconnaissance", "Weaponisation", "Delivery", "Exploitation"],
+        correctAnswer: 2,
+        explanation:
+          "The slides define Delivery as the stage where the attacker 'sends the email' or 'drops the USB.' The email has been transmitted but not yet opened — the PDF has not yet triggered (which would be Exploitation).",
+      },
+      {
+        id: "cyb-l1-q11",
+        type: "multiple-choice",
+        question:
+          "The attacker's malicious PDF is opened by an employee and successfully runs shellcode on the workstation, granting the attacker an initial foothold. This is the 'boom' moment of the intrusion. Which stage is this?",
+        points: 2,
+        options: ["Weaponisation", "Delivery", "Exploitation", "Installation"],
+        correctAnswer: 2,
+        explanation:
+          "The slides explicitly call Exploitation 'the boom moment where vulnerability is triggered' and give the exact example 'User opens PDF → vulnerability triggered → code execution achieved.'",
+      },
+      {
+        id: "cyb-l1-q12",
+        type: "multiple-choice",
+        question:
+          "After gaining code execution on a victim host, the attacker adds a malicious script to the Windows registry 'Run' key so that it executes on every reboot. This is a textbook example of which Kill Chain stage?",
+        points: 2,
+        options: [
+          "Exploitation",
+          "Installation",
+          "Command & Control (C2)",
+          "Actions on Objectives",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides define Installation as establishing persistence: 'Add malicious scripts to startup locations... Modify system files and registries.' The registry 'Run' key is the canonical persistence mechanism. Exploitation is 'code runs'; Installation is 'code SURVIVES A REBOOT.'",
+      },
+      {
+        id: "cyb-l1-q13",
+        type: "multiple-choice",
+        question:
+          "A defender notices unusual outbound DNS traffic from an internal workstation to a previously unseen domain, repeating every 60 seconds with small payloads. This is MOST consistent with which Kill Chain stage?",
+        points: 2,
+        options: [
+          "Reconnaissance",
+          "Delivery",
+          "Command & Control (C2)",
+          "Actions on Objectives",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "C2 is the stage where 'Malware connects to attacker's server. Often uses DNS or HTTP to blend in.' DNS beaconing on a fixed interval to a never-before-seen domain is a hallmark C2 indicator; the defensive action listed is 'DNS monitoring for suspicious domains.'",
+      },
+      {
+        id: "cyb-l1-q14",
+        type: "multiple-choice",
+        question:
+          "The slides give 'Network Segmentation, Offline Backups, Least Privilege Access, and Incident Response plans' as defensive actions. These are mapped to which Kill Chain stage?",
+        points: 2,
+        options: [
+          "Reconnaissance",
+          "Exploitation",
+          "Command & Control",
+          "Actions on Objectives",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "The slides list these four controls verbatim against Actions on Objectives: 'Network segmentation (limit lateral movement), Offline backups, Least privilege access, Incident response plan.' These are end-state mitigations limiting damage once the attacker has reached their goal.",
+      },
+      {
+        id: "cyb-l1-q15",
+        type: "multiple-choice",
+        question:
+          "The slides give the example: a policy document says 'Change password every 90 days,' and SEPARATELY the authentication system automatically rejects logins after 90 days unless the password is updated. The combination illustrates which design principle?",
+        points: 2,
+        options: [
+          "Zero Trust",
+          "Defence in Depth (layering control TYPES so an administrative rule and a technical enforcement reinforce each other)",
+          "Fail-Safe Defaults",
+          "The CIA Triad",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides use this exact example under 'Layering Control Types — Defence in Depth: Password Policy Example.' The administrative control (the rule) and the technical control (automated enforcement) layer together so if one fails the other holds.",
+      },
+      {
+        id: "cyb-l1-q16",
+        type: "multiple-choice",
+        question:
+          "Which classification is correct for a badge reader on the server room door?",
+        points: 2,
+        options: [
+          "Administrative control",
+          "Technical control",
+          "Physical control",
+          "Cryptographic control",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slides explicitly give 'Locked server room, badge readers, biometric scanners, security cameras' as examples of physical controls. Anything that prevents unauthorised PHYSICAL access is a physical control.",
+      },
+      {
+        id: "cyb-l1-q17",
+        type: "multiple-choice",
+        question:
+          "The course defines risk using a specific formula. Which is it?",
+        points: 2,
+        options: [
+          "Risk = Vulnerability × Exploit",
+          "Risk = Likelihood × Impact",
+          "Risk = CVSS × Patching Time",
+          "Risk = Threats - Controls",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Given verbatim in the 'Risk Is Not Just Danger' slide. Likelihood = probability the threat occurs; Impact = damage if it happens. A high-impact, low-likelihood event can carry the same risk as a low-impact, high-likelihood one.",
+      },
+      {
+        id: "cyb-l1-q18",
+        type: "multiple-choice",
+        question:
+          "A company decides not to store credit-card numbers at all, instead delegating payment processing to a PCI-DSS certified third party. Using the slides' four ways to handle risk, this is BEST described as:",
+        points: 2,
+        options: ["Accept", "Avoid", "Mitigate", "Transfer"],
+        correctAnswer: 1,
+        explanation:
+          "The four strategies are Accept (tolerate), Avoid (don't do the risky activity — the slides' own example is 'don't store credit cards'), Mitigate (reduce likelihood/impact), and Transfer (insurance/outsource). Here the company eliminates the risky activity entirely. Transfer would apply if it STILL stored cards but bought breach insurance.",
+      },
+      {
+        id: "cyb-l1-q19",
+        type: "multiple-choice",
+        question:
+          "The Zero Trust model rejects the assumption that 'inside the network = safe.' Which of the following BEST captures the principle in practice, as stated in the slides?",
+        points: 2,
+        options: [
+          "Employees on the corporate Wi-Fi are automatically trusted for internal database access",
+          "Every request is authenticated and authorised as if it originated from the open internet — even if it comes from an employee's laptop on office Wi-Fi",
+          "External traffic is blocked entirely and only VPN users are allowed",
+          "Encryption is sufficient — no further authorisation is needed inside the network",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides give this exact practice statement: 'Just because a request comes from an employee's laptop inside the office Wi-Fi does not mean it should have access to the database. Every request is authenticated and authorised as if it originated from the open internet.' Core slogan: 'Never trust, always verify.'",
+      },
+      {
+        id: "cyb-l1-q20",
+        type: "multiple-choice",
+        question: "The course defines a 'zero-day' vulnerability as:",
+        points: 2,
+        options: [
+          "Any vulnerability discovered within the last 24 hours",
+          "A vulnerability unknown to the vendor — no patch exists, so attackers have first-mover advantage",
+          "A known vulnerability with a patch that has not yet been applied in production",
+          "A vulnerability whose CVSS score is exactly 0.0",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "From the 'Formal Definitions' slide: 'Zero-Day: Vulnerability unknown to the vendor — no patch exists, attackers have first-mover advantage.' Option (c) describes N-day, not zero-day.",
+      },
+      {
+        id: "cyb-l1-q21",
+        type: "multiple-choice",
+        question: "Which statement BEST distinguishes CVE from CWE?",
+        points: 2,
+        options: [
+          "CVE and CWE are the same thing under different names",
+          "CVE is the taxonomy of vulnerability TYPES; CWE lists specific INSTANCES with unique IDs",
+          "CVE lists specific INSTANCES (e.g. CVE-2023-34362 in MOVEit); CWE is the TAXONOMY of vulnerability types (e.g. CWE-89 is SQL Injection)",
+          "CVE is open source; CWE is proprietary to NIST",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The slides: 'CVE = the instance (broken lock on your door); CWE = the category (broken locks in general).' CVE-2023-34362 (MOVEit) is an instance of CWE-89 (SQL Injection). 'CVEs are crimes; CWEs are types of crimes.'",
+      },
+      {
+        id: "cyb-l1-q22",
+        type: "multiple-choice",
+        question:
+          "The slides emphasise that CVSS 'measures severity, not risk.' The BEST reason this distinction matters is:",
+        points: 2,
+        options: [
+          "CVSS scores are randomly assigned and unreliable",
+          "A CVSS 9.8 Critical in a component you do not expose to the internet may matter less than a 5.5 Medium in your internet-facing edge",
+          "Severity and risk are synonyms in cybersecurity",
+          "CVSS only applies to web applications",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides state 'CVSS measures severity, not risk' and that context (reachability, exposure, exploit availability, blast radius) determines real-world risk. A high CVSS in unreachable code is less urgent than a moderate CVSS on your front-line system.",
+      },
+      {
+        id: "cyb-l1-q23",
+        type: "multiple-choice",
+        question:
+          "Under the South African Cybercrimes Act 19 of 2020, which of the following is MOST clearly a criminal offence even if no data was stolen?",
+        points: 2,
+        options: [
+          "Reading publicly available CVE advisories on cve.org",
+          "Running an nmap port scan against your own authorised lab environment",
+          "Intentionally and without permission intercepting data transmissions",
+          "Reporting a flaw to a vendor through their published responsible-disclosure policy",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The Cybercrimes Act 19 of 2020 criminalises unlawful access, unlawful interception of data, and possession of malware/hacking tools with intent. Intent alone is not enough — you need authorisation. Reading public advisories, scanning your own authorised systems, and responsible disclosure are lawful; unauthorised interception is the offence even if no theft occurs.",
+      },
+      {
+        id: "cyb-l1-q24",
+        type: "multiple-choice",
+        question:
+          "A penetration tester finds a vulnerability in a banking portal during an AUTHORISED engagement and, in the process, briefly views a customer's account balance to prove the bug is real. Which law is MOST directly at risk of being breached if the tester does not delete that data immediately?",
+        points: 2,
+        options: [
+          "The Cybercrimes Act, because viewing data with consent is illegal",
+          "POPIA, because retaining personal information beyond what is necessary for the test can constitute a data breach",
+          "Neither — written consent for the test covers all data handling indefinitely",
+          "Both Cybercrimes Act and POPIA, equally, regardless of consent",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The slides warn: 'Security researchers must be careful not to exfiltrate personal data during a test, as this constitutes a data breach under POPIA.' Rules of Engagement: 'Never view user data unless necessary for the proof of concept, then delete immediately.' Authorisation under the Cybercrimes Act protects the TESTING; it does not exempt the tester from POPIA's data-handling obligations.",
+      },
+    ],
+  },
 ]
 
 export const dummyAssessmentAttempts: AssessmentAttempt[] = [
