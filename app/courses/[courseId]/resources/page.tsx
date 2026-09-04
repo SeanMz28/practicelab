@@ -10,10 +10,32 @@ import { useQuery, useConvex } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
+import { PasswordGate } from "@/components/access/password-gate"
 
 export default function CourseResourcesPage() {
   const params = useParams()
   const courseId = params.courseId as Id<"courses">
+  const course = useQuery(api.courses.get, { id: courseId })
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <DashboardHeader />
+      <main className="flex-1 container mx-auto px-4 py-8">
+        {course === undefined ? (
+          <p className="text-muted-foreground">Loading…</p>
+        ) : course === null ? (
+          <p className="text-muted-foreground">Course not found.</p>
+        ) : (
+          <PasswordGate resourceType="course" resourceId={course._id} title={course.name}>
+            <UnlockedResources courseId={courseId} />
+          </PasswordGate>
+        )}
+      </main>
+    </div>
+  )
+}
+
+function UnlockedResources({ courseId }: { courseId: Id<"courses"> }) {
   const resources = useQuery(api.resources.listByCourse, { courseId }) ?? []
   const convex = useConvex()
 
@@ -44,58 +66,55 @@ export default function CourseResourcesPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <DashboardHeader />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <Link href={`/courses/${courseId}`}>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Course
-          </Button>
-        </Link>
+    <>
+      <Link href={`/courses/${courseId}`}>
+        <Button variant="ghost" className="mb-6">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Course
+        </Button>
+      </Link>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Course Resources</h1>
-          <p className="text-muted-foreground">Download files and materials for this course</p>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Course Resources</h1>
+        <p className="text-muted-foreground">Download files and materials for this course</p>
+      </div>
 
-        <div className="grid gap-4">
-          {resources.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <FolderOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">No resources available</h3>
-                <p className="text-muted-foreground">Your tutor has not uploaded any resources yet</p>
+      <div className="grid gap-4">
+        {resources.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <FolderOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">No resources available</h3>
+              <p className="text-muted-foreground">Your tutor has not uploaded any resources yet</p>
+            </CardContent>
+          </Card>
+        ) : (
+          resources.map((resource) => (
+            <Card key={resource._id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">{getFileIcon(resource.fileType)}</div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold truncate">{resource.title}</h3>
+                    {resource.description && (
+                      <p className="text-sm text-muted-foreground mt-1">{resource.description}</p>
+                    )}
+                    <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                      <span>{resource.fileName}</span>
+                      <span>{formatFileSize(resource.fileSize)}</span>
+                      <span>Uploaded {new Date(resource.uploadedAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                  <Button onClick={() => handleDownload(resource)} className="flex-shrink-0">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
+                  </Button>
+                </div>
               </CardContent>
             </Card>
-          ) : (
-            resources.map((resource) => (
-              <Card key={resource._id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">{getFileIcon(resource.fileType)}</div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold truncate">{resource.title}</h3>
-                      {resource.description && (
-                        <p className="text-sm text-muted-foreground mt-1">{resource.description}</p>
-                      )}
-                      <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                        <span>{resource.fileName}</span>
-                        <span>{formatFileSize(resource.fileSize)}</span>
-                        <span>Uploaded {new Date(resource.uploadedAt).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    <Button onClick={() => handleDownload(resource)} className="flex-shrink-0">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
-      </main>
-    </div>
+          ))
+        )}
+      </div>
+    </>
   )
 }

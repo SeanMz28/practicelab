@@ -9,6 +9,7 @@ import { useQuery, useConvex } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
+import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
 
 interface AssessmentResultsProps {
   courseId: string
@@ -126,13 +127,20 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
         </CardContent>
       </Card>
 
+      {assessment.type === "quiz" && assessment.leaderboardEnabled && (
+        <QuizLeaderboard assessmentId={assessment._id} />
+      )}
+
       <h2 className="text-2xl font-bold mb-4">Review Your Answers</h2>
 
       <div className="space-y-6">
         {assessment.questions.map((question, qIndex) => {
           const answer = attempt.answers[qIndex]
           if (!answer) return null
-          const isAutoGraded = question.type === "multiple-choice"
+          const isAutoGraded =
+            question.type === "multiple-choice" ||
+            question.type === "memory-verse" ||
+            question.type === "ordered-list"
           const isCorrect = answer.isCorrect
 
           return (
@@ -172,6 +180,16 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                         {question.type === "file" && (
                           <Badge variant="outline" className="bg-yellow-50">
                             File Upload
+                          </Badge>
+                        )}
+                        {question.type === "ordered-list" && (
+                          <Badge variant="outline" className="bg-emerald-50">
+                            In Order
+                          </Badge>
+                        )}
+                        {question.type === "memory-verse" && (
+                          <Badge variant="outline" className="bg-violet-50">
+                            Memory Scripture
                           </Badge>
                         )}
                       </div>
@@ -227,7 +245,47 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {question.type === "file" && answer.value && typeof answer.value === "object" && (
+                {question.type === "memory-verse" && (
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="font-semibold mb-2">Your Answer:</h4>
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="whitespace-pre-wrap">{answer.value as string}</p>
+                      </div>
+                    </div>
+                    {!answer.isCorrect && question.correctText && (
+                      <div>
+                        <h4 className="font-semibold mb-2 text-green-700">Correct Wording:</h4>
+                        <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
+                          <p className="whitespace-pre-wrap">{question.correctText}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {question.type === "ordered-list" && (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <h4 className="font-semibold mb-2">Your Answer:</h4>
+                      <ol className="list-decimal list-inside rounded-lg bg-muted/50 p-4 space-y-1">
+                        {(Array.isArray(answer.value) ? answer.value : []).map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ol>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2 text-green-700">Correct Order:</h4>
+                      <ol className="list-decimal list-inside rounded-lg border border-green-200 bg-green-50 p-4 space-y-1">
+                        {(question.correctAnswers ?? []).map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  </div>
+                )}
+
+                {question.type === "file" && answer.value && typeof answer.value === "object" && !Array.isArray(answer.value) && (
                   <div>
                     <h4 className="font-semibold mb-2">Your Submission:</h4>
                     <div className="border-2 rounded-lg p-4 bg-muted/20">

@@ -36,11 +36,13 @@ export interface Assessment {
 
 export interface Question {
   id: string
-  type: "multiple-choice" | "text" | "file"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse"
   question: string
   points: number
   options?: string[] // For multiple-choice
   correctAnswer?: number // For multiple-choice
+  correctText?: string // For memory scripture
+  correctAnswers?: string[] // For ordered lists
   explanation?: string
   acceptedFileTypes?: string[] // For file uploads
 }
@@ -61,8 +63,8 @@ export interface AssessmentAttempt {
 
 export interface Answer {
   questionId: string
-  type: "multiple-choice" | "text" | "file"
-  value: number | string | FileSubmission // multiple-choice: number, text: string, file: FileSubmission
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse"
+  value: number | string | string[] | FileSubmission
   isCorrect?: boolean // For auto-graded questions
   pointsAwarded?: number
   feedback?: string // Tutor feedback

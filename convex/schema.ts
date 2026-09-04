@@ -3,11 +3,19 @@ import { v } from "convex/values"
 
 const question = v.object({
   id: v.string(),
-  type: v.union(v.literal("multiple-choice"), v.literal("text"), v.literal("file")),
+  type: v.union(
+    v.literal("multiple-choice"),
+    v.literal("text"),
+    v.literal("file"),
+    v.literal("ordered-list"),
+    v.literal("memory-verse"),
+  ),
   question: v.string(),
   points: v.number(),
   options: v.optional(v.array(v.string())),
   correctAnswer: v.optional(v.number()),
+  correctText: v.optional(v.string()),
+  correctAnswers: v.optional(v.array(v.string())),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
 })
@@ -22,8 +30,14 @@ const fileSubmission = v.object({
 
 const answer = v.object({
   questionId: v.string(),
-  type: v.union(v.literal("multiple-choice"), v.literal("text"), v.literal("file")),
-  value: v.union(v.number(), v.string(), fileSubmission),
+  type: v.union(
+    v.literal("multiple-choice"),
+    v.literal("text"),
+    v.literal("file"),
+    v.literal("ordered-list"),
+    v.literal("memory-verse"),
+  ),
+  value: v.union(v.number(), v.string(), v.array(v.string()), fileSubmission),
   isCorrect: v.optional(v.boolean()),
   pointsAwarded: v.optional(v.number()),
   feedback: v.optional(v.string()),
@@ -58,6 +72,7 @@ export default defineSchema({
     questions: v.array(question),
     timeLimit: v.optional(v.number()),
     dueDate: v.optional(v.string()),
+    leaderboardEnabled: v.optional(v.boolean()),
     createdAt: v.string(),
   }).index("by_courseId", ["courseId"]),
 
@@ -75,7 +90,24 @@ export default defineSchema({
   })
     .index("by_userId", ["userId"])
     .index("by_assessmentId", ["assessmentId"])
+    .index("by_assessment_user", ["assessmentId", "userId"])
     .index("by_status", ["status"]),
+
+  accessCredentials: defineTable({
+    resourceType: v.union(v.literal("course"), v.literal("assessment")),
+    resourceId: v.string(),
+    passwordHash: v.string(),
+  }).index("by_resource", ["resourceType", "resourceId"]),
+
+  accessGrants: defineTable({
+    userId: v.string(),
+    resourceType: v.union(v.literal("course"), v.literal("assessment")),
+    resourceId: v.string(),
+    credentialId: v.id("accessCredentials"),
+    grantedAt: v.string(),
+  })
+    .index("by_user_resource", ["userId", "resourceType", "resourceId"])
+    .index("by_resource", ["resourceType", "resourceId"]),
 
   resources: defineTable({
     courseId: v.id("courses"),

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FileText, ClipboardList, FolderOpen } from "lucide-react"
+import { FileText, ClipboardList, FolderOpen, LockKeyhole, Trophy } from "lucide-react"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc } from "@/convex/_generated/dataModel"
@@ -15,7 +15,7 @@ interface CourseContentProps {
 
 export function CourseContent({ course }: CourseContentProps) {
   const courseNotes = useQuery(api.notes.listByCourse, { courseId: course._id }) ?? []
-  const courseAssessments = useQuery(api.assessments.listByCourse, { courseId: course._id }) ?? []
+  const courseAssessments = useQuery(api.assessments.listSummariesByCourse, { courseId: course._id }) ?? []
   const resources = useQuery(api.resources.listByCourse, { courseId: course._id }) ?? []
   const resourceCount = resources.length
 
@@ -86,6 +86,10 @@ export function CourseContent({ course }: CourseContentProps) {
                         <CardTitle className="flex items-center gap-2 mb-2">
                           <ClipboardList className="w-5 h-5 text-secondary-foreground" />
                           {assessment.title}
+                          {assessment.passwordProtected && <LockKeyhole className="w-4 h-4 text-muted-foreground" />}
+                          {assessment.leaderboardEnabled && assessment.type === "quiz" && (
+                            <Trophy className="w-4 h-4 text-amber-500" />
+                          )}
                         </CardTitle>
                         <CardDescription>{assessment.description}</CardDescription>
                       </div>
@@ -94,7 +98,7 @@ export function CourseContent({ course }: CourseContentProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                      <span>{assessment.questions.length} questions</span>
+                      <span>{assessment.questionCount} questions</span>
                       {assessment.type === "assignment" && assessment.dueDate ? (
                         <span>Due: {new Date(assessment.dueDate).toLocaleDateString()}</span>
                       ) : assessment.timeLimit ? (

@@ -166,6 +166,16 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                           File Upload
                         </Badge>
                       )}
+                      {question.type === "ordered-list" && (
+                        <Badge variant="outline" className="bg-emerald-50">
+                          In Order
+                        </Badge>
+                      )}
+                      {question.type === "memory-verse" && (
+                        <Badge variant="outline" className="bg-violet-50">
+                          Memory Scripture
+                        </Badge>
+                      )}
                       <span className="text-sm text-muted-foreground">{question.points} points</span>
                     </div>
                   </div>
@@ -220,7 +230,34 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                     </div>
                   )}
 
-                  {question.type === "file" && answer.value && typeof answer.value === "object" && (
+                  {question.type === "memory-verse" && (
+                    <div className="space-y-3">
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="whitespace-pre-wrap">{answer.value as string}</p>
+                      </div>
+                      <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
+                        <p className="text-sm font-semibold text-green-800 mb-1">Correct wording</p>
+                        <p className="whitespace-pre-wrap">{question.correctText}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {question.type === "ordered-list" && (
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <ol className="list-decimal list-inside bg-muted/50 p-4 rounded-lg space-y-1">
+                        {(Array.isArray(answer.value) ? answer.value : []).map((item, itemIndex) => (
+                          <li key={itemIndex}>{item}</li>
+                        ))}
+                      </ol>
+                      <ol className="list-decimal list-inside border border-green-200 bg-green-50 p-4 rounded-lg space-y-1">
+                        {(question.correctAnswers ?? []).map((item, itemIndex) => (
+                          <li key={itemIndex}>{item}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+
+                  {question.type === "file" && answer.value && typeof answer.value === "object" && !Array.isArray(answer.value) && (
                     <div className="border-2 rounded-lg p-4 bg-muted/20">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -249,7 +286,7 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                   )}
                 </div>
 
-                {question.type !== "multiple-choice" && (
+                {(question.type === "text" || question.type === "file") && (
                   <div className="border-t pt-4 space-y-4">
                     <div className="grid gap-2">
                       <Label htmlFor={`points-${index}`}>Points Awarded (out of {question.points})</Label>
@@ -276,7 +313,7 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                   </div>
                 )}
 
-                {question.type === "multiple-choice" && answer.isCorrect !== undefined && (
+                {question.type !== "text" && question.type !== "file" && answer.isCorrect !== undefined && (
                   <div className="border-t pt-4">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold">Auto-graded:</span>

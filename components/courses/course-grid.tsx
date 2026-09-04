@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { BookOpen, FileText } from "lucide-react"
+import { BookOpen, FileText, LockKeyhole } from "lucide-react"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 
@@ -23,7 +23,10 @@ export function CourseGrid() {
               <div className={`w-12 h-12 ${course.color} rounded-lg flex items-center justify-center`}>
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xs font-semibold px-2 py-1 bg-muted rounded">{course.code}</span>
+              <div className="flex items-center gap-2">
+                {course.passwordProtected && <LockKeyhole className="h-4 w-4 text-muted-foreground" />}
+                <span className="text-xs font-semibold px-2 py-1 bg-muted rounded">{course.code}</span>
+              </div>
             </div>
             <CardTitle className="text-lg">{course.name}</CardTitle>
             <CardDescription>{course.description}</CardDescription>

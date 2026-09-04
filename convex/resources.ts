@@ -1,10 +1,12 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import { requireTutor } from "./users"
+import { canAccessCourse } from "./access"
 
 export const listByCourse = query({
   args: { courseId: v.id("courses") },
   handler: async (ctx, args) => {
+    if (!(await canAccessCourse(ctx, args.courseId))) return []
     return ctx.db
       .query("resources")
       .withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))

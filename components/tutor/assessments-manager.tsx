@@ -15,13 +15,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Pencil, Trash2, Clock, HelpCircle, X, Calendar, ChevronUp, ChevronDown, Check } from "lucide-react"
+import { Plus, Pencil, Trash2, Clock, HelpCircle, X, Calendar, ChevronUp, ChevronDown, Check, LockKeyhole, Trophy } from "lucide-react"
 import { ClipboardList } from "lucide-react"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 
 type Question = Doc<"assessments">["questions"][number]
+type AssessmentWithAccess = Doc<"assessments"> & { passwordProtected: boolean }
 
 interface AssessmentsManagerProps {
   courseId: Id<"courses">
@@ -34,13 +35,16 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
   const removeAssessment = useMutation(api.assessments.remove)
 
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [editingAssessment, setEditingAssessment] = useState<Doc<"assessments"> | null>(null)
+  const [editingAssessment, setEditingAssessment] = useState<AssessmentWithAccess | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     type: "quiz" as "quiz" | "assignment" | "test",
     timeLimit: 30,
     dueDate: "",
+    leaderboardEnabled: false,
+    password: "",
+    removePassword: false,
   })
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState<Partial<Question>>({
@@ -58,6 +62,10 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       alert("Please add at least one question")
       return
     }
+    if (formData.password && formData.password.length < 4) {
+      alert("Assessment passwords must be at least 4 characters")
+      return
+    }
     await createAssessment({
       courseId,
       title: formData.title,
@@ -66,6 +74,8 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       questions,
       timeLimit: formData.type === "assignment" ? undefined : formData.timeLimit,
       dueDate: formData.type === "assignment" ? formData.dueDate || undefined : undefined,
+      leaderboardEnabled: formData.type === "quiz" && formData.leaderboardEnabled,
+      password: formData.password || undefined,
     })
     setIsCreateOpen(false)
     resetForm()
@@ -73,6 +83,10 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
 
   const handleUpdate = async () => {
     if (!editingAssessment || questions.length === 0) return
+    if (formData.password && formData.password.length < 4) {
+      alert("Assessment passwords must be at least 4 characters")
+      return
+    }
     await updateAssessment({
       id: editingAssessment._id,
       title: formData.title,
@@ -81,6 +95,9 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       questions,
       timeLimit: formData.type === "assignment" ? undefined : formData.timeLimit,
       dueDate: formData.type === "assignment" ? formData.dueDate || undefined : undefined,
+      leaderboardEnabled: formData.type === "quiz" && formData.leaderboardEnabled,
+      password: formData.password || undefined,
+      removePassword: formData.removePassword,
     })
     setEditingAssessment(null)
     resetForm()
@@ -93,7 +110,16 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
   }
 
   const resetForm = () => {
-    setFormData({ title: "", description: "", type: "quiz", timeLimit: 30, dueDate: "" })
+    setFormData({
+      title: "",
+      description: "",
+      type: "quiz",
+      timeLimit: 30,
+      dueDate: "",
+      leaderboardEnabled: false,
+      password: "",
+      removePassword: false,
+    })
     setQuestions([])
     setCurrentQuestion({
       type: "multiple-choice",
@@ -127,6 +153,17 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       alert("Please enter a question")
       return
     }
+    if (questionDraft.type === "memory-verse" && !questionDraft.correctText?.trim()) {
+      alert("Please enter the correct scripture wording")
+      return
+    }
+    if (
+      questionDraft.type === "ordered-list" &&
+      !questionDraft.correctAnswers?.some((answer) => answer.trim())
+    ) {
+      alert("Please enter at least one expected answer")
+      return
+    }
     const original = questions[editingQuestionIndex]
     const updated: Question = {
       id: original.id,
@@ -140,6 +177,12 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       }),
       ...(questionDraft.type === "file" && {
         acceptedFileTypes: questionDraft.acceptedFileTypes ?? original.acceptedFileTypes ?? [".pdf", ".doc", ".docx"],
+      }),
+      ...(questionDraft.type === "memory-verse" && {
+        correctText: questionDraft.correctText?.trim(),
+      }),
+      ...(questionDraft.type === "ordered-list" && {
+        correctAnswers: questionDraft.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
       }),
     }
     const next = [...questions]
@@ -164,7 +207,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
     else if (editingQuestionIndex === target) setEditingQuestionIndex(index)
   }
 
-  const openEdit = (assessment: Doc<"assessments">) => {
+  const openEdit = (assessment: AssessmentWithAccess) => {
     setEditingAssessment(assessment)
     setFormData({
       title: assessment.title,
@@ -172,6 +215,9 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       type: assessment.type,
       timeLimit: assessment.timeLimit || 30,
       dueDate: assessment.dueDate || "",
+      leaderboardEnabled: assessment.leaderboardEnabled ?? false,
+      password: "",
+      removePassword: false,
     })
     setQuestions([...assessment.questions])
   }
@@ -179,6 +225,17 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
   const addQuestion = () => {
     if (!currentQuestion.question) {
       alert("Please enter a question")
+      return
+    }
+    if (currentQuestion.type === "memory-verse" && !currentQuestion.correctText?.trim()) {
+      alert("Please enter the correct scripture wording")
+      return
+    }
+    if (
+      currentQuestion.type === "ordered-list" &&
+      !currentQuestion.correctAnswers?.some((answer) => answer.trim())
+    ) {
+      alert("Please enter at least one expected answer")
       return
     }
 
@@ -194,6 +251,12 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       }),
       ...(currentQuestion.type === "file" && {
         acceptedFileTypes: currentQuestion.acceptedFileTypes || [".pdf", ".doc", ".docx"],
+      }),
+      ...(currentQuestion.type === "memory-verse" && {
+        correctText: currentQuestion.correctText?.trim(),
+      }),
+      ...(currentQuestion.type === "ordered-list" && {
+        correctAnswers: currentQuestion.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
       }),
     }
 
@@ -316,6 +379,56 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                     />
                   </div>
                 )}
+                {formData.type === "quiz" && (
+                  <label className="flex items-start gap-3 rounded-lg border p-4">
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      checked={formData.leaderboardEnabled}
+                      onChange={(e) => setFormData({ ...formData, leaderboardEnabled: e.target.checked })}
+                    />
+                    <span>
+                      <span className="block font-medium">Show leaderboard</span>
+                      <span className="block text-sm text-muted-foreground">
+                        Students can compare everyone&apos;s latest and first-attempt scores.
+                      </span>
+                    </span>
+                  </label>
+                )}
+                <div>
+                  <Label htmlFor="assessment-password">
+                    {editingAssessment?.passwordProtected ? "Replace Access Password" : "Access Password (Optional)"}
+                  </Label>
+                  <Input
+                    id="assessment-password"
+                    type="password"
+                    minLength={4}
+                    maxLength={128}
+                    placeholder={editingAssessment?.passwordProtected ? "Leave blank to keep current password" : "At least 4 characters"}
+                    value={formData.password}
+                    disabled={formData.removePassword}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Students must enter this in addition to any course password.
+                  </p>
+                  {editingAssessment?.passwordProtected && (
+                    <label className="mt-2 flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={formData.removePassword}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            removePassword: e.target.checked,
+                            password: e.target.checked ? "" : formData.password,
+                          })
+                        }
+                      />
+                      Remove assessment password
+                    </label>
+                  )}
+                </div>
               </div>
 
               <div className="border-t pt-6">
@@ -353,6 +466,8 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                     <SelectItem value="multiple-choice">Multiple Choice</SelectItem>
                                     <SelectItem value="text">Text Answer</SelectItem>
                                     <SelectItem value="file">File Upload</SelectItem>
+                                    <SelectItem value="ordered-list">Ordered List</SelectItem>
+                                    <SelectItem value="memory-verse">Memory Scripture</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -449,6 +564,40 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 />
                               </div>
                             )}
+                            {questionDraft.type === "memory-verse" && (
+                              <div>
+                                <Label>Correct Wording</Label>
+                                <Textarea
+                                  className="min-h-28"
+                                  placeholder="Enter the scripture exactly as it should be spelled"
+                                  value={questionDraft.correctText ?? ""}
+                                  onChange={(e) =>
+                                    setQuestionDraft({ ...questionDraft, correctText: e.target.value })
+                                  }
+                                />
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                  Grading ignores capitalization and punctuation, but checks spelling and word order.
+                                </p>
+                              </div>
+                            )}
+                            {questionDraft.type === "ordered-list" && (
+                              <div>
+                                <Label>Correct Answers in Order</Label>
+                                <Textarea
+                                  className="min-h-32"
+                                  placeholder={"Genesis\nExodus\nLeviticus"}
+                                  value={questionDraft.correctAnswers?.join("\n") ?? ""}
+                                  onChange={(e) =>
+                                    setQuestionDraft({
+                                      ...questionDraft,
+                                      correctAnswers: e.target.value
+                                        .split("\n"),
+                                    })
+                                  }
+                                />
+                                <p className="mt-1 text-xs text-muted-foreground">Enter one answer per line.</p>
+                              </div>
+                            )}
                             <div className="flex justify-end gap-2">
                               <Button variant="outline" onClick={cancelEditQuestion}>
                                 Cancel
@@ -483,6 +632,14 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                               {q.type === "file" && q.acceptedFileTypes && q.acceptedFileTypes.length > 0 && (
                                 <p className="mt-2 text-xs text-muted-foreground">
                                   Accepts: {q.acceptedFileTypes.join(", ")}
+                                </p>
+                              )}
+                              {q.type === "memory-verse" && q.correctText && (
+                                <p className="mt-2 text-xs text-green-700">Correct wording: {q.correctText}</p>
+                              )}
+                              {q.type === "ordered-list" && q.correctAnswers && (
+                                <p className="mt-2 text-xs text-green-700">
+                                  Correct order: {q.correctAnswers.join(" → ")}
                                 </p>
                               )}
                               {q.explanation && (
@@ -559,6 +716,8 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                             <SelectItem value="multiple-choice">Multiple Choice</SelectItem>
                             <SelectItem value="text">Text Answer</SelectItem>
                             <SelectItem value="file">File Upload</SelectItem>
+                            <SelectItem value="ordered-list">Ordered List</SelectItem>
+                            <SelectItem value="memory-verse">Memory Scripture</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -652,6 +811,44 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                       </div>
                     )}
 
+                    {currentQuestion.type === "memory-verse" && (
+                      <div>
+                        <Label htmlFor="correct-text">Correct Wording</Label>
+                        <Textarea
+                          id="correct-text"
+                          className="min-h-28"
+                          placeholder="Enter the scripture exactly as it should be spelled"
+                          value={currentQuestion.correctText ?? ""}
+                          onChange={(e) =>
+                            setCurrentQuestion({ ...currentQuestion, correctText: e.target.value })
+                          }
+                        />
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Grading ignores capitalization and punctuation, but checks spelling and word order.
+                        </p>
+                      </div>
+                    )}
+
+                    {currentQuestion.type === "ordered-list" && (
+                      <div>
+                        <Label htmlFor="correct-answers">Correct Answers in Order</Label>
+                        <Textarea
+                          id="correct-answers"
+                          className="min-h-32"
+                          placeholder={"Genesis\nExodus\nLeviticus"}
+                          value={currentQuestion.correctAnswers?.join("\n") ?? ""}
+                          onChange={(e) =>
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              correctAnswers: e.target.value
+                                .split("\n"),
+                            })
+                          }
+                        />
+                        <p className="mt-1 text-xs text-muted-foreground">Enter one answer per line.</p>
+                      </div>
+                    )}
+
                     <Button
                       onClick={addQuestion}
                       variant="outline"
@@ -704,6 +901,12 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                       >
                         {getAssessmentTypeLabel(assessment.type)}
                       </span>
+                      {assessment.passwordProtected && (
+                        <span title="Password protected"><LockKeyhole className="w-4 h-4 text-muted-foreground" /></span>
+                      )}
+                      {assessment.type === "quiz" && assessment.leaderboardEnabled && (
+                        <span title="Leaderboard enabled"><Trophy className="w-4 h-4 text-amber-500" /></span>
+                      )}
                     </div>
                     <CardDescription className="mt-1">{assessment.description}</CardDescription>
                   </div>

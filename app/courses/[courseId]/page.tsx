@@ -7,6 +7,7 @@ import type { Id } from "@/convex/_generated/dataModel"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { CourseHeader } from "@/components/courses/course-header"
 import { CourseContent } from "@/components/courses/course-content"
+import { PasswordGate } from "@/components/access/password-gate"
 
 interface CoursePageProps {
   params: Promise<{
@@ -31,12 +32,12 @@ export default function CoursePage({ params }: CoursePageProps) {
             <p className="text-muted-foreground">Course not found.</p>
           </div>
         ) : (
-          <>
+          <PasswordGate resourceType="course" resourceId={course._id} title={course.name}>
             <CourseHeader course={course} />
             <div className="container mx-auto px-4 py-8">
               <CourseContent course={course} />
             </div>
-          </>
+          </PasswordGate>
         )}
       </main>
     </div>

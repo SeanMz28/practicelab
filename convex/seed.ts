@@ -4,11 +4,19 @@ import type { Id } from "./_generated/dataModel"
 
 const questionValidator = v.object({
   id: v.string(),
-  type: v.union(v.literal("multiple-choice"), v.literal("text"), v.literal("file")),
+  type: v.union(
+    v.literal("multiple-choice"),
+    v.literal("text"),
+    v.literal("file"),
+    v.literal("ordered-list"),
+    v.literal("memory-verse"),
+  ),
   question: v.string(),
   points: v.number(),
   options: v.optional(v.array(v.string())),
   correctAnswer: v.optional(v.number()),
+  correctText: v.optional(v.string()),
+  correctAnswers: v.optional(v.array(v.string())),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
 })

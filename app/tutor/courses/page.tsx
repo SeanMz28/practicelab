@@ -15,11 +15,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus, Pencil, Trash2, BookOpen } from "lucide-react"
+import { Plus, Pencil, Trash2, BookOpen, LockKeyhole } from "lucide-react"
 import Link from "next/link"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc } from "@/convex/_generated/dataModel"
+
+type CourseWithAccess = Doc<"courses"> & { passwordProtected: boolean }
 
 export default function TutorCoursesPage() {
   const courses = useQuery(api.courses.list) ?? []
@@ -28,23 +30,47 @@ export default function TutorCoursesPage() {
   const removeCourse = useMutation(api.courses.remove)
 
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [editingCourse, setEditingCourse] = useState<Doc<"courses"> | null>(null)
+  const [editingCourse, setEditingCourse] = useState<CourseWithAccess | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     code: "",
     description: "",
     color: "bg-blue-500",
+    password: "",
+    removePassword: false,
   })
 
   const handleCreate = async () => {
-    await createCourse(formData)
+    if (formData.password && formData.password.length < 4) {
+      alert("Course passwords must be at least 4 characters")
+      return
+    }
+    await createCourse({
+      name: formData.name,
+      code: formData.code,
+      description: formData.description,
+      color: formData.color,
+      password: formData.password || undefined,
+    })
     setIsCreateOpen(false)
     resetForm()
   }
 
   const handleUpdate = async () => {
     if (!editingCourse) return
-    await updateCourse({ id: editingCourse._id, ...formData })
+    if (formData.password && formData.password.length < 4) {
+      alert("Course passwords must be at least 4 characters")
+      return
+    }
+    await updateCourse({
+      id: editingCourse._id,
+      name: formData.name,
+      code: formData.code,
+      description: formData.description,
+      color: formData.color,
+      password: formData.password || undefined,
+      removePassword: formData.removePassword,
+    })
     setEditingCourse(null)
     resetForm()
   }
@@ -58,16 +84,25 @@ export default function TutorCoursesPage() {
   }
 
   const resetForm = () => {
-    setFormData({ name: "", code: "", description: "", color: "bg-blue-500" })
+    setFormData({
+      name: "",
+      code: "",
+      description: "",
+      color: "bg-blue-500",
+      password: "",
+      removePassword: false,
+    })
   }
 
-  const openEdit = (course: Doc<"courses">) => {
+  const openEdit = (course: CourseWithAccess) => {
     setEditingCourse(course)
     setFormData({
       name: course.name,
       code: course.code,
       description: course.description,
       color: course.color,
+      password: "",
+      removePassword: false,
     })
   }
 
@@ -132,6 +167,19 @@ export default function TutorCoursesPage() {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="course-password">Access Password (Optional)</Label>
+                  <Input
+                    id="course-password"
+                    type="password"
+                    minLength={4}
+                    maxLength={128}
+                    placeholder="At least 4 characters"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Students must enter this before viewing the course.</p>
+                </div>
+                <div>
                   <Label htmlFor="color">Color Theme</Label>
                   <div className="grid grid-cols-4 gap-2 mt-2">
                     {colorOptions.map((option) => (
@@ -163,7 +211,10 @@ export default function TutorCoursesPage() {
                     <CardTitle className="text-xl">{course.code}</CardTitle>
                     <p className="text-sm opacity-90 mt-1">{course.name}</p>
                   </div>
-                  <BookOpen className="w-5 h-5" />
+                  <div className="flex items-center gap-2">
+                    {course.passwordProtected && <LockKeyhole className="w-4 h-4" />}
+                    <BookOpen className="w-5 h-5" />
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-4">
@@ -209,6 +260,37 @@ export default function TutorCoursesPage() {
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                           />
+                        </div>
+                        <div>
+                          <Label htmlFor="edit-course-password">
+                            {editingCourse?.passwordProtected ? "Replace Password" : "Access Password (Optional)"}
+                          </Label>
+                          <Input
+                            id="edit-course-password"
+                            type="password"
+                            minLength={4}
+                            maxLength={128}
+                            placeholder={editingCourse?.passwordProtected ? "Leave blank to keep current password" : "At least 4 characters"}
+                            value={formData.password}
+                            disabled={formData.removePassword}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          />
+                          {editingCourse?.passwordProtected && (
+                            <label className="mt-2 flex items-center gap-2 text-sm">
+                              <input
+                                type="checkbox"
+                                checked={formData.removePassword}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    removePassword: e.target.checked,
+                                    password: e.target.checked ? "" : formData.password,
+                                  })
+                                }
+                              />
+                              Remove course password
+                            </label>
+                          )}
                         </div>
                         <div>
                           <Label htmlFor="edit-color">Color Theme</Label>

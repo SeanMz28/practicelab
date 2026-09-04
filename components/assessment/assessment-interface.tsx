@@ -12,10 +12,11 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Clock, ChevronRight, Check, Upload, FileText, X, Calendar } from "lucide-react"
+import { ArrowLeft, Clock, ChevronRight, Check, Upload, FileText, X, Calendar, CheckCircle2 } from "lucide-react"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
+import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
 
 interface LocalFileAnswer {
   file: File
@@ -26,8 +27,8 @@ interface LocalFileAnswer {
 
 interface LocalAnswer {
   questionId: string
-  type: "multiple-choice" | "text" | "file"
-  value: number | string | LocalFileAnswer | null
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse"
+  value: number | string | string[] | LocalFileAnswer | null
   isCorrect?: boolean
   pointsAwarded?: number
   feedback?: string
@@ -58,7 +59,14 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     assessment.questions.map((q) => ({
       questionId: q.id,
       type: q.type,
-      value: q.type === "multiple-choice" ? -1 : q.type === "text" ? "" : null,
+      value:
+        q.type === "multiple-choice"
+          ? -1
+          : q.type === "ordered-list"
+            ? []
+            : q.type === "file"
+              ? null
+              : "",
     })),
   )
   const [shuffledOrders] = useState<number[][]>(() =>
@@ -68,6 +76,8 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
   )
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
   const [startTime, setStartTime] = useState<string | null>(null)
+  const [orderedDrafts, setOrderedDrafts] = useState<Record<string, string>>({})
+  const [orderedErrors, setOrderedErrors] = useState<Record<string, string>>({})
 
   const question = assessment.questions[currentQuestion]
   const currentAnswer = answers[currentQuestion]
@@ -76,11 +86,18 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     () =>
       answers.filter((a) => {
         if (a.type === "multiple-choice") return typeof a.value === "number" && a.value !== -1
-        if (a.type === "text") return typeof a.value === "string" && a.value.trim() !== ""
+        if (a.type === "text" || a.type === "memory-verse") {
+          return typeof a.value === "string" && a.value.trim() !== ""
+        }
+        if (a.type === "ordered-list") {
+          const expectedCount =
+            assessment.questions.find((question) => question.id === a.questionId)?.correctAnswers?.length ?? 0
+          return Array.isArray(a.value) && expectedCount > 0 && a.value.length === expectedCount
+        }
         if (a.type === "file") return a.value !== null
         return false
       }).length,
-    [answers],
+    [answers, assessment.questions],
   )
   const progress =
     assessment.questions.length === 0 ? 0 : (answeredCount / assessment.questions.length) * 100
@@ -91,6 +108,42 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
 
   const handleTextChange = (questionIndex: number, value: string) => {
     setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
+  }
+
+  const normalizeBookName = (value: string) =>
+    value.normalize("NFKC").toLocaleLowerCase("en").replace(/\s+/g, " ").trim()
+
+  const handleOrderedChange = (questionIndex: number, value: string) => {
+    const targetQuestion = assessment.questions[questionIndex]
+    const completed = Array.isArray(answers[questionIndex].value)
+      ? (answers[questionIndex].value as string[])
+      : []
+    const expected = targetQuestion.correctAnswers?.[completed.length]
+
+    setOrderedDrafts((prev) => ({ ...prev, [targetQuestion.id]: value }))
+    setOrderedErrors((prev) => ({ ...prev, [targetQuestion.id]: "" }))
+
+    if (expected && normalizeBookName(value) === normalizeBookName(expected)) {
+      setAnswers((prev) =>
+        prev.map((answer, index) =>
+          index === questionIndex ? { ...answer, value: [...completed, expected] } : answer,
+        ),
+      )
+      setOrderedDrafts((prev) => ({ ...prev, [targetQuestion.id]: "" }))
+    }
+  }
+
+  const handleOrderedEnter = (questionIndex: number) => {
+    const targetQuestion = assessment.questions[questionIndex]
+    const completed = Array.isArray(answers[questionIndex].value)
+      ? (answers[questionIndex].value as string[])
+      : []
+    if (completed.length < (targetQuestion.correctAnswers?.length ?? 0)) {
+      setOrderedErrors((prev) => ({
+        ...prev,
+        [targetQuestion.id]: "Check the spelling and make sure this is the next book in order.",
+      }))
+    }
   }
 
   const handleRemoveFile = (questionIndex: number) => {
@@ -174,10 +227,6 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         return answer
       })
 
-      const autoGradedScore = gradedAnswers.reduce((acc, a) => acc + (a.pointsAwarded || 0), 0)
-      const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
-      const hasManualGrading = assessment.questions.some((q) => q.type !== "multiple-choice")
-
       // Upload any file answers to Convex storage and replace with FileSubmission shape.
       const submittableAnswers = await Promise.all(
         gradedAnswers.map(async (a) => {
@@ -212,11 +261,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
       const attemptId = await submitAttempt({
         assessmentId: assessment._id,
         answers: submittableAnswers as any,
-        score: hasManualGrading ? null : Math.round((autoGradedScore / totalPoints) * 100),
-        totalQuestions: assessment.questions.length,
         startedAt: startTime || new Date().toISOString(),
-        completedAt: new Date().toISOString(),
-        status: hasManualGrading ? "pending" : "graded",
       })
 
       router.push(`/courses/${course._id}/assessments/${assessment._id}/results?attemptId=${attemptId}`)
@@ -262,7 +307,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           </Button>
         </Link>
 
-        <Card>
+        <Card className="mb-8">
           <CardHeader>
             <div className="flex items-center gap-3 mb-2">
               <CardTitle className="text-2xl">{assessment.title}</CardTitle>
@@ -322,6 +367,9 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
             </Button>
           </CardContent>
         </Card>
+        {assessment.type === "quiz" && assessment.leaderboardEnabled && (
+          <QuizLeaderboard assessmentId={assessment._id} />
+        )}
       </main>
     )
   }
@@ -365,6 +413,12 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
             )}
             {question.type === "file" && (
               <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">File Upload</span>
+            )}
+            {question.type === "ordered-list" && (
+              <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full">In Order</span>
+            )}
+            {question.type === "memory-verse" && (
+              <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded-full">Memory Scripture</span>
             )}
           </div>
         </CardHeader>
@@ -419,6 +473,94 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               <p className="text-xs text-muted-foreground">{(currentAnswer.value as string).length} characters</p>
             </div>
           )}
+
+          {question.type === "memory-verse" && (
+            <div className="space-y-3">
+              <Textarea
+                placeholder="Type the scripture from memory…"
+                value={currentAnswer.value as string}
+                onChange={(e) => handleTextChange(currentQuestion, e.target.value)}
+                className="min-h-[180px] text-base leading-relaxed"
+                spellCheck={false}
+              />
+              <div className="rounded-md bg-muted/50 p-3 text-sm text-muted-foreground">
+                Capital letters and punctuation do not affect your score. Spelling and word order must match exactly.
+              </div>
+            </div>
+          )}
+
+          {question.type === "ordered-list" && (() => {
+            const expected = question.correctAnswers ?? []
+            const completed = Array.isArray(currentAnswer.value) ? currentAnswer.value : []
+            const isComplete = completed.length === expected.length && expected.length > 0
+            return (
+              <div className="space-y-4">
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {expected.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`flex min-h-11 items-center gap-3 rounded-md border px-3 py-2 ${
+                        index < completed.length
+                          ? "border-green-300 bg-green-50 text-green-800"
+                          : index === completed.length
+                            ? "border-primary bg-primary/5"
+                            : "bg-muted/20 text-muted-foreground"
+                      }`}
+                    >
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-background text-xs font-semibold">
+                        {index + 1}
+                      </span>
+                      {index < completed.length ? (
+                        <>
+                          <span className="font-medium">{completed[index]}</span>
+                          <CheckCircle2 className="ml-auto h-4 w-4 text-green-600" />
+                        </>
+                      ) : index === completed.length ? (
+                        <span className="text-sm font-medium">Enter this book below</span>
+                      ) : (
+                        <span className="text-sm">Waiting…</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {isComplete ? (
+                  <div className="flex items-center gap-2 rounded-md border border-green-300 bg-green-50 p-4 text-green-800">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span className="font-medium">All {expected.length} books are correct and in order.</span>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor={`ordered-${question.id}`}>
+                      Book {completed.length + 1} of {expected.length}
+                    </Label>
+                    <Input
+                      key={`${question.id}-${completed.length}`}
+                      id={`ordered-${question.id}`}
+                      value={orderedDrafts[question.id] ?? ""}
+                      onChange={(e) => handleOrderedChange(currentQuestion, e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault()
+                          handleOrderedEnter(currentQuestion)
+                        }
+                      }}
+                      placeholder="Type the next book…"
+                      autoComplete="off"
+                      spellCheck={false}
+                      autoFocus
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      A correct entry is confirmed automatically, then the field advances to the next book.
+                    </p>
+                    {orderedErrors[question.id] && (
+                      <p className="text-sm text-destructive">{orderedErrors[question.id]}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          })()}
 
           {question.type === "file" && (
             <div className="space-y-4">
