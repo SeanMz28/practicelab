@@ -2,6 +2,7 @@ import { hashPassword, verifyPassword } from "better-auth/crypto"
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import type { MutationCtx, QueryCtx } from "./_generated/server"
+import type { Id } from "./_generated/dataModel"
 import { authComponent } from "./auth"
 
 export type ProtectedResourceType = "course" | "assessment"
@@ -28,6 +29,26 @@ async function userIsTutor(ctx: ReadCtx, userId: string) {
   return profile?.role === "tutor"
 }
 
+async function userHasGrant(
+  ctx: ReadCtx,
+  userId: string,
+  resourceType: ProtectedResourceType,
+  resourceId: string,
+  credentialId: Id<"accessCredentials">,
+) {
+  const grants = await ctx.db
+    .query("accessGrants")
+    .withIndex("by_user_resource", (q) =>
+      q
+        .eq("userId", userId)
+        .eq("resourceType", resourceType)
+        .eq("resourceId", resourceId),
+    )
+    .collect()
+
+  return grants.some((grant) => grant.credentialId === credentialId)
+}
+
 export async function isResourcePasswordProtected(
   ctx: ReadCtx,
   resourceType: ProtectedResourceType,
@@ -48,17 +69,7 @@ export async function canAccessResource(
   if (!authUser) return false
   if (await userIsTutor(ctx, authUser._id)) return true
 
-  const grants = await ctx.db
-    .query("accessGrants")
-    .withIndex("by_user_resource", (q) =>
-      q
-        .eq("userId", authUser._id)
-        .eq("resourceType", resourceType)
-        .eq("resourceId", resourceId),
-    )
-    .collect()
-
-  return grants.some((grant) => grant.credentialId === credential._id)
+  return userHasGrant(ctx, authUser._id, resourceType, resourceId, credential._id)
 }
 
 export async function canAccessCourse(ctx: ReadCtx, courseId: string) {
@@ -135,14 +146,25 @@ export const status = query({
     resourceId: v.string(),
   },
   handler: async (ctx, args) => {
-    const protectedResource = await isResourcePasswordProtected(
-      ctx,
-      args.resourceType,
-      args.resourceId,
-    )
+    const credential = await getCredential(ctx, args.resourceType, args.resourceId)
+    if (!credential) {
+      return { passwordProtected: false, unlocked: true }
+    }
+
+    const authUser = await authComponent.safeGetAuthUser(ctx)
     return {
-      passwordProtected: protectedResource,
-      unlocked: await canAccessResource(ctx, args.resourceType, args.resourceId),
+      passwordProtected: true,
+      // Tutors retain backend access for course administration, but the
+      // student-facing password gate still requires an explicit unlock.
+      unlocked:
+        authUser != null &&
+        (await userHasGrant(
+          ctx,
+          authUser._id,
+          args.resourceType,
+          args.resourceId,
+          credential._id,
+        )),
     }
   },
 })
