@@ -10,6 +10,7 @@ import { MarkdownRenderer } from "@/components/notes/markdown-renderer"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar } from "lucide-react"
 import { PasswordGate } from "@/components/access/password-gate"
+import { NotePageLoading } from "@/components/loading/loading-states"
 
 interface NotePageProps {
   params: Promise<{
@@ -30,7 +31,7 @@ export default function NotePage({ params }: NotePageProps) {
       <DashboardHeader />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {isLoading ? (
-          <p className="text-muted-foreground">Loading…</p>
+          <NotePageLoading />
         ) : notFound ? (
           <p className="text-muted-foreground">Note not found.</p>
         ) : (
@@ -45,7 +46,7 @@ export default function NotePage({ params }: NotePageProps) {
 
 function UnlockedNote({ noteId, course }: { noteId: Id<"notes">; course: Doc<"courses"> }) {
   const note = useQuery(api.notes.get, { id: noteId })
-  if (note === undefined) return <p className="text-muted-foreground">Loading note…</p>
+  if (note === undefined) return <NotePageLoading />
   if (note === null) return <p className="text-muted-foreground">Note not found.</p>
 
   return (

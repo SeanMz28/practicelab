@@ -8,6 +8,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { CourseHeader } from "@/components/courses/course-header"
 import { CourseContent } from "@/components/courses/course-content"
 import { PasswordGate } from "@/components/access/password-gate"
+import { CoursePageLoading } from "@/components/loading/loading-states"
 
 interface CoursePageProps {
   params: Promise<{
@@ -24,9 +25,7 @@ export default function CoursePage({ params }: CoursePageProps) {
       <DashboardHeader />
       <main className="flex-1">
         {course === undefined ? (
-          <div className="container mx-auto px-4 py-8">
-            <p className="text-muted-foreground">Loading…</p>
-          </div>
+          <CoursePageLoading />
         ) : course === null ? (
           <div className="container mx-auto px-4 py-8">
             <p className="text-muted-foreground">Course not found.</p>

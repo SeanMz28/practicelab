@@ -244,9 +244,15 @@ export const leaderboard = query({
     })
     const enriched = await Promise.all(
       selected.map(async ({ userId, attempt, attemptNumber }) => {
-        const user = await authComponent.getAnyUserById(ctx, userId)
+        const [user, profile] = await Promise.all([
+          authComponent.getAnyUserById(ctx, userId),
+          ctx.db
+            .query("userProfiles")
+            .withIndex("by_userId", (q) => q.eq("userId", userId))
+            .unique(),
+        ])
         return {
-          name: user?.name || "Student",
+          name: profile?.username || user?.name || "Student",
           score: attempt.score,
           status: attempt.status,
           completedAt: attempt.completedAt,

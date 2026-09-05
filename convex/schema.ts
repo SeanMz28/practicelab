@@ -47,7 +47,11 @@ export default defineSchema({
   userProfiles: defineTable({
     userId: v.string(),
     role: v.union(v.literal("student"), v.literal("tutor")),
-  }).index("by_userId", ["userId"]),
+    username: v.optional(v.string()),
+    usernameNormalized: v.optional(v.string()),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_usernameNormalized", ["usernameNormalized"]),
 
   courses: defineTable({
     name: v.string(),

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Providers } from "@/components/providers"
 import { DataInitializer } from "@/components/data-initializer"
+import { UsernameOnboarding } from "@/components/profile/username-onboarding"
 import { getToken } from "@/lib/auth-server"
 import "./globals.css"
 
@@ -33,6 +34,7 @@ export default async function RootLayout({
       <body className={`font-sans antialiased`} suppressHydrationWarning>
         <Providers initialToken={initialToken}>
           <DataInitializer />
+          <UsernameOnboarding />
           {children}
         </Providers>
         <Analytics />

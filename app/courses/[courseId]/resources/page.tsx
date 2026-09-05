@@ -11,6 +11,7 @@ import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
 import { PasswordGate } from "@/components/access/password-gate"
+import { ResourcePageLoading } from "@/components/loading/loading-states"
 
 export default function CourseResourcesPage() {
   const params = useParams()
@@ -22,7 +23,7 @@ export default function CourseResourcesPage() {
       <DashboardHeader />
       <main className="flex-1 container mx-auto px-4 py-8">
         {course === undefined ? (
-          <p className="text-muted-foreground">Loading…</p>
+          <ResourcePageLoading />
         ) : course === null ? (
           <p className="text-muted-foreground">Course not found.</p>
         ) : (
@@ -36,8 +37,10 @@ export default function CourseResourcesPage() {
 }
 
 function UnlockedResources({ courseId }: { courseId: Id<"courses"> }) {
-  const resources = useQuery(api.resources.listByCourse, { courseId }) ?? []
+  const resources = useQuery(api.resources.listByCourse, { courseId })
   const convex = useConvex()
+
+  if (resources === undefined) return <ResourcePageLoading />
 
   const handleDownload = async (resource: Doc<"resources">) => {
     const url = await convex.query(api.files.getUrl, { storageId: resource.storageId })

@@ -14,15 +14,15 @@ export default function SignInPage() {
             <span className="text-2xl font-bold">Practice Lab</span>
           </Link>
           <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to continue your learning journey</p>
+          <p className="text-muted-foreground">Sign in or create an account with Google</p>
         </div>
 
         <SignInForm />
 
         <p className="text-center text-sm text-muted-foreground mt-6">
-          {"Don't have an account? "}
+          {"New to Practice Lab? "}
           <Link href="/register" className="text-primary hover:underline font-medium">
-            Register here
+            Get started
           </Link>
         </p>
       </div>

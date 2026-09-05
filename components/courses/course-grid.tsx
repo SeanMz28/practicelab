@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button"
 import { BookOpen, FileText, LockKeyhole } from "lucide-react"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
+import { CourseGridLoading } from "@/components/loading/loading-states"
 
 export function CourseGrid() {
   const courses = useQuery(api.courses.list)
 
   if (!courses) {
-    return <p className="text-sm text-muted-foreground">Loading courses…</p>
+    return <CourseGridLoading />
   }
 
   return (

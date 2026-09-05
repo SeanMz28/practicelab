@@ -50,7 +50,8 @@ export function DashboardHeader() {
 
   if (!me) return null
 
-  const initials = (me.name || me.email)
+  const displayName = me.username || me.name || me.email
+  const initials = displayName
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -113,7 +114,7 @@ export function DashboardHeader() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">{me.name}</p>
+                  <p className="text-sm font-medium">{displayName}</p>
                   <p className="text-xs text-muted-foreground">{me.email}</p>
                   <Badge variant="outline" className="w-fit mt-1">
                     {isTutor ? "Tutor" : "Student"}

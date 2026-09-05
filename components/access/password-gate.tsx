@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { InlineLoading } from "@/components/loading/loading-states"
 
 interface PasswordGateProps {
   resourceType: "course" | "assessment"
@@ -39,7 +40,11 @@ export function PasswordGate({ resourceType, resourceId, title, children }: Pass
   }
 
   if (access === undefined) {
-    return <p className="text-muted-foreground">Checking access…</p>
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <InlineLoading label="Checking access…" />
+      </div>
+    )
   }
   if (access.unlocked) return <>{children}</>
 

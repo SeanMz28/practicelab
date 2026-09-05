@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { LeaderboardLoading } from "@/components/loading/loading-states"
 
 interface QuizLeaderboardProps {
   assessmentId: Id<"assessments">
@@ -57,7 +58,7 @@ type LeaderboardRows =
   | undefined
 
 function LeaderboardTable({ rows, mode }: { rows: LeaderboardRows; mode: "latest" | "first" }) {
-  if (rows === undefined) return <p className="py-6 text-center text-sm text-muted-foreground">Loading leaderboard…</p>
+  if (rows === undefined) return <LeaderboardLoading />
   if (rows.length === 0) return <p className="py-6 text-center text-sm text-muted-foreground">No attempts yet.</p>
 
   return (

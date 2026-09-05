@@ -13,8 +13,8 @@ export default function RegisterPage() {
             </div>
             <span className="text-2xl font-bold">Practice Lab</span>
           </Link>
-          <h1 className="text-3xl font-bold mb-2">Create Your Account</h1>
-          <p className="text-muted-foreground">Start your journey to academic excellence</p>
+          <h1 className="text-3xl font-bold mb-2">Join Practice Lab</h1>
+          <p className="text-muted-foreground">Use Google to get started in a few seconds</p>
         </div>
 
         <RegisterForm />

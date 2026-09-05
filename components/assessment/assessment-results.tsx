@@ -10,6 +10,7 @@ import { api } from "@/convex/_generated/api"
 import type { Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
 import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
+import { ResultsPageLoading } from "@/components/loading/loading-states"
 
 interface AssessmentResultsProps {
   courseId: string
@@ -40,15 +41,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
   }
 
   if (!attempt || !assessment || !course) {
-    return (
-      <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">Loading results...</p>
-          </CardContent>
-        </Card>
-      </main>
-    )
+    return <ResultsPageLoading />
   }
 
   const totalPoints = assessment.questions.reduce((acc, q) => acc + q.points, 0)
