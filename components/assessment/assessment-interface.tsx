@@ -110,7 +110,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
   }
 
-  const normalizeBookName = (value: string) =>
+  const normalizeOrderedItem = (value: string) =>
     value.normalize("NFKC").toLocaleLowerCase("en").replace(/\s+/g, " ").trim()
 
   const handleOrderedChange = (questionIndex: number, value: string) => {
@@ -123,7 +123,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     setOrderedDrafts((prev) => ({ ...prev, [targetQuestion.id]: value }))
     setOrderedErrors((prev) => ({ ...prev, [targetQuestion.id]: "" }))
 
-    if (expected && normalizeBookName(value) === normalizeBookName(expected)) {
+    if (expected && normalizeOrderedItem(value) === normalizeOrderedItem(expected)) {
       setAnswers((prev) =>
         prev.map((answer, index) =>
           index === questionIndex ? { ...answer, value: [...completed, expected] } : answer,
@@ -141,7 +141,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     if (completed.length < (targetQuestion.correctAnswers?.length ?? 0)) {
       setOrderedErrors((prev) => ({
         ...prev,
-        [targetQuestion.id]: "Check the spelling and make sure this is the next book in order.",
+        [targetQuestion.id]: "Check the spelling and make sure this is the next item in order.",
       }))
     }
   }
@@ -493,6 +493,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
             const expected = question.correctAnswers ?? []
             const completed = Array.isArray(currentAnswer.value) ? currentAnswer.value : []
             const isComplete = completed.length === expected.length && expected.length > 0
+            const inputHint = question.orderedListHint?.trim() || "Type the next item…"
             return (
               <div className="space-y-4">
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -516,7 +517,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                           <CheckCircle2 className="ml-auto h-4 w-4 text-green-600" />
                         </>
                       ) : index === completed.length ? (
-                        <span className="text-sm font-medium">Enter this book below</span>
+                        <span className="text-sm font-medium">Enter this item below</span>
                       ) : (
                         <span className="text-sm">Waiting…</span>
                       )}
@@ -527,12 +528,12 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                 {isComplete ? (
                   <div className="flex items-center gap-2 rounded-md border border-green-300 bg-green-50 p-4 text-green-800">
                     <CheckCircle2 className="h-5 w-5" />
-                    <span className="font-medium">All {expected.length} books are correct and in order.</span>
+                    <span className="font-medium">All {expected.length} items are correct and in order.</span>
                   </div>
                 ) : (
                   <div className="space-y-2">
                     <Label htmlFor={`ordered-${question.id}`}>
-                      Book {completed.length + 1} of {expected.length}
+                      Item {completed.length + 1} of {expected.length}
                     </Label>
                     <Input
                       key={`${question.id}-${completed.length}`}
@@ -545,13 +546,13 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                           handleOrderedEnter(currentQuestion)
                         }
                       }}
-                      placeholder="Type the next book…"
+                      placeholder={inputHint}
                       autoComplete="off"
                       spellCheck={false}
                       autoFocus
                     />
                     <p className="text-xs text-muted-foreground">
-                      A correct entry is confirmed automatically, then the field advances to the next book.
+                      A correct entry is confirmed automatically, then the field advances to the next item.
                     </p>
                     {orderedErrors[question.id] && (
                       <p className="text-sm text-destructive">{orderedErrors[question.id]}</p>

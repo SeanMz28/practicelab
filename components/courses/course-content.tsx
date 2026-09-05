@@ -8,6 +8,7 @@ import { FileText, ClipboardList, FolderOpen, LockKeyhole, Trophy } from "lucide
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc } from "@/convex/_generated/dataModel"
+import { LeaderboardDialog } from "@/components/assessment/leaderboard-dialog"
 
 interface CourseContentProps {
   course: Doc<"courses">
@@ -109,11 +110,19 @@ export function CourseContent({ course }: CourseContentProps) {
                         </span>
                       ) : null}
                     </div>
-                    <Link href={`/courses/${course._id}/assessments/${assessment._id}`}>
-                      <Button variant="secondary">
-                        Start {assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1)}
-                      </Button>
-                    </Link>
+                    <div className="flex flex-wrap gap-2">
+                      <Link href={`/courses/${course._id}/assessments/${assessment._id}`}>
+                        <Button variant="secondary">
+                          Start {assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1)}
+                        </Button>
+                      </Link>
+                      {assessment.type === "quiz" && assessment.leaderboardEnabled && (
+                        <LeaderboardDialog
+                          assessmentId={assessment._id}
+                          assessmentTitle={assessment.title}
+                        />
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               )

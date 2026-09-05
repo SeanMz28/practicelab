@@ -43,6 +43,7 @@ export interface Question {
   correctAnswer?: number // For multiple-choice
   correctText?: string // For memory scripture
   correctAnswers?: string[] // For ordered lists
+  orderedListHint?: string // Optional prompt shown while entering ordered-list items
   explanation?: string
   acceptedFileTypes?: string[] // For file uploads
 }

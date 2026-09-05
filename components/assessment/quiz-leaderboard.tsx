@@ -9,21 +9,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { LeaderboardLoading } from "@/components/loading/loading-states"
+import { cn } from "@/lib/utils"
 
 interface QuizLeaderboardProps {
   assessmentId: Id<"assessments">
+  title?: string
+  className?: string
 }
 
-export function QuizLeaderboard({ assessmentId }: QuizLeaderboardProps) {
+export function QuizLeaderboard({ assessmentId, title, className }: QuizLeaderboardProps) {
   const latest = useQuery(api.attempts.leaderboard, { assessmentId, mode: "latest" })
   const first = useQuery(api.attempts.leaderboard, { assessmentId, mode: "first" })
 
   return (
-    <Card className="mb-8">
+    <Card className={cn("mb-8", className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Trophy className="h-5 w-5 text-amber-500" />
-          Quiz leaderboard
+          {title ? `${title} leaderboard` : "Quiz leaderboard"}
         </CardTitle>
         <CardDescription>One ranked result per student. Pending grades appear after scored attempts.</CardDescription>
       </CardHeader>

@@ -24,6 +24,7 @@ const questionValidator = v.object({
   correctAnswer: v.optional(v.number()),
   correctText: v.optional(v.string()),
   correctAnswers: v.optional(v.array(v.string())),
+  orderedListHint: v.optional(v.string()),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
 })

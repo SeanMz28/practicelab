@@ -183,6 +183,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       }),
       ...(questionDraft.type === "ordered-list" && {
         correctAnswers: questionDraft.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
+        orderedListHint: questionDraft.orderedListHint?.trim() || undefined,
       }),
     }
     const next = [...questions]
@@ -257,6 +258,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       }),
       ...(currentQuestion.type === "ordered-list" && {
         correctAnswers: currentQuestion.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
+        orderedListHint: currentQuestion.orderedListHint?.trim() || undefined,
       }),
     }
 
@@ -581,21 +583,38 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                               </div>
                             )}
                             {questionDraft.type === "ordered-list" && (
-                              <div>
-                                <Label>Correct Answers in Order</Label>
-                                <Textarea
-                                  className="min-h-32"
-                                  placeholder={"Genesis\nExodus\nLeviticus"}
-                                  value={questionDraft.correctAnswers?.join("\n") ?? ""}
-                                  onChange={(e) =>
-                                    setQuestionDraft({
-                                      ...questionDraft,
-                                      correctAnswers: e.target.value
-                                        .split("\n"),
-                                    })
-                                  }
-                                />
-                                <p className="mt-1 text-xs text-muted-foreground">Enter one answer per line.</p>
+                              <div className="space-y-4">
+                                <div>
+                                  <Label>Correct Answers in Order</Label>
+                                  <Textarea
+                                    className="min-h-32"
+                                    placeholder={"Genesis\nExodus\nLeviticus"}
+                                    value={questionDraft.correctAnswers?.join("\n") ?? ""}
+                                    onChange={(e) =>
+                                      setQuestionDraft({
+                                        ...questionDraft,
+                                        correctAnswers: e.target.value.split("\n"),
+                                      })
+                                    }
+                                  />
+                                  <p className="mt-1 text-xs text-muted-foreground">Enter one answer per line.</p>
+                                </div>
+                                <div>
+                                  <Label>Student Hint (Optional)</Label>
+                                  <Input
+                                    placeholder="e.g., Type the next book…"
+                                    value={questionDraft.orderedListHint ?? ""}
+                                    onChange={(e) =>
+                                      setQuestionDraft({
+                                        ...questionDraft,
+                                        orderedListHint: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  <p className="mt-1 text-xs text-muted-foreground">
+                                    Shown inside the answer field. The default is “Type the next item…”
+                                  </p>
+                                </div>
                               </div>
                             )}
                             <div className="flex justify-end gap-2">
@@ -830,22 +849,40 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                     )}
 
                     {currentQuestion.type === "ordered-list" && (
-                      <div>
-                        <Label htmlFor="correct-answers">Correct Answers in Order</Label>
-                        <Textarea
-                          id="correct-answers"
-                          className="min-h-32"
-                          placeholder={"Genesis\nExodus\nLeviticus"}
-                          value={currentQuestion.correctAnswers?.join("\n") ?? ""}
-                          onChange={(e) =>
-                            setCurrentQuestion({
-                              ...currentQuestion,
-                              correctAnswers: e.target.value
-                                .split("\n"),
-                            })
-                          }
-                        />
-                        <p className="mt-1 text-xs text-muted-foreground">Enter one answer per line.</p>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="correct-answers">Correct Answers in Order</Label>
+                          <Textarea
+                            id="correct-answers"
+                            className="min-h-32"
+                            placeholder={"Genesis\nExodus\nLeviticus"}
+                            value={currentQuestion.correctAnswers?.join("\n") ?? ""}
+                            onChange={(e) =>
+                              setCurrentQuestion({
+                                ...currentQuestion,
+                                correctAnswers: e.target.value.split("\n"),
+                              })
+                            }
+                          />
+                          <p className="mt-1 text-xs text-muted-foreground">Enter one answer per line.</p>
+                        </div>
+                        <div>
+                          <Label htmlFor="ordered-list-hint">Student Hint (Optional)</Label>
+                          <Input
+                            id="ordered-list-hint"
+                            placeholder="e.g., Type the next book…"
+                            value={currentQuestion.orderedListHint ?? ""}
+                            onChange={(e) =>
+                              setCurrentQuestion({
+                                ...currentQuestion,
+                                orderedListHint: e.target.value,
+                              })
+                            }
+                          />
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            Shown inside the answer field. The default is “Type the next item…”
+                          </p>
+                        </div>
                       </div>
                     )}
 
