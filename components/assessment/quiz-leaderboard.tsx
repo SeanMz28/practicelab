@@ -34,9 +34,13 @@ export function QuizLeaderboard({ assessmentId, title, className }: QuizLeaderbo
       </CardHeader>
       <CardContent className="min-w-0 px-4 sm:px-6">
         <Tabs defaultValue="latest" className="min-w-0">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="latest">Latest scores</TabsTrigger>
-            <TabsTrigger value="first">First attempts</TabsTrigger>
+          <TabsList className="grid h-auto w-full max-w-md grid-cols-2">
+            <TabsTrigger value="latest" className="h-auto min-h-9 whitespace-normal text-center">
+              Latest scores
+            </TabsTrigger>
+            <TabsTrigger value="first" className="h-auto min-h-9 whitespace-normal text-center">
+              First attempts
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="latest" className="min-w-0 pt-4">
             <LeaderboardTable rows={latest} mode="latest" />
@@ -68,39 +72,39 @@ function LeaderboardTable({ rows, mode }: { rows: LeaderboardRows; mode: "latest
 
   return (
     <>
-      <div className="divide-y rounded-lg border md:hidden" role="list" aria-label="Leaderboard rankings">
+      <div className="divide-y rounded-lg border lg:hidden" role="list" aria-label="Leaderboard rankings">
         {rows.map((row) => (
           <div
             key={`${row.name}-${row.completedAt}`}
             className={cn(
-              "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 p-3",
+              "min-w-0 p-3",
               row.isCurrentUser && "bg-primary/5",
             )}
             role="listitem"
           >
-            <span className="flex min-w-8 items-center gap-1 font-semibold" aria-label={`Rank ${row.rank}`}>
-              {row.rank <= 3 && row.score !== null && <Medal className="h-4 w-4 shrink-0 text-amber-500" />}
-              {row.rank}
-            </span>
-            <div className="min-w-0">
-              <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-                <span className="min-w-0 break-words font-medium">{row.name}</span>
-                {row.isCurrentUser && <Badge variant="secondary">You</Badge>}
+            <div className="flex min-w-0 items-center justify-between gap-3">
+              <span className="flex min-w-0 items-center gap-1 font-semibold" aria-label={`Rank ${row.rank}`}>
+                {row.rank <= 3 && row.score !== null && <Medal className="h-4 w-4 shrink-0 text-amber-500" />}
+                Rank {row.rank}
+              </span>
+              <div className="shrink-0 text-right font-semibold">
+                {row.score === null ? <Badge variant="secondary">Pending</Badge> : `${row.score}%`}
               </div>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                {mode === "latest" ? "Latest" : "First"} attempt #{row.attemptNumber}
-                <span aria-hidden="true"> · </span>
-                {new Date(row.completedAt).toLocaleDateString()}
-              </p>
             </div>
-            <div className="text-right font-semibold">
-              {row.score === null ? <Badge variant="secondary">Pending</Badge> : `${row.score}%`}
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-1.5">
+              <span className="min-w-0 [overflow-wrap:anywhere] font-medium">{row.name}</span>
+              {row.isCurrentUser && <Badge variant="secondary">You</Badge>}
             </div>
+            <p className="mt-1 [overflow-wrap:anywhere] text-xs text-muted-foreground">
+              {mode === "latest" ? "Latest" : "First"} attempt #{row.attemptNumber}
+              <span aria-hidden="true"> · </span>
+              {new Date(row.completedAt).toLocaleDateString()}
+            </p>
           </div>
         ))}
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <Table>
           <TableHeader>
             <TableRow>
