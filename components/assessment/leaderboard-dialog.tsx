@@ -27,7 +27,7 @@ export function LeaderboardDialog({ assessmentId, assessmentTitle }: Leaderboard
           View Leaderboard
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto p-0 sm:max-w-4xl">
+      <DialogContent className="max-h-[calc(100dvh-1rem)] max-w-[calc(100%-1rem)] overflow-x-hidden overflow-y-auto p-0 sm:max-h-[calc(100dvh-2rem)] sm:max-w-4xl">
         <DialogHeader className="sr-only">
           <DialogTitle>{assessmentTitle} leaderboard</DialogTitle>
           <DialogDescription>
