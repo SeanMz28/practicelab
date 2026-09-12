@@ -692,7 +692,8 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               return (
                 <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Complete each part by writing the thing first, followed by its supporting scripture.
+                    Enter the three matched pairs in any order. For each part, write the thing first,
+                    followed by its supporting scripture.
                   </p>
                   {expected.map((_, index) => {
                     const pair = splitPairedAnswer(completed[index])
@@ -708,7 +709,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                               onChange={(event) =>
                                 handlePairedAnswerChange(currentQuestion, index, "thing", event.target.value)
                               }
-                              placeholder="e.g. Emotions"
+                              placeholder="e.g. Pride"
                               autoComplete="off"
                             />
                           </div>
@@ -722,7 +723,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                               onChange={(event) =>
                                 handlePairedAnswerChange(currentQuestion, index, "scripture", event.target.value)
                               }
-                              placeholder="e.g. John 8:31–32"
+                              placeholder="e.g. Proverbs 16:18"
                               autoComplete="off"
                             />
                           </div>

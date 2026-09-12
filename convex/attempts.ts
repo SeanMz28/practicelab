@@ -143,13 +143,22 @@ export const submit = mutation({
             ? submitted.value
             : []
         const expected = question.correctAnswers ?? []
-        const correctCount = expected.reduce(
-          (count, answer, index) =>
-            normalizeAssessmentText(value[index] ?? "") === normalizeAssessmentText(answer)
-              ? count + 1
-              : count,
-          0,
-        )
+        const unmatchedPairedAnswers = expected.map(normalizeAssessmentText)
+        const correctCount = question.answerLayout === "paired"
+          ? value.reduce((count, answer) => {
+              const normalizedAnswer = normalizeAssessmentText(answer)
+              const matchingIndex = unmatchedPairedAnswers.indexOf(normalizedAnswer)
+              if (!normalizedAnswer || matchingIndex === -1) return count
+              unmatchedPairedAnswers.splice(matchingIndex, 1)
+              return count + 1
+            }, 0)
+          : expected.reduce(
+              (count, answer, index) =>
+                normalizeAssessmentText(value[index] ?? "") === normalizeAssessmentText(answer)
+                  ? count + 1
+                  : count,
+              0,
+            )
         const isCorrect = expected.length > 0 && correctCount === expected.length
         return {
           questionId: question.id,
