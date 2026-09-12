@@ -26,6 +26,7 @@ const questionValidator = v.object({
   correctText: v.optional(v.string()),
   correctAnswers: v.optional(v.array(v.string())),
   orderedListHint: v.optional(v.string()),
+  answerLayout: v.optional(v.literal("paired")),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
 })

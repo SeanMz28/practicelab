@@ -3,25 +3,26 @@
 import type React from "react"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useQuery } from "convex/react"
+import { useConvexAuth, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 
 export default function TutorLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth()
   const me = useQuery(api.users.me)
 
   useEffect(() => {
-    if (me === undefined) return
-    if (me === null) {
+    if (isAuthLoading) return
+    if (!isAuthenticated) {
       router.replace("/sign-in")
       return
     }
-    if (me.role !== "tutor") {
+    if (me && me.role !== "tutor") {
       router.replace("/dashboard")
     }
-  }, [me, router])
+  }, [isAuthenticated, isAuthLoading, me, router])
 
-  if (me === undefined || me === null || me.role !== "tutor") {
+  if (isAuthLoading || !isAuthenticated || !me || me.role !== "tutor") {
     return null
   }
 

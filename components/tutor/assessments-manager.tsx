@@ -189,6 +189,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       ...(questionDraft.type === "ordered-list" && {
         correctAnswers: questionDraft.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
         orderedListHint: questionDraft.orderedListHint?.trim() || undefined,
+        answerLayout: questionDraft.answerLayout,
       }),
     }
     const next = [...questions]
@@ -265,6 +266,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       ...(currentQuestion.type === "ordered-list" && {
         correctAnswers: currentQuestion.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
         orderedListHint: currentQuestion.orderedListHint?.trim() || undefined,
+        answerLayout: currentQuestion.answerLayout,
       }),
     }
 
@@ -678,7 +680,8 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                               )}
                               {q.type === "ordered-list" && q.correctAnswers && (
                                 <p className="mt-2 text-xs text-green-700">
-                                  Correct order: {q.correctAnswers.join(" → ")}
+                                  {q.answerLayout === "paired" ? "Correct pairs: " : "Correct order: "}
+                                  {q.correctAnswers.join(q.answerLayout === "paired" ? "; " : " → ")}
                                 </p>
                               )}
                               {q.explanation && (

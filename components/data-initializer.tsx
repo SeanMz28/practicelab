@@ -8,6 +8,7 @@ import { dummyCourses, dummyNotes, dummyAssessments } from "@/lib/dummy-data"
 export function DataInitializer() {
   const seedIfEmpty = useMutation(api.seed.seedIfEmpty)
   const ensureCourseWithAssessment = useMutation(api.seed.ensureCourseWithAssessment)
+  const ensureCourseWithNote = useMutation(api.seed.ensureCourseWithNote)
   const ensureProfile = useMutation(api.users.ensureProfile)
   const me = useQuery(api.users.me)
   const profileEnsured = useRef(false)
@@ -101,6 +102,26 @@ export function DataInitializer() {
 
         const bibleCourse = dummyCourses.find((c) => c.code === "BIBLE101")
         if (bibleCourse) {
+          const wordOfGodNote = dummyNotes.find(
+            (note) => note.courseId === bibleCourse.id && note.title === "The Word of God",
+          )
+          if (wordOfGodNote) {
+            await ensureCourseWithNote({
+              course: {
+                name: bibleCourse.name,
+                code: bibleCourse.code,
+                description: bibleCourse.description,
+                color: bibleCourse.color,
+              },
+              note: {
+                title: wordOfGodNote.title,
+                content: wordOfGodNote.content,
+                createdAt: wordOfGodNote.createdAt,
+                updatedAt: wordOfGodNote.updatedAt,
+              },
+            })
+          }
+
           const bibleQuizzes = dummyAssessments.filter((a) => a.courseId === bibleCourse.id)
           for (const quiz of bibleQuizzes) {
             await ensureCourseWithAssessment({
@@ -126,7 +147,7 @@ export function DataInitializer() {
       .catch((err) => {
         console.error("Seed failed", err)
       })
-  }, [seedIfEmpty, ensureCourseWithAssessment])
+  }, [seedIfEmpty, ensureCourseWithAssessment, ensureCourseWithNote])
 
   return null
 }

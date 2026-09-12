@@ -43,7 +43,8 @@ export function GoogleAuthCard({ title, description }: GoogleAuthCardProps) {
     setIsLoading(true)
     const { error: authError } = await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/dashboard",
+      callbackURL: "/auth/complete",
+      errorCallbackURL: "/sign-in?error=google",
     })
     if (authError) {
       setError(authError.message ?? "Google sign-in failed")

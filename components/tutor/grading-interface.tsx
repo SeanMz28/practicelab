@@ -19,6 +19,12 @@ interface GradingInterfaceProps {
   attemptId: string
 }
 
+function displayOrderedAnswer(value: string, paired: boolean) {
+  if (!paired) return value
+  const [thing = "", scripture = ""] = value.split("\t")
+  return `${thing || "Not answered"} — ${scripture || "Not answered"}`
+}
+
 export function GradingInterface({ attemptId }: GradingInterfaceProps) {
   const router = useRouter()
   const convex = useConvex()
@@ -168,7 +174,7 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                       )}
                       {question.type === "ordered-list" && (
                         <Badge variant="outline" className="bg-emerald-50">
-                          In Order
+                          {question.answerLayout === "paired" ? "3-Part Answer" : "In Order"}
                         </Badge>
                       )}
                       {question.type === "memory-verse" && (
@@ -246,7 +252,9 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <ol className="list-decimal list-inside bg-muted/50 p-4 rounded-lg space-y-1">
                         {(Array.isArray(answer.value) ? answer.value : []).map((item, itemIndex) => (
-                          <li key={itemIndex}>{item}</li>
+                          <li key={itemIndex}>
+                            {displayOrderedAnswer(item, question.answerLayout === "paired")}
+                          </li>
                         ))}
                       </ol>
                       <ol className="list-decimal list-inside border border-green-200 bg-green-50 p-4 rounded-lg space-y-1">

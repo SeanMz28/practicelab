@@ -44,6 +44,7 @@ export interface Question {
   correctText?: string // For memory scripture
   correctAnswers?: string[] // For ordered lists
   orderedListHint?: string // Optional prompt shown while entering ordered-list items
+  answerLayout?: "paired" // Show each ordered-list answer as a pair of fields
   explanation?: string
   acceptedFileTypes?: string[] // For file uploads
 }
@@ -257,6 +258,118 @@ fruits.remove("banana")
     createdAt: "2026-01-03T10:00:00Z",
     updatedAt: "2026-01-03T10:00:00Z",
   },
+  {
+    id: "word-of-god-notes",
+    courseId: "8",
+    title: "The Word of God",
+    content: `# The Word of God
+
+> **Purpose:** To help you decide to make the Bible your standard for life and to build a conviction about what the Bible says about itself.
+
+## Opening Discussion
+
+- What is your viewpoint of the Bible?
+- Do you believe it is the divine Word of God?
+- Consider the validity of the Bible.
+
+## Facts About the Bible
+
+- The Bible contains **66 books** written by approximately **40 authors**.
+- It was written in three languages: **Hebrew, Aramaic, and Greek**.
+- It was written on three continents: **Africa, Asia, and Europe**.
+- Approximately 400 Old Testament prophecies about Jesus were fulfilled in the New Testament.
+- The Bible was written over a period of approximately **1,500 years**.
+- The study notes that archaeological discoveries have supported, rather than contradicted, the Bible.
+- More than 40,000 ancient copies exist—more than for any other ancient manuscript.
+- Scientific examples referenced in the study:
+  - **Isaiah 40:22:** The Earth is a sphere.
+  - **Isaiah 55:10–11:** The water cycle.
+  - **Job 26:7:** The Earth floats freely in space.
+
+### The Ruler Illustration
+
+If someone asked you to determine the length of a Bible in inches or centimetres, you would need a fixed standard of measurement, such as a ruler. Anything else would only be a guess.
+
+**Question:** What is the standard of measurement in your life?
+
+## 2 Timothy 3:16–17
+
+- Do you believe that all Scripture is from God?
+- The Bible is useful for **teaching, rebuking, correcting, and training in righteousness**.
+- To be thoroughly equipped, we need to use the Bible and allow it to affect our lives.
+- The Bible is an absolute. Are you ready to make it an absolute in your life?
+
+## Hebrews 4:12–13
+
+- The Word of God is not dead; it remains relevant because it exposes the human heart, which has not changed.
+- People still struggle with lust, deceit, pride, and other sins, just as people did 2,000 years ago.
+- The Bible is like a double-edged sword. Although the process may hurt, it cuts sin out of us.
+- It cuts through the layers of the heart to expose the truth, like a scalpel removing cancer.
+
+**Question:** Are you willing to allow the Bible to cut your heart so that you can be healed?
+
+## Three Things That Take Away From God's Word
+
+### 1. Interpretation — 2 Peter 1:19–21
+
+- The Bible is meant to be read and applied, not changed to suit our opinions.
+- Consider a doctor who gives a prescription, but the pharmacist decides to change it.
+- It is not about who is right, but **what is right**.
+- The Word determines how a church should be.
+
+### 2. Emotions — John 8:31–32
+
+- Individual emotions and rationalising the Bible can pull us away from the truth.
+- Being stopped for speeding but not feeling as though you were speeding does not make you innocent.
+- Merely saying or feeling that you believe does not replace holding to Scripture.
+- A person can be sincerely wrong.
+
+**Question:** Which Scriptures are challenging for you to obey?
+
+### 3. Traditions — Mark 7:1–13
+
+- We must choose the truth of God's Word over religious or cultural tradition.
+- Worship based on tradition that supersedes God's Word is worship in vain.
+- The Jewish tradition of Corban allowed money to be given to the synagogue instead of being used to provide for one's parents, thereby dishonouring them.
+
+**Question:** Are you aware of religious traditions that disobey God's Word?
+
+## 1 Timothy 4:16
+
+- Which is more important: life or doctrine? **Both are equally important.**
+- Watch out for interpretations, emotions, or traditions that can stop you from obeying the Word of God.
+
+## Acts 17:10–11
+
+- Do you want a noble character? What do you need to do?
+- Eagerly examine the Scriptures every day.
+- The Bereans examined the Scriptures for themselves, and so should we.
+
+## James 1:22–25
+
+- Listening without trying to change leads to self-deception.
+- The Word of God is a mirror: it reveals our character so that we can change it.
+- Do not forget what you see. Apply the Bible by doing what it says.
+
+**Question:** Are you willing to look intently into the Bible so that you can change and have freedom from sin?
+
+## John 12:48
+
+- Jesus says that His Word will judge us.
+- The Bible is God's standard. Will it be your standard?
+
+## Memory Scriptures
+
+- **Philippians 4:13**
+- **John 8:31–32**
+
+## Challenge
+
+Eagerly examine the Scriptures every day so that you can make God's Word your standard for life. Continue reading one or two chapters of the Gospel of John each day as you pray.
+`,
+    createdAt: "2026-09-12T10:00:00Z",
+    updatedAt: "2026-09-12T10:00:00Z",
+  },
 ]
 
 const wordOfGodStudyQuiz: Assessment = {
@@ -373,14 +486,14 @@ const wordOfGodStudyQuiz: Assessment = {
         id: "wg-q8",
         type: "ordered-list",
         question:
-          "List the three things that take away from God's Word and give the supporting scripture for each.",
+          "Complete all three parts. For each part, write the thing that takes away from God's Word, then write its supporting scripture.",
         points: 3,
         correctAnswers: [
           "Interpretation — 2 Peter 1:19–21",
           "Emotions — John 8:31–32",
           "Traditions — Mark 7:1–13",
         ],
-        orderedListHint: "Thing — supporting scripture",
+        answerLayout: "paired",
       },
       {
         id: "wg-q9",

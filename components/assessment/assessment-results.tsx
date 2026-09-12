@@ -18,6 +18,12 @@ interface AssessmentResultsProps {
   attemptId?: string
 }
 
+function displayOrderedAnswer(value: string, paired: boolean) {
+  if (!paired) return value
+  const [thing = "", scripture = ""] = value.split("\t")
+  return `${thing || "Not answered"} — ${scripture || "Not answered"}`
+}
+
 export function AssessmentResults({ courseId, assessmentId, attemptId }: AssessmentResultsProps) {
   const convex = useConvex()
   const attempt = useQuery(
@@ -177,7 +183,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                         )}
                         {question.type === "ordered-list" && (
                           <Badge variant="outline" className="bg-emerald-50">
-                            In Order
+                            {question.answerLayout === "paired" ? "3-Part Answer" : "In Order"}
                           </Badge>
                         )}
                         {question.type === "memory-verse" && (
@@ -263,12 +269,14 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                       <h4 className="font-semibold mb-2">Your Answer:</h4>
                       <ol className="list-decimal list-inside rounded-lg bg-muted/50 p-4 space-y-1">
                         {(Array.isArray(answer.value) ? answer.value : []).map((item, index) => (
-                          <li key={index}>{item}</li>
+                          <li key={index}>{displayOrderedAnswer(item, question.answerLayout === "paired")}</li>
                         ))}
                       </ol>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2 text-green-700">Correct Order:</h4>
+                      <h4 className="font-semibold mb-2 text-green-700">
+                        {question.answerLayout === "paired" ? "Correct Pairs:" : "Correct Order:"}
+                      </h4>
                       <ol className="list-decimal list-inside rounded-lg border border-green-200 bg-green-50 p-4 space-y-1">
                         {(question.correctAnswers ?? []).map((item, index) => (
                           <li key={index}>{item}</li>

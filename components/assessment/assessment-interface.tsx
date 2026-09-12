@@ -61,6 +61,13 @@ interface AssessmentInterfaceProps {
 
 type AssessmentQuestion = Doc<"assessments">["questions"][number]
 
+const PAIRED_ANSWER_SEPARATOR = "\t"
+
+function splitPairedAnswer(value: string | undefined) {
+  const [thing = "", scripture = ""] = (value ?? "").split(PAIRED_ANSWER_SEPARATOR)
+  return { thing, scripture }
+}
+
 function isQuestionAnswered(answer: LocalAnswer, question: AssessmentQuestion) {
   if (answer.type === "multiple-choice") {
     return typeof answer.value === "number" && answer.value !== -1
@@ -70,17 +77,41 @@ function isQuestionAnswered(answer: LocalAnswer, question: AssessmentQuestion) {
   }
   if (answer.type === "ordered-list") {
     const expectedCount = question.correctAnswers?.length ?? 0
+    if (question.answerLayout === "paired") {
+      return (
+        Array.isArray(answer.value) &&
+        answer.value.length === expectedCount &&
+        answer.value.every((value) => {
+          const pair = splitPairedAnswer(value)
+          return pair.thing.trim() !== "" && pair.scripture.trim() !== ""
+        })
+      )
+    }
     return Array.isArray(answer.value) && expectedCount > 0 && answer.value.length === expectedCount
   }
   if (answer.type === "file") return answer.value !== null
   return false
 }
 
-function shuffleIndices(n: number): number[] {
+function randomIndex(maxExclusive: number) {
+  if (globalThis.crypto?.getRandomValues) {
+    const value = new Uint32Array(1)
+    globalThis.crypto.getRandomValues(value)
+    return Math.floor((value[0] / 4_294_967_296) * maxExclusive)
+  }
+  return Math.floor(Math.random() * maxExclusive)
+}
+
+function shuffleIndices(n: number, previous?: number[]): number[] {
   const arr = Array.from({ length: n }, (_, i) => i)
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
+    const j = randomIndex(i + 1)
     ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+
+  const orderToAvoid = previous?.length === n ? previous : Array.from({ length: n }, (_, i) => i)
+  if (n > 1 && arr.every((value, index) => value === orderToAvoid[index])) {
+    ;[arr[0], arr[1]] = [arr[1], arr[0]]
   }
   return arr
 }
@@ -106,9 +137,11 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               : "",
     })),
   )
-  const [shuffledOrders] = useState<number[][]>(() =>
+  const [shuffledOrders, setShuffledOrders] = useState<number[][]>(() =>
     assessment.questions.map((q) =>
-      q.type === "multiple-choice" && q.options ? shuffleIndices(q.options.length) : [],
+      q.type === "multiple-choice" && q.options
+        ? Array.from({ length: q.options.length }, (_, index) => index)
+        : [],
     ),
   )
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
@@ -176,6 +209,33 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         [targetQuestion.id]: "Check the spelling and make sure this is the next item in order.",
       }))
     }
+  }
+
+  const handlePairedAnswerChange = (
+    questionIndex: number,
+    pairIndex: number,
+    field: "thing" | "scripture",
+    value: string,
+  ) => {
+    const expectedCount = assessment.questions[questionIndex].correctAnswers?.length ?? 0
+    const currentValues = Array.isArray(answers[questionIndex].value)
+      ? (answers[questionIndex].value as string[])
+      : []
+    const nextValues = Array.from(
+      { length: expectedCount },
+      (_, index) => currentValues[index] ?? PAIRED_ANSWER_SEPARATOR,
+    )
+    const pair = splitPairedAnswer(nextValues[pairIndex])
+    nextValues[pairIndex] =
+      field === "thing"
+        ? `${value}${PAIRED_ANSWER_SEPARATOR}${pair.scripture}`
+        : `${pair.thing}${PAIRED_ANSWER_SEPARATOR}${value}`
+
+    setAnswers((previous) =>
+      previous.map((answer, index) =>
+        index === questionIndex ? { ...answer, value: nextValues } : answer,
+      ),
+    )
   }
 
   const handleRemoveFile = (questionIndex: number) => {
@@ -343,6 +403,33 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     return <span className={`text-xs px-3 py-1 rounded-full font-medium ${badge.color}`}>{badge.label}</span>
   }
 
+  const handleStartAssessment = () => {
+    const storageKey = `assessment-option-order:${assessment._id}`
+    let previousOrders: number[][] = []
+    try {
+      const savedOrders = window.sessionStorage.getItem(storageKey)
+      if (savedOrders) {
+        const parsedOrders: unknown = JSON.parse(savedOrders)
+        if (Array.isArray(parsedOrders)) previousOrders = parsedOrders as number[][]
+      }
+    } catch {
+      previousOrders = []
+    }
+
+    const nextOrders = assessment.questions.map((item, index) =>
+      item.type === "multiple-choice" && item.options
+        ? shuffleIndices(item.options.length, previousOrders[index])
+        : [],
+    )
+    setShuffledOrders(nextOrders)
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify(nextOrders))
+    } catch {
+      // Shuffling still works when browser storage is unavailable.
+    }
+    setStarted(true)
+  }
+
   if (!started) {
     return (
       <main className="flex-1 container mx-auto px-4 py-8 max-w-3xl">
@@ -409,7 +496,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               </ul>
             </div>
 
-            <Button onClick={() => setStarted(true)} size="lg" className="w-full">
+            <Button onClick={handleStartAssessment} size="lg" className="w-full">
               Start {assessment.type === "quiz" ? "Quiz" : assessment.type === "assignment" ? "Assignment" : "Test"}
             </Button>
           </CardContent>
@@ -522,7 +609,9 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">File Upload</span>
             )}
             {question.type === "ordered-list" && (
-              <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full">In Order</span>
+              <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full">
+                {question.answerLayout === "paired" ? "3-Part Answer" : "In Order"}
+              </span>
             )}
             {question.type === "memory-verse" && (
               <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded-full">Memory Scripture</span>
@@ -599,6 +688,51 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           {question.type === "ordered-list" && (() => {
             const expected = question.correctAnswers ?? []
             const completed = Array.isArray(currentAnswer.value) ? currentAnswer.value : []
+            if (question.answerLayout === "paired") {
+              return (
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Complete each part by writing the thing first, followed by its supporting scripture.
+                  </p>
+                  {expected.map((_, index) => {
+                    const pair = splitPairedAnswer(completed[index])
+                    return (
+                      <div key={index} className="rounded-lg border bg-muted/10 p-4">
+                        <p className="mb-3 font-semibold">Part {index + 1}</p>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label htmlFor={`paired-thing-${question.id}-${index}`}>Thing</Label>
+                            <Input
+                              id={`paired-thing-${question.id}-${index}`}
+                              value={pair.thing}
+                              onChange={(event) =>
+                                handlePairedAnswerChange(currentQuestion, index, "thing", event.target.value)
+                              }
+                              placeholder="e.g. Emotions"
+                              autoComplete="off"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`paired-scripture-${question.id}-${index}`}>
+                              Supporting scripture
+                            </Label>
+                            <Input
+                              id={`paired-scripture-${question.id}-${index}`}
+                              value={pair.scripture}
+                              onChange={(event) =>
+                                handlePairedAnswerChange(currentQuestion, index, "scripture", event.target.value)
+                              }
+                              placeholder="e.g. John 8:31–32"
+                              autoComplete="off"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            }
             const isComplete = completed.length === expected.length && expected.length > 0
             const inputHint = question.orderedListHint?.trim() || "Type the next item…"
             return (

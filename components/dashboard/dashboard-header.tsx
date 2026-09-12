@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { useEffect } from "react"
-import { useQuery } from "convex/react"
+import { useConvexAuth, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { authClient } from "@/lib/auth-client"
 import { useViewMode } from "@/hooks/use-view-mode"
@@ -23,6 +23,7 @@ import { useViewMode } from "@/hooks/use-view-mode"
 export function DashboardHeader() {
   const router = useRouter()
   const pathname = usePathname()
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth()
   const me = useQuery(api.users.me)
   const isTutor = me?.role === "tutor"
   const [viewMode, setViewMode] = useViewMode(isTutor)
@@ -34,8 +35,8 @@ export function DashboardHeader() {
   const pendingCount = pendingAttempts?.length ?? 0
 
   useEffect(() => {
-    if (me === null) router.push("/sign-in")
-  }, [me, router])
+    if (!isAuthLoading && !isAuthenticated) router.replace("/sign-in")
+  }, [isAuthenticated, isAuthLoading, router])
 
   const handleSignOut = async () => {
     await authClient.signOut()
@@ -48,7 +49,7 @@ export function DashboardHeader() {
     router.push(next === "tutor" ? "/tutor/grading" : "/dashboard")
   }
 
-  if (!me) return null
+  if (isAuthLoading || !isAuthenticated || !me) return null
 
   const displayName = me.username || me.name || me.email
   const initials = displayName

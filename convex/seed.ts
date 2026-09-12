@@ -18,6 +18,7 @@ const questionValidator = v.object({
   correctText: v.optional(v.string()),
   correctAnswers: v.optional(v.array(v.string())),
   orderedListHint: v.optional(v.string()),
+  answerLayout: v.optional(v.literal("paired")),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
 })
@@ -160,5 +161,42 @@ export const ensureCourseWithAssessment = mutation({
       courseId,
     })
     return { courseId, assessmentId, created: true }
+  },
+})
+
+export const ensureCourseWithNote = mutation({
+  args: {
+    course: v.object({
+      name: v.string(),
+      code: v.string(),
+      description: v.string(),
+      color: v.string(),
+    }),
+    note: v.object({
+      title: v.string(),
+      content: v.string(),
+      createdAt: v.string(),
+      updatedAt: v.string(),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const allCourses = await ctx.db.query("courses").collect()
+    const existingCourse = allCourses.find((course) => course.code === args.course.code)
+    const courseId = existingCourse?._id ?? (await ctx.db.insert("courses", args.course))
+
+    const existingNotes = await ctx.db
+      .query("notes")
+      .withIndex("by_courseId", (q) => q.eq("courseId", courseId))
+      .collect()
+    const existing = existingNotes.find((note) => note.title === args.note.title)
+    if (existing) {
+      return { courseId, noteId: existing._id, created: false }
+    }
+
+    const noteId = await ctx.db.insert("notes", {
+      ...args.note,
+      courseId,
+    })
+    return { courseId, noteId, created: true }
   },
 })
