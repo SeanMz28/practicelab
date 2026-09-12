@@ -615,6 +615,24 @@ const wordOfGodStudyQuiz: Assessment = {
         correctText:
           "To the Jews who had believed him, Jesus said, If you hold to my teaching, you are really my disciples. Then you will know the truth, and the truth will set you free.",
       },
+      {
+        id: "wg-q18",
+        type: "ordered-list",
+        question:
+          "Write the next eight books of the Bible, from 1 Samuel through Nehemiah, in order.",
+        points: 8,
+        correctAnswers: [
+          "1 Samuel",
+          "2 Samuel",
+          "1 Kings",
+          "2 Kings",
+          "1 Chronicles",
+          "2 Chronicles",
+          "Ezra",
+          "Nehemiah",
+        ],
+        orderedListHint: "Type the next book…",
+      },
   ],
 }
 
