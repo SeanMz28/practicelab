@@ -8,6 +8,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { AssessmentInterface } from "@/components/assessment/assessment-interface"
 import { PasswordGate } from "@/components/access/password-gate"
 import { AssessmentPageLoading } from "@/components/loading/loading-states"
+import { LockedContent } from "@/components/access/locked-content"
 
 interface AssessmentPageProps {
   params: Promise<{
@@ -31,10 +32,17 @@ export default function AssessmentPage({ params }: AssessmentPageProps) {
       <DashboardHeader />
       {isLoading ? (
         <AssessmentPageLoading />
+      ) : course?.locked ? (
+        <LockedContent title={`${course.name} is locked`} />
       ) : notFound ? (
         <div className="container mx-auto px-4 py-8">
           <p className="text-muted-foreground">Assessment not found.</p>
         </div>
+      ) : assessmentMetadata.locked ? (
+        <LockedContent
+          title={`${assessmentMetadata.title} is locked`}
+          backHref={`/courses/${course._id}`}
+        />
       ) : (
         <PasswordGate resourceType="course" resourceId={course._id} title={course.name}>
           <PasswordGate

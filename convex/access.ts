@@ -5,8 +5,15 @@ import type { MutationCtx, QueryCtx } from "./_generated/server"
 import type { Id } from "./_generated/dataModel"
 import { authComponent } from "./auth"
 
-export type ProtectedResourceType = "course" | "assessment"
+export type ProtectedResourceType = "course" | "assessment" | "note" | "resource"
 type ReadCtx = QueryCtx | MutationCtx
+
+const protectedResourceTypeValidator = v.union(
+  v.literal("course"),
+  v.literal("assessment"),
+  v.literal("note"),
+  v.literal("resource"),
+)
 
 async function getCredential(
   ctx: ReadCtx,
@@ -27,6 +34,11 @@ async function userIsTutor(ctx: ReadCtx, userId: string) {
     .withIndex("by_userId", (q) => q.eq("userId", userId))
     .unique()
   return profile?.role === "tutor"
+}
+
+async function requesterIsTutor(ctx: ReadCtx) {
+  const authUser = await authComponent.safeGetAuthUser(ctx)
+  return authUser ? userIsTutor(ctx, authUser._id) : false
 }
 
 async function userHasGrant(
@@ -57,6 +69,23 @@ export async function isResourcePasswordProtected(
   return (await getCredential(ctx, resourceType, resourceId)) !== null
 }
 
+export async function getResourceAccessStatus(
+  ctx: ReadCtx,
+  resourceType: ProtectedResourceType,
+  resourceId: string,
+) {
+  const credential = await getCredential(ctx, resourceType, resourceId)
+  if (!credential) return { passwordProtected: false, unlocked: true }
+
+  const authUser = await authComponent.safeGetAuthUser(ctx)
+  return {
+    passwordProtected: true,
+    unlocked:
+      authUser != null &&
+      (await userHasGrant(ctx, authUser._id, resourceType, resourceId, credential._id)),
+  }
+}
+
 export async function canAccessResource(
   ctx: ReadCtx,
   resourceType: ProtectedResourceType,
@@ -73,6 +102,12 @@ export async function canAccessResource(
 }
 
 export async function canAccessCourse(ctx: ReadCtx, courseId: string) {
+  const courseIdValue = ctx.db.normalizeId("courses", courseId)
+  if (!courseIdValue) return false
+  const course = await ctx.db.get(courseIdValue)
+  if (!course) return false
+  if ((course.locked || course.hidden) && !(await requesterIsTutor(ctx))) return false
+
   return canAccessResource(ctx, "course", courseId)
 }
 
@@ -81,10 +116,37 @@ export async function canAccessAssessment(ctx: ReadCtx, assessmentId: string) {
   if (!assessmentIdValue) return false
   const assessment = await ctx.db.get(assessmentIdValue)
   if (!assessment) return false
+  if (assessment.locked && !(await requesterIsTutor(ctx))) return false
 
   return (
     (await canAccessCourse(ctx, assessment.courseId)) &&
     (await canAccessResource(ctx, "assessment", assessmentId))
+  )
+}
+
+export async function canAccessNote(ctx: ReadCtx, noteId: string) {
+  const noteIdValue = ctx.db.normalizeId("notes", noteId)
+  if (!noteIdValue) return false
+  const note = await ctx.db.get(noteIdValue)
+  if (!note) return false
+  if (note.locked && !(await requesterIsTutor(ctx))) return false
+
+  return (
+    (await canAccessCourse(ctx, note.courseId)) &&
+    (await canAccessResource(ctx, "note", noteId))
+  )
+}
+
+export async function canAccessFileResource(ctx: ReadCtx, resourceId: string) {
+  const resourceIdValue = ctx.db.normalizeId("resources", resourceId)
+  if (!resourceIdValue) return false
+  const resource = await ctx.db.get(resourceIdValue)
+  if (!resource) return false
+  if (resource.locked && !(await requesterIsTutor(ctx))) return false
+
+  return (
+    (await canAccessCourse(ctx, resource.courseId)) &&
+    (await canAccessResource(ctx, "resource", resourceId))
   )
 }
 
@@ -142,36 +204,15 @@ export async function removeResourceAccess(
 
 export const status = query({
   args: {
-    resourceType: v.union(v.literal("course"), v.literal("assessment")),
+    resourceType: protectedResourceTypeValidator,
     resourceId: v.string(),
   },
-  handler: async (ctx, args) => {
-    const credential = await getCredential(ctx, args.resourceType, args.resourceId)
-    if (!credential) {
-      return { passwordProtected: false, unlocked: true }
-    }
-
-    const authUser = await authComponent.safeGetAuthUser(ctx)
-    return {
-      passwordProtected: true,
-      // Tutors retain backend access for course administration, but the
-      // student-facing password gate still requires an explicit unlock.
-      unlocked:
-        authUser != null &&
-        (await userHasGrant(
-          ctx,
-          authUser._id,
-          args.resourceType,
-          args.resourceId,
-          credential._id,
-        )),
-    }
-  },
+  handler: async (ctx, args) => getResourceAccessStatus(ctx, args.resourceType, args.resourceId),
 })
 
 export const unlock = mutation({
   args: {
-    resourceType: v.union(v.literal("course"), v.literal("assessment")),
+    resourceType: protectedResourceTypeValidator,
     resourceId: v.string(),
     password: v.string(),
   },

@@ -1,8 +1,9 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
-import { requireTutor } from "./users"
+import { isTutor, requireTutor } from "./users"
 import {
   configureResourcePassword,
+  getResourceAccessStatus,
   isResourcePasswordProtected,
   removeResourceAccess,
 } from "./access"
@@ -13,13 +14,42 @@ async function withPasswordStatus<T extends { _id: string }>(
 ) {
   return {
     ...course,
+    locked: "locked" in course ? Boolean(course.locked) : false,
+    hidden: "hidden" in course ? Boolean(course.hidden) : false,
     passwordProtected: await isResourcePasswordProtected(ctx, "course", course._id),
+  }
+}
+
+async function withStudentAccess<T extends { _id: string; locked?: boolean; hidden?: boolean }>(
+  ctx: Parameters<typeof getResourceAccessStatus>[0],
+  course: T,
+) {
+  const access = await getResourceAccessStatus(ctx, "course", course._id)
+  return {
+    ...course,
+    locked: course.locked ?? false,
+    hidden: course.hidden ?? false,
+    passwordProtected: access.passwordProtected,
+    passwordLocked: !access.unlocked,
   }
 }
 
 export const list = query({
   args: {},
   handler: async (ctx) => {
+    const courses = await ctx.db.query("courses").collect()
+    return Promise.all(
+      courses
+        .filter((course) => !course.hidden)
+        .map((course) => withStudentAccess(ctx, course)),
+    )
+  },
+})
+
+export const listForTutor = query({
+  args: {},
+  handler: async (ctx) => {
+    await requireTutor(ctx)
     const courses = await ctx.db.query("courses").collect()
     return Promise.all(courses.map((course) => withPasswordStatus(ctx, course)))
   },
@@ -28,6 +58,16 @@ export const list = query({
 export const get = query({
   args: { id: v.id("courses") },
   handler: async (ctx, args) => {
+    const course = await ctx.db.get(args.id)
+    if (!course || (course.hidden && !(await isTutor(ctx)))) return null
+    return withStudentAccess(ctx, course)
+  },
+})
+
+export const getForTutor = query({
+  args: { id: v.id("courses") },
+  handler: async (ctx, args) => {
+    await requireTutor(ctx)
     const course = await ctx.db.get(args.id)
     return course ? withPasswordStatus(ctx, course) : null
   },
@@ -39,6 +79,8 @@ export const create = mutation({
     code: v.string(),
     description: v.string(),
     color: v.string(),
+    locked: v.boolean(),
+    hidden: v.boolean(),
     password: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -57,6 +99,8 @@ export const update = mutation({
     code: v.string(),
     description: v.string(),
     color: v.string(),
+    locked: v.boolean(),
+    hidden: v.boolean(),
     password: v.optional(v.string()),
     removePassword: v.optional(v.boolean()),
   },

@@ -15,27 +15,36 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus, Trash2, Download, FileText, File, ImageIcon, FolderOpen, Code } from "lucide-react"
+import { Plus, Trash2, Download, FileText, File, ImageIcon, FolderOpen, Code, LockKeyhole } from "lucide-react"
 import { useQuery, useMutation, useConvex } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
 
 interface ResourcesManagerProps {
   courseId: Id<"courses">
 }
 
+type ResourceWithAccess = Omit<Doc<"resources">, "storageId"> & {
+  storageId: Id<"_storage"> | null
+  passwordProtected: boolean
+}
+
 export function ResourcesManager({ courseId }: ResourcesManagerProps) {
   const convex = useConvex()
-  const resources = useQuery(api.resources.listByCourse, { courseId }) ?? []
+  const resources = useQuery(api.resources.listByCourseForTutor, { courseId }) ?? []
   const createResource = useMutation(api.resources.create)
+  const updateResourceAccess = useMutation(api.resources.updateAccess)
   const removeResource = useMutation(api.resources.remove)
   const generateUploadUrl = useMutation(api.files.generateUploadUrl)
 
   const [isUploadOpen, setIsUploadOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [formData, setFormData] = useState({ title: "", description: "" })
+  const [formData, setFormData] = useState({ title: "", description: "", locked: false, password: "" })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [editingAccessResource, setEditingAccessResource] = useState<ResourceWithAccess | null>(null)
+  const [accessForm, setAccessForm] = useState({ locked: false, password: "", removePassword: false })
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -50,6 +59,10 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
   const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file")
+      return
+    }
+    if (formData.password && formData.password.length < 4) {
+      alert("Resource passwords must be at least 4 characters")
       return
     }
 
@@ -72,6 +85,8 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
         fileType: selectedFile.type,
         fileSize: selectedFile.size,
         storageId,
+        locked: formData.locked,
+        password: formData.password || undefined,
       })
       setIsUploadOpen(false)
       resetForm()
@@ -88,8 +103,8 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
     }
   }
 
-  const handleDownload = async (resource: Doc<"resources">) => {
-    const url = await convex.query(api.files.getUrl, { storageId: resource.storageId })
+  const handleDownload = async (resource: ResourceWithAccess) => {
+    const url = await convex.query(api.resources.getDownloadUrl, { id: resource._id })
     if (!url) {
       alert("File not available")
       return
@@ -102,8 +117,24 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
   }
 
   const resetForm = () => {
-    setFormData({ title: "", description: "" })
+    setFormData({ title: "", description: "", locked: false, password: "" })
     setSelectedFile(null)
+  }
+
+  const handleAccessUpdate = async () => {
+    if (!editingAccessResource) return
+    if (accessForm.password && accessForm.password.length < 4) {
+      alert("Resource passwords must be at least 4 characters")
+      return
+    }
+    await updateResourceAccess({
+      id: editingAccessResource._id,
+      locked: accessForm.locked,
+      password: accessForm.password || undefined,
+      removePassword: accessForm.removePassword,
+    })
+    setEditingAccessResource(null)
+    setAccessForm({ locked: false, password: "", removePassword: false })
   }
 
   const getFileIcon = (fileType: string) => {
@@ -171,6 +202,35 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 />
               </div>
+              <div>
+                <Label htmlFor="resource-password">Access Password (Optional)</Label>
+                <Input
+                  id="resource-password"
+                  type="password"
+                  minLength={4}
+                  maxLength={128}
+                  placeholder="At least 4 characters"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Students must enter this before downloading the file.
+                </p>
+              </div>
+              <label className="flex items-start gap-3 rounded-lg border p-4">
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={formData.locked}
+                  onChange={(e) => setFormData({ ...formData, locked: e.target.checked })}
+                />
+                <span>
+                  <span className="block font-medium">Lock resource</span>
+                  <span className="block text-sm text-muted-foreground">
+                    Students can see this file but cannot download it.
+                  </span>
+                </span>
+              </label>
               <Button onClick={handleUpload} className="w-full" disabled={isUploading}>
                 {isUploading ? "Uploading..." : "Upload Resource"}
               </Button>
@@ -195,7 +255,11 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">{getFileIcon(resource.fileType)}</div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate">{resource.title}</h3>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="truncate font-semibold">{resource.title}</h3>
+                      <LockStatusBadge locked={resource.locked ?? false} />
+                      <LockStatusBadge locked={resource.passwordProtected} label="Password" />
+                    </div>
                     {resource.description && (
                       <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{resource.description}</p>
                     )}
@@ -209,6 +273,21 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
                     <Button variant="outline" size="icon" onClick={() => handleDownload(resource)}>
                       <Download className="w-4 h-4" />
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        setEditingAccessResource(resource)
+                        setAccessForm({
+                          locked: resource.locked ?? false,
+                          password: "",
+                          removePassword: false,
+                        })
+                      }}
+                      title="Manage resource access"
+                    >
+                      <LockKeyhole className="w-4 h-4" />
+                    </Button>
                     <Button variant="outline" size="icon" onClick={() => handleDelete(resource._id)}>
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </Button>
@@ -219,6 +298,82 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
           ))
         )}
       </div>
+
+      <Dialog
+        open={!!editingAccessResource}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditingAccessResource(null)
+            setAccessForm({ locked: false, password: "", removePassword: false })
+          }
+        }}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Manage Resource Access</DialogTitle>
+            <DialogDescription>
+              Lock the file completely, or use a password when students should be able to unlock it.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <label className="flex items-start gap-3 rounded-lg border p-4">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={accessForm.locked}
+                onChange={(e) => setAccessForm({ ...accessForm, locked: e.target.checked })}
+              />
+              <span>
+                <span className="block font-medium">Lock resource</span>
+                <span className="block text-sm text-muted-foreground">
+                  Students can see this file but cannot download it.
+                </span>
+              </span>
+            </label>
+            <div>
+              <Label htmlFor="edit-resource-password">
+                {editingAccessResource?.passwordProtected ? "Replace Access Password" : "Access Password"}
+              </Label>
+              <Input
+                id="edit-resource-password"
+                type="password"
+                minLength={4}
+                maxLength={128}
+                placeholder={
+                  editingAccessResource?.passwordProtected
+                    ? "Enter a new password"
+                    : "At least 4 characters"
+                }
+                value={accessForm.password}
+                disabled={accessForm.removePassword}
+                onChange={(e) => setAccessForm({ ...accessForm, password: e.target.value })}
+              />
+            </div>
+            {editingAccessResource?.passwordProtected && (
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={accessForm.removePassword}
+                  onChange={(e) =>
+                    setAccessForm({
+                      locked: accessForm.locked,
+                      password: e.target.checked ? "" : accessForm.password,
+                      removePassword: e.target.checked,
+                    })
+                  }
+                />
+                Remove resource password
+              </label>
+            )}
+            <Button
+              onClick={handleAccessUpdate}
+              className="w-full"
+            >
+              Save Access Settings
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

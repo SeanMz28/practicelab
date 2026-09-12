@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
@@ -15,16 +16,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus, Pencil, Trash2, BookOpen, LockKeyhole } from "lucide-react"
+import { Plus, Pencil, Trash2, BookOpen, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc } from "@/convex/_generated/dataModel"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
 
 type CourseWithAccess = Doc<"courses"> & { passwordProtected: boolean }
 
 export default function TutorCoursesPage() {
-  const courses = useQuery(api.courses.list) ?? []
+  const courses = useQuery(api.courses.listForTutor) ?? []
   const createCourse = useMutation(api.courses.create)
   const updateCourse = useMutation(api.courses.update)
   const removeCourse = useMutation(api.courses.remove)
@@ -36,6 +38,8 @@ export default function TutorCoursesPage() {
     code: "",
     description: "",
     color: "bg-blue-500",
+    locked: false,
+    hidden: false,
     password: "",
     removePassword: false,
   })
@@ -50,6 +54,8 @@ export default function TutorCoursesPage() {
       code: formData.code,
       description: formData.description,
       color: formData.color,
+      locked: formData.locked,
+      hidden: formData.hidden,
       password: formData.password || undefined,
     })
     setIsCreateOpen(false)
@@ -68,6 +74,8 @@ export default function TutorCoursesPage() {
       code: formData.code,
       description: formData.description,
       color: formData.color,
+      locked: formData.locked,
+      hidden: formData.hidden,
       password: formData.password || undefined,
       removePassword: formData.removePassword,
     })
@@ -89,6 +97,8 @@ export default function TutorCoursesPage() {
       code: "",
       description: "",
       color: "bg-blue-500",
+      locked: false,
+      hidden: false,
       password: "",
       removePassword: false,
     })
@@ -101,6 +111,8 @@ export default function TutorCoursesPage() {
       code: course.code,
       description: course.description,
       color: course.color,
+      locked: course.locked ?? false,
+      hidden: course.hidden ?? false,
       password: "",
       removePassword: false,
     })
@@ -179,6 +191,32 @@ export default function TutorCoursesPage() {
                   />
                   <p className="text-xs text-muted-foreground mt-1">Students must enter this before viewing the course.</p>
                 </div>
+                <div className="space-y-3">
+                  <label className="flex items-start gap-3 rounded-lg border p-3">
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      checked={formData.locked}
+                      onChange={(e) => setFormData({ ...formData, locked: e.target.checked })}
+                    />
+                    <span>
+                      <span className="block font-medium">Lock course</span>
+                      <span className="block text-xs text-muted-foreground">Students can see it, but cannot enter it.</span>
+                    </span>
+                  </label>
+                  <label className="flex items-start gap-3 rounded-lg border p-3">
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      checked={formData.hidden}
+                      onChange={(e) => setFormData({ ...formData, hidden: e.target.checked })}
+                    />
+                    <span>
+                      <span className="block font-medium">Hide course</span>
+                      <span className="block text-xs text-muted-foreground">Removes it from every student view and blocks direct links.</span>
+                    </span>
+                  </label>
+                </div>
                 <div>
                   <Label htmlFor="color">Color Theme</Label>
                   <div className="grid grid-cols-4 gap-2 mt-2">
@@ -211,8 +249,15 @@ export default function TutorCoursesPage() {
                     <CardTitle className="text-xl">{course.code}</CardTitle>
                     <p className="text-sm opacity-90 mt-1">{course.name}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {course.passwordProtected && <LockKeyhole className="w-4 h-4" />}
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    <LockStatusBadge locked={course.locked ?? false} />
+                    <LockStatusBadge locked={course.passwordProtected} label="Password" />
+                    {course.hidden && (
+                      <Badge variant="outline" className="gap-1 border-slate-300 bg-slate-50 text-slate-800">
+                        <EyeOff className="h-3 w-3" />
+                        Hidden
+                      </Badge>
+                    )}
                     <BookOpen className="w-5 h-5" />
                   </div>
                 </div>
@@ -291,6 +336,32 @@ export default function TutorCoursesPage() {
                               Remove course password
                             </label>
                           )}
+                        </div>
+                        <div className="space-y-3">
+                          <label className="flex items-start gap-3 rounded-lg border p-3">
+                            <input
+                              type="checkbox"
+                              className="mt-1"
+                              checked={formData.locked}
+                              onChange={(e) => setFormData({ ...formData, locked: e.target.checked })}
+                            />
+                            <span>
+                              <span className="block font-medium">Lock course</span>
+                              <span className="block text-xs text-muted-foreground">Students can see it, but cannot enter it.</span>
+                            </span>
+                          </label>
+                          <label className="flex items-start gap-3 rounded-lg border p-3">
+                            <input
+                              type="checkbox"
+                              className="mt-1"
+                              checked={formData.hidden}
+                              onChange={(e) => setFormData({ ...formData, hidden: e.target.checked })}
+                            />
+                            <span>
+                              <span className="block font-medium">Hide course</span>
+                              <span className="block text-xs text-muted-foreground">Removes it from every student view and blocks direct links.</span>
+                            </span>
+                          </label>
                         </div>
                         <div>
                           <Label htmlFor="edit-color">Color Theme</Label>

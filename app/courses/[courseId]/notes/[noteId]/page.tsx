@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar } from "lucide-react"
 import { PasswordGate } from "@/components/access/password-gate"
 import { NotePageLoading } from "@/components/loading/loading-states"
+import { LockedContent } from "@/components/access/locked-content"
 
 interface NotePageProps {
   params: Promise<{
@@ -34,13 +35,30 @@ export default function NotePage({ params }: NotePageProps) {
           <NotePageLoading />
         ) : notFound ? (
           <p className="text-muted-foreground">Note not found.</p>
+        ) : course.locked ? (
+          <LockedContent title={`${course.name} is locked`} />
         ) : (
           <PasswordGate resourceType="course" resourceId={course._id} title={course.name}>
-            <UnlockedNote noteId={noteId as Id<"notes">} course={course} />
+            <NoteAccess noteId={noteId as Id<"notes">} course={course} />
           </PasswordGate>
         )}
       </main>
     </div>
+  )
+}
+
+function NoteAccess({ noteId, course }: { noteId: Id<"notes">; course: Doc<"courses"> }) {
+  const noteMetadata = useQuery(api.notes.getMetadata, { id: noteId })
+  if (noteMetadata === undefined) return <NotePageLoading />
+  if (noteMetadata === null) return <p className="text-muted-foreground">Note not found.</p>
+  if (noteMetadata.locked) {
+    return <LockedContent title={`${noteMetadata.title} is locked`} backHref={`/courses/${course._id}`} />
+  }
+
+  return (
+    <PasswordGate resourceType="note" resourceId={noteId} title={noteMetadata.title}>
+      <UnlockedNote noteId={noteId} course={course} />
+    </PasswordGate>
   )
 }
 

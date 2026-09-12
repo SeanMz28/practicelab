@@ -5,6 +5,7 @@ import {
   canAccessAssessment,
   canAccessCourse,
   configureResourcePassword,
+  getResourceAccessStatus,
   isResourcePasswordProtected,
   removeResourceAccess,
 } from "./access"
@@ -29,19 +30,31 @@ const questionValidator = v.object({
   acceptedFileTypes: v.optional(v.array(v.string())),
 })
 
+async function assessmentAccessState(
+  ctx: Parameters<typeof isResourcePasswordProtected>[0],
+  assessment: { _id: string; locked?: boolean },
+) {
+  const access = await getResourceAccessStatus(ctx, "assessment", assessment._id)
+  return {
+    locked: assessment.locked ?? false,
+    passwordProtected: access.passwordProtected,
+    passwordLocked: !access.unlocked,
+  }
+}
+
 export const list = query({
   args: {},
   handler: async (ctx) => {
     const assessments = await ctx.db.query("assessments").collect()
+    const visibleAssessments = []
+    for (const assessment of assessments) {
+      if (await canAccessCourse(ctx, assessment.courseId)) visibleAssessments.push(assessment)
+    }
     return Promise.all(
-      assessments.map(async ({ questions, ...assessment }) => ({
+      visibleAssessments.map(async ({ questions, ...assessment }) => ({
         ...assessment,
         questionCount: questions.length,
-        passwordProtected: await isResourcePasswordProtected(
-          ctx,
-          "assessment",
-          assessment._id,
-        ),
+        ...(await assessmentAccessState(ctx, assessment)),
       })),
     )
   },
@@ -80,11 +93,7 @@ export const listSummariesByCourse = query({
       assessments.map(async ({ questions, ...assessment }) => ({
         ...assessment,
         questionCount: questions.length,
-        passwordProtected: await isResourcePasswordProtected(
-          ctx,
-          "assessment",
-          assessment._id,
-        ),
+        ...(await assessmentAccessState(ctx, assessment)),
       })),
     )
   },
@@ -94,11 +103,12 @@ export const getMetadata = query({
   args: { id: v.id("assessments") },
   handler: async (ctx, args) => {
     const assessment = await ctx.db.get(args.id)
-    if (!assessment) return null
+    if (!assessment || !(await canAccessCourse(ctx, assessment.courseId))) return null
     const { questions, ...metadata } = assessment
     return {
       ...metadata,
       questionCount: questions.length,
+      locked: assessment.locked ?? false,
       passwordProtected: await isResourcePasswordProtected(ctx, "assessment", args.id),
     }
   },
@@ -122,6 +132,7 @@ export const create = mutation({
     timeLimit: v.optional(v.number()),
     dueDate: v.optional(v.string()),
     leaderboardEnabled: v.boolean(),
+    locked: v.boolean(),
     password: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -147,6 +158,7 @@ export const update = mutation({
     timeLimit: v.optional(v.number()),
     dueDate: v.optional(v.string()),
     leaderboardEnabled: v.boolean(),
+    locked: v.boolean(),
     password: v.optional(v.string()),
     removePassword: v.optional(v.boolean()),
   },

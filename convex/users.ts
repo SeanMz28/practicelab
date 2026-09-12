@@ -5,6 +5,18 @@ import { authComponent } from "./auth"
 
 type PublicUser = { id: string; name: string; email: string }
 
+export async function isTutor(ctx: QueryCtx | MutationCtx) {
+  const authUser = await authComponent.safeGetAuthUser(ctx)
+  if (!authUser) return false
+
+  const profile = await ctx.db
+    .query("userProfiles")
+    .withIndex("by_userId", (q) => q.eq("userId", authUser._id))
+    .unique()
+
+  return profile?.role === "tutor"
+}
+
 export async function requireTutor(ctx: QueryCtx | MutationCtx) {
   const authUser = await authComponent.getAuthUser(ctx)
   if (!authUser) throw new Error("Not authenticated")

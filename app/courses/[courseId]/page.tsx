@@ -9,6 +9,7 @@ import { CourseHeader } from "@/components/courses/course-header"
 import { CourseContent } from "@/components/courses/course-content"
 import { PasswordGate } from "@/components/access/password-gate"
 import { CoursePageLoading } from "@/components/loading/loading-states"
+import { LockedContent } from "@/components/access/locked-content"
 
 interface CoursePageProps {
   params: Promise<{
@@ -30,6 +31,8 @@ export default function CoursePage({ params }: CoursePageProps) {
           <div className="container mx-auto px-4 py-8">
             <p className="text-muted-foreground">Course not found.</p>
           </div>
+        ) : course.locked ? (
+          <LockedContent title={`${course.name} is locked`} />
         ) : (
           <PasswordGate resourceType="course" resourceId={course._id} title={course.name}>
             <CourseHeader course={course} />

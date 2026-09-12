@@ -24,7 +24,7 @@ interface StudentProgress {
 
 export default function TutorStudentsPage() {
   const allAttempts = useQuery(api.attempts.list) ?? []
-  const courses = useQuery(api.courses.list) ?? []
+  const courses = useQuery(api.courses.listForTutor) ?? []
   const assessments = useQuery(api.assessments.list) ?? []
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null)
 

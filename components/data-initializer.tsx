@@ -98,6 +98,30 @@ export function DataInitializer() {
             })
           }
         }
+
+        const bibleCourse = dummyCourses.find((c) => c.code === "BIBLE101")
+        if (bibleCourse) {
+          const bibleQuizzes = dummyAssessments.filter((a) => a.courseId === bibleCourse.id)
+          for (const quiz of bibleQuizzes) {
+            await ensureCourseWithAssessment({
+              course: {
+                name: bibleCourse.name,
+                code: bibleCourse.code,
+                description: bibleCourse.description,
+                color: bibleCourse.color,
+              },
+              assessment: {
+                title: quiz.title,
+                description: quiz.description,
+                type: quiz.type,
+                questions: quiz.questions,
+                timeLimit: quiz.timeLimit,
+                dueDate: quiz.dueDate,
+                createdAt: quiz.createdAt,
+              },
+            })
+          }
+        }
       })
       .catch((err) => {
         console.error("Seed failed", err)

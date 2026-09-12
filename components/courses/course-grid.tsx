@@ -7,6 +7,7 @@ import { BookOpen, FileText, LockKeyhole } from "lucide-react"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { CourseGridLoading } from "@/components/loading/loading-states"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
 
 export function CourseGrid() {
   const courses = useQuery(api.courses.list)
@@ -25,7 +26,8 @@ export function CourseGrid() {
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
               <div className="flex items-center gap-2">
-                {course.passwordProtected && <LockKeyhole className="h-4 w-4 text-muted-foreground" />}
+                <LockStatusBadge locked={course.locked} />
+                <LockStatusBadge locked={!course.locked && course.passwordProtected} label="Password" />
                 <span className="text-xs font-semibold px-2 py-1 bg-muted rounded">{course.code}</span>
               </div>
             </div>
@@ -33,12 +35,19 @@ export function CourseGrid() {
             <CardDescription>{course.description}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Link href={`/courses/${course._id}`}>
-              <Button className="w-full">
+            {course.locked ? (
+              <Button className="w-full" disabled>
+                <LockKeyhole className="w-4 h-4 mr-2" />
+                Course Locked
+              </Button>
+            ) : (
+              <Button asChild className="w-full">
+                <Link href={`/courses/${course._id}`}>
                 <FileText className="w-4 h-4 mr-2" />
                 View Course
+                </Link>
               </Button>
-            </Link>
+            )}
           </CardContent>
         </Card>
       ))}

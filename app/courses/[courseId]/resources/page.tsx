@@ -4,14 +4,17 @@ import { useParams } from "next/navigation"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Download, FileText, File, ImageIcon, Code, FolderOpen, ArrowLeft } from "lucide-react"
+import { Download, FileText, File, ImageIcon, Code, FolderOpen, ArrowLeft, LockKeyhole } from "lucide-react"
 import Link from "next/link"
 import { useQuery, useConvex } from "convex/react"
 import { api } from "@/convex/_generated/api"
-import type { Doc, Id } from "@/convex/_generated/dataModel"
+import type { Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
 import { PasswordGate } from "@/components/access/password-gate"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
+import { UnlockDialog } from "@/components/access/unlock-dialog"
 import { ResourcePageLoading } from "@/components/loading/loading-states"
+import { LockedContent } from "@/components/access/locked-content"
 
 export default function CourseResourcesPage() {
   const params = useParams()
@@ -26,6 +29,8 @@ export default function CourseResourcesPage() {
           <ResourcePageLoading />
         ) : course === null ? (
           <p className="text-muted-foreground">Course not found.</p>
+        ) : course.locked ? (
+          <LockedContent title={`${course.name} is locked`} />
         ) : (
           <PasswordGate resourceType="course" resourceId={course._id} title={course.name}>
             <UnlockedResources courseId={courseId} />
@@ -42,8 +47,8 @@ function UnlockedResources({ courseId }: { courseId: Id<"courses"> }) {
 
   if (resources === undefined) return <ResourcePageLoading />
 
-  const handleDownload = async (resource: Doc<"resources">) => {
-    const url = await convex.query(api.files.getUrl, { storageId: resource.storageId })
+  const handleDownload = async (resource: { _id: Id<"resources">; fileName: string }) => {
+    const url = await convex.query(api.resources.getDownloadUrl, { id: resource._id })
     if (!url) {
       alert("File not available")
       return
@@ -95,10 +100,14 @@ function UnlockedResources({ courseId }: { courseId: Id<"courses"> }) {
           resources.map((resource) => (
             <Card key={resource._id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col items-start gap-4 sm:flex-row">
                   <div className="flex-shrink-0">{getFileIcon(resource.fileType)}</div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate">{resource.title}</h3>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="truncate font-semibold">{resource.title}</h3>
+                      <LockStatusBadge locked={resource.locked} />
+                      <LockStatusBadge locked={!resource.locked && resource.passwordLocked} label="Password" />
+                    </div>
                     {resource.description && (
                       <p className="text-sm text-muted-foreground mt-1">{resource.description}</p>
                     )}
@@ -108,10 +117,24 @@ function UnlockedResources({ courseId }: { courseId: Id<"courses"> }) {
                       <span>Uploaded {new Date(resource.uploadedAt).toLocaleDateString()}</span>
                     </div>
                   </div>
-                  <Button onClick={() => handleDownload(resource)} className="flex-shrink-0">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
+                  {resource.locked ? (
+                    <Button disabled className="flex-shrink-0">
+                      <LockKeyhole className="mr-2 h-4 w-4" />
+                      Locked
+                    </Button>
+                  ) : resource.storageId === null ? (
+                    <UnlockDialog
+                      resourceType="resource"
+                      resourceId={resource._id}
+                      title={resource.title}
+                      triggerLabel="Unlock"
+                    />
+                  ) : (
+                    <Button onClick={() => handleDownload(resource)} className="flex-shrink-0">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

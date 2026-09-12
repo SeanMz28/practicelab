@@ -12,11 +12,31 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Clock, ChevronRight, Check, Upload, FileText, X, Calendar, CheckCircle2 } from "lucide-react"
+import {
+  ArrowLeft,
+  Clock,
+  ChevronRight,
+  Check,
+  Upload,
+  FileText,
+  X,
+  Calendar,
+  CheckCircle2,
+  TriangleAlert,
+} from "lucide-react"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 
 interface LocalFileAnswer {
   file: File
@@ -37,6 +57,23 @@ interface LocalAnswer {
 interface AssessmentInterfaceProps {
   assessment: Doc<"assessments">
   course: Doc<"courses">
+}
+
+type AssessmentQuestion = Doc<"assessments">["questions"][number]
+
+function isQuestionAnswered(answer: LocalAnswer, question: AssessmentQuestion) {
+  if (answer.type === "multiple-choice") {
+    return typeof answer.value === "number" && answer.value !== -1
+  }
+  if (answer.type === "text" || answer.type === "memory-verse") {
+    return typeof answer.value === "string" && answer.value.trim() !== ""
+  }
+  if (answer.type === "ordered-list") {
+    const expectedCount = question.correctAnswers?.length ?? 0
+    return Array.isArray(answer.value) && expectedCount > 0 && answer.value.length === expectedCount
+  }
+  if (answer.type === "file") return answer.value !== null
+  return false
 }
 
 function shuffleIndices(n: number): number[] {
@@ -78,27 +115,22 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
   const [startTime, setStartTime] = useState<string | null>(null)
   const [orderedDrafts, setOrderedDrafts] = useState<Record<string, string>>({})
   const [orderedErrors, setOrderedErrors] = useState<Record<string, string>>({})
+  const [submitWarningOpen, setSubmitWarningOpen] = useState(false)
 
   const question = assessment.questions[currentQuestion]
   const currentAnswer = answers[currentQuestion]
 
-  const answeredCount = useMemo(
-    () =>
-      answers.filter((a) => {
-        if (a.type === "multiple-choice") return typeof a.value === "number" && a.value !== -1
-        if (a.type === "text" || a.type === "memory-verse") {
-          return typeof a.value === "string" && a.value.trim() !== ""
-        }
-        if (a.type === "ordered-list") {
-          const expectedCount =
-            assessment.questions.find((question) => question.id === a.questionId)?.correctAnswers?.length ?? 0
-          return Array.isArray(a.value) && expectedCount > 0 && a.value.length === expectedCount
-        }
-        if (a.type === "file") return a.value !== null
-        return false
-      }).length,
+  const answeredQuestions = useMemo(
+    () => answers.map((answer, index) => isQuestionAnswered(answer, assessment.questions[index])),
     [answers, assessment.questions],
   )
+  const answeredCount = answeredQuestions.filter(Boolean).length
+  const unansweredQuestionIndexes = useMemo(
+    () => answeredQuestions.flatMap((isAnswered, index) => (isAnswered ? [] : [index])),
+    [answeredQuestions],
+  )
+  const unansweredCount = unansweredQuestionIndexes.length
+  const isCurrentQuestionAnswered = answeredQuestions[currentQuestion] ?? false
   const progress =
     assessment.questions.length === 0 ? 0 : (answeredCount / assessment.questions.length) * 100
 
@@ -271,6 +303,20 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     }
   }
 
+  const handleSubmitRequest = () => {
+    if (unansweredCount > 0) {
+      setSubmitWarningOpen(true)
+      return
+    }
+    void handleSubmit(false)
+  }
+
+  const reviewFirstUnansweredQuestion = () => {
+    const firstUnanswered = unansweredQuestionIndexes[0]
+    if (firstUnanswered !== undefined) setCurrentQuestion(firstUnanswered)
+    setSubmitWarningOpen(false)
+  }
+
   const formatTime = (seconds: number) => {
     if (assessment.type === "assignment") {
       const days = Math.floor(seconds / 86400)
@@ -358,6 +404,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                   <li>Submit before the due date to avoid late penalty</li>
                 )}
                 <li>You can navigate between questions</li>
+                <li>You can skip a question and return to it before submitting</li>
                 <li>Submit when you're ready to see your results</li>
               </ul>
             </div>
@@ -396,7 +443,67 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         )}
       </div>
 
-      <Progress value={progress} className="mb-6" />
+      <Progress
+        value={progress}
+        className="mb-6"
+        aria-label={`${answeredCount} of ${assessment.questions.length} questions answered`}
+      />
+
+      <nav className="mb-6 rounded-xl border bg-card p-4 shadow-sm" aria-labelledby="question-navigator-title">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 id="question-navigator-title" className="font-semibold">
+              Question navigator
+            </h3>
+            <p className="text-sm text-muted-foreground" aria-live="polite">
+              {answeredCount} answered · {unansweredCount} unanswered
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 text-xs text-muted-foreground" aria-hidden="true">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-green-500" /> Answered
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full border bg-background" /> Unanswered
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-10">
+          {assessment.questions.map((_, index) => {
+            const isAnswered = answeredQuestions[index]
+            const isCurrent = index === currentQuestion
+            const status = isAnswered ? "answered" : "unanswered"
+            return (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setCurrentQuestion(index)}
+                aria-current={isCurrent ? "step" : undefined}
+                aria-label={`Question ${index + 1}, ${status}${isCurrent ? ", current question" : ""}`}
+                className={cn(
+                  "relative flex h-10 min-w-0 items-center justify-center rounded-md border text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                  isCurrent
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : isAnswered
+                      ? "border-green-300 bg-green-50 text-green-800 hover:bg-green-100"
+                      : "bg-background hover:bg-muted",
+                )}
+              >
+                {index + 1}
+                {isAnswered && (
+                  <Check
+                    className={cn(
+                      "absolute top-0.5 right-0.5 h-3 w-3",
+                      isCurrent ? "text-primary-foreground" : "text-green-700",
+                    )}
+                    aria-hidden="true"
+                  />
+                )}
+              </button>
+            )
+          })}
+        </div>
+      </nav>
 
       <Card className="mb-6">
         <CardHeader>
@@ -607,9 +714,10 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-sm text-muted-foreground">
+      <div className="mb-6 flex items-center justify-between">
+        <p className={cn("text-sm", unansweredCount > 0 ? "text-amber-700" : "text-muted-foreground")}>
           {answeredCount} of {assessment.questions.length} questions answered
+          {unansweredCount > 0 && ` · ${unansweredCount} still unanswered`}
         </p>
       </div>
 
@@ -622,14 +730,14 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
 
         {currentQuestion < assessment.questions.length - 1 ? (
           <Button onClick={handleNext}>
-            Next
+            {isCurrentQuestionAnswered ? "Next" : "Skip for now"}
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
         ) : (
           <Button
-            onClick={() => handleSubmit(false)}
+            onClick={handleSubmitRequest}
             variant="secondary"
-            disabled={answeredCount < assessment.questions.length || submitting}
+            disabled={submitting}
           >
             <Check className="w-4 h-4 mr-2" />
             {submitting
@@ -638,6 +746,59 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           </Button>
         )}
       </div>
+
+      <Dialog open={submitWarningOpen} onOpenChange={setSubmitWarningOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <TriangleAlert className="h-5 w-5 text-amber-600" />
+              Unanswered questions
+            </DialogTitle>
+            <DialogDescription>
+              You still have {unansweredCount} unanswered {unansweredCount === 1 ? "question" : "questions"}.
+              Blank or incomplete responses will be submitted as they are and may receive no credit.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div>
+            <p className="mb-2 text-sm font-medium">Go directly to an unanswered question:</p>
+            <div className="flex max-h-36 flex-wrap gap-2 overflow-y-auto py-1">
+              {unansweredQuestionIndexes.map((index) => (
+                <Button
+                  key={index}
+                  type="button"
+                  variant="outline"
+                  size="icon-sm"
+                  onClick={() => {
+                    setCurrentQuestion(index)
+                    setSubmitWarningOpen(false)
+                  }}
+                  aria-label={`Review unanswered question ${index + 1}`}
+                >
+                  {index + 1}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={reviewFirstUnansweredQuestion}>
+              Review questions
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setSubmitWarningOpen(false)
+                void handleSubmit(false)
+              }}
+              disabled={submitting}
+            >
+              {submitting ? "Submitting..." : "Submit anyway"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   )
 }

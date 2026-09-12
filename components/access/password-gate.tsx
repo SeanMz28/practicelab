@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useMutation, useQuery } from "convex/react"
 import { LockKeyhole } from "lucide-react"
 import { api } from "@/convex/_generated/api"
+import type { ProtectedResourceType } from "@/convex/access"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { InlineLoading } from "@/components/loading/loading-states"
 
 interface PasswordGateProps {
-  resourceType: "course" | "assessment"
+  resourceType: ProtectedResourceType
   resourceId: string
   title: string
   children: ReactNode

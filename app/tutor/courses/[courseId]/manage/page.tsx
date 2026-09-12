@@ -16,7 +16,7 @@ import type { Id } from "@/convex/_generated/dataModel"
 export default function ManageCoursePage() {
   const params = useParams()
   const courseId = params.courseId as Id<"courses">
-  const course = useQuery(api.courses.get, { id: courseId })
+  const course = useQuery(api.courses.getForTutor, { id: courseId })
 
   if (course === undefined) {
     return (

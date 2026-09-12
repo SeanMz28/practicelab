@@ -13,7 +13,7 @@ import { api } from "@/convex/_generated/api"
 export default function TutorGradingPage() {
   const pending = useQuery(api.attempts.listByStatus, { status: "pending" }) ?? []
   const assessments = useQuery(api.assessments.list) ?? []
-  const courses = useQuery(api.courses.list) ?? []
+  const courses = useQuery(api.courses.listForTutor) ?? []
 
   const studentIds = useMemo(() => pending.map((p) => p.userId), [pending])
   const students = useQuery(api.users.listByIds, { ids: studentIds }) ?? []

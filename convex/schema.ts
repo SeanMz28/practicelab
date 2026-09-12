@@ -59,12 +59,15 @@ export default defineSchema({
     code: v.string(),
     description: v.string(),
     color: v.string(),
+    locked: v.optional(v.boolean()),
+    hidden: v.optional(v.boolean()),
   }),
 
   notes: defineTable({
     courseId: v.id("courses"),
     title: v.string(),
     content: v.string(),
+    locked: v.optional(v.boolean()),
     createdAt: v.string(),
     updatedAt: v.string(),
   }).index("by_courseId", ["courseId"]),
@@ -78,6 +81,7 @@ export default defineSchema({
     timeLimit: v.optional(v.number()),
     dueDate: v.optional(v.string()),
     leaderboardEnabled: v.optional(v.boolean()),
+    locked: v.optional(v.boolean()),
     createdAt: v.string(),
   }).index("by_courseId", ["courseId"]),
 
@@ -99,14 +103,24 @@ export default defineSchema({
     .index("by_status", ["status"]),
 
   accessCredentials: defineTable({
-    resourceType: v.union(v.literal("course"), v.literal("assessment")),
+    resourceType: v.union(
+      v.literal("course"),
+      v.literal("assessment"),
+      v.literal("note"),
+      v.literal("resource"),
+    ),
     resourceId: v.string(),
     passwordHash: v.string(),
   }).index("by_resource", ["resourceType", "resourceId"]),
 
   accessGrants: defineTable({
     userId: v.string(),
-    resourceType: v.union(v.literal("course"), v.literal("assessment")),
+    resourceType: v.union(
+      v.literal("course"),
+      v.literal("assessment"),
+      v.literal("note"),
+      v.literal("resource"),
+    ),
     resourceId: v.string(),
     credentialId: v.id("accessCredentials"),
     grantedAt: v.string(),
@@ -122,6 +136,9 @@ export default defineSchema({
     fileType: v.string(),
     fileSize: v.number(),
     storageId: v.id("_storage"),
+    locked: v.optional(v.boolean()),
     uploadedAt: v.string(),
-  }).index("by_courseId", ["courseId"]),
+  })
+    .index("by_courseId", ["courseId"])
+    .index("by_storageId", ["storageId"]),
 })

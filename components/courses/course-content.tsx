@@ -4,11 +4,12 @@ import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FileText, ClipboardList, FolderOpen, LockKeyhole, Trophy } from "lucide-react"
+import { FileText, ClipboardList, FolderOpen, Trophy, LockKeyhole } from "lucide-react"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc } from "@/convex/_generated/dataModel"
 import { LeaderboardDialog } from "@/components/assessment/leaderboard-dialog"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
 
 interface CourseContentProps {
   course: Doc<"courses">
@@ -19,6 +20,7 @@ export function CourseContent({ course }: CourseContentProps) {
   const courseAssessments = useQuery(api.assessments.listSummariesByCourse, { courseId: course._id }) ?? []
   const resources = useQuery(api.resources.listByCourse, { courseId: course._id }) ?? []
   const resourceCount = resources.length
+  const lockedResourceCount = resources.filter((resource) => resource.locked).length
 
   const getAssessmentTypeBadge = (type: string) => {
     const badges = {
@@ -53,13 +55,24 @@ export function CourseContent({ course }: CourseContentProps) {
                   <CardTitle className="flex items-center gap-2">
                     <FileText className="w-5 h-5 text-primary" />
                     {note.title}
+                    <LockStatusBadge locked={note.locked} />
+                    <LockStatusBadge locked={!note.locked && note.passwordLocked} label="Password" />
                   </CardTitle>
                   <CardDescription>Last updated: {new Date(note.updatedAt).toLocaleDateString()}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/courses/${course._id}/notes/${note._id}`}>
-                    <Button>Read Note</Button>
-                  </Link>
+                  {note.locked ? (
+                    <Button disabled>
+                      <LockKeyhole className="mr-2 h-4 w-4" />
+                      Note Locked
+                    </Button>
+                  ) : (
+                    <Button asChild>
+                      <Link href={`/courses/${course._id}/notes/${note._id}`}>
+                        {note.passwordLocked ? "Unlock Note" : "Read Note"}
+                      </Link>
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -87,7 +100,8 @@ export function CourseContent({ course }: CourseContentProps) {
                         <CardTitle className="flex items-center gap-2 mb-2">
                           <ClipboardList className="w-5 h-5 text-secondary-foreground" />
                           {assessment.title}
-                          {assessment.passwordProtected && <LockKeyhole className="w-4 h-4 text-muted-foreground" />}
+                          <LockStatusBadge locked={assessment.locked} />
+                          <LockStatusBadge locked={!assessment.locked && assessment.passwordLocked} label="Password" />
                           {assessment.leaderboardEnabled && assessment.type === "quiz" && (
                             <Trophy className="w-4 h-4 text-amber-500" />
                           )}
@@ -111,12 +125,20 @@ export function CourseContent({ course }: CourseContentProps) {
                       ) : null}
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Link href={`/courses/${course._id}/assessments/${assessment._id}`}>
-                        <Button variant="secondary">
-                          Start {assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1)}
+                      {assessment.locked ? (
+                        <Button variant="secondary" disabled>
+                          <LockKeyhole className="mr-2 h-4 w-4" />
+                          {assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1)} Locked
                         </Button>
-                      </Link>
-                      {assessment.type === "quiz" && assessment.leaderboardEnabled && (
+                      ) : (
+                        <Button asChild variant="secondary">
+                          <Link href={`/courses/${course._id}/assessments/${assessment._id}`}>
+                          {assessment.passwordLocked ? "Unlock" : "Start"}{" "}
+                          {assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1)}
+                          </Link>
+                        </Button>
+                      )}
+                      {!assessment.locked && assessment.type === "quiz" && assessment.leaderboardEnabled && (
                         <LeaderboardDialog
                           assessmentId={assessment._id}
                           assessmentTitle={assessment.title}
@@ -139,6 +161,7 @@ export function CourseContent({ course }: CourseContentProps) {
               <p className="text-muted-foreground">
                 {resourceCount > 0 ? `${resourceCount} resource(s) available` : "No resources available yet"}
               </p>
+              {lockedResourceCount > 0 && <LockStatusBadge locked label={`${lockedResourceCount} locked`} />}
             </div>
             {resourceCount > 0 && (
               <div className="flex justify-center mt-4">

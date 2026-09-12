@@ -15,11 +15,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Pencil, Trash2, Clock, HelpCircle, X, Calendar, ChevronUp, ChevronDown, Check, LockKeyhole, Trophy } from "lucide-react"
+import { Plus, Pencil, Trash2, Clock, HelpCircle, X, Calendar, ChevronUp, ChevronDown, Check, Trophy } from "lucide-react"
 import { ClipboardList } from "lucide-react"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
 
 type Question = Doc<"assessments">["questions"][number]
 type AssessmentWithAccess = Doc<"assessments"> & { passwordProtected: boolean }
@@ -43,6 +44,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
     timeLimit: 30,
     dueDate: "",
     leaderboardEnabled: false,
+    locked: false,
     password: "",
     removePassword: false,
   })
@@ -75,6 +77,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       timeLimit: formData.type === "assignment" ? undefined : formData.timeLimit,
       dueDate: formData.type === "assignment" ? formData.dueDate || undefined : undefined,
       leaderboardEnabled: formData.type === "quiz" && formData.leaderboardEnabled,
+      locked: formData.locked,
       password: formData.password || undefined,
     })
     setIsCreateOpen(false)
@@ -96,6 +99,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       timeLimit: formData.type === "assignment" ? undefined : formData.timeLimit,
       dueDate: formData.type === "assignment" ? formData.dueDate || undefined : undefined,
       leaderboardEnabled: formData.type === "quiz" && formData.leaderboardEnabled,
+      locked: formData.locked,
       password: formData.password || undefined,
       removePassword: formData.removePassword,
     })
@@ -117,6 +121,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       timeLimit: 30,
       dueDate: "",
       leaderboardEnabled: false,
+      locked: false,
       password: "",
       removePassword: false,
     })
@@ -217,6 +222,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       timeLimit: assessment.timeLimit || 30,
       dueDate: assessment.dueDate || "",
       leaderboardEnabled: assessment.leaderboardEnabled ?? false,
+      locked: assessment.locked ?? false,
       password: "",
       removePassword: false,
     })
@@ -397,6 +403,20 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                     </span>
                   </label>
                 )}
+                <label className="flex items-start gap-3 rounded-lg border p-4">
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={formData.locked}
+                    onChange={(e) => setFormData({ ...formData, locked: e.target.checked })}
+                  />
+                  <span>
+                    <span className="block font-medium">Lock assessment</span>
+                    <span className="block text-sm text-muted-foreground">
+                      Students can see it, but cannot open or submit it.
+                    </span>
+                  </span>
+                </label>
                 <div>
                   <Label htmlFor="assessment-password">
                     {editingAssessment?.passwordProtected ? "Replace Access Password" : "Access Password (Optional)"}
@@ -931,16 +951,15 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="mb-2 flex flex-wrap items-center gap-3">
                       <CardTitle>{assessment.title}</CardTitle>
                       <span
                         className={`text-xs px-3 py-1 rounded-full font-medium ${getAssessmentTypeBadge(assessment.type)}`}
                       >
                         {getAssessmentTypeLabel(assessment.type)}
                       </span>
-                      {assessment.passwordProtected && (
-                        <span title="Password protected"><LockKeyhole className="w-4 h-4 text-muted-foreground" /></span>
-                      )}
+                      <LockStatusBadge locked={assessment.locked ?? false} />
+                      <LockStatusBadge locked={assessment.passwordProtected} label="Password" />
                       {assessment.type === "quiz" && assessment.leaderboardEnabled && (
                         <span title="Leaderboard enabled"><Trophy className="w-4 h-4 text-amber-500" /></span>
                       )}

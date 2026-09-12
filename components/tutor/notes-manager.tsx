@@ -20,34 +20,61 @@ import { MarkdownRenderer } from "@/components/notes/markdown-renderer"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
+import { LockStatusBadge } from "@/components/access/lock-status-badge"
 
 interface NotesManagerProps {
   courseId: Id<"courses">
 }
 
+type NoteWithAccess = Doc<"notes"> & { passwordProtected: boolean }
+
 export function NotesManager({ courseId }: NotesManagerProps) {
-  const notes = useQuery(api.notes.listByCourse, { courseId }) ?? []
+  const notes = useQuery(api.notes.listByCourseForTutor, { courseId }) ?? []
   const createNote = useMutation(api.notes.create)
   const updateNote = useMutation(api.notes.update)
   const removeNote = useMutation(api.notes.remove)
 
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [editingNote, setEditingNote] = useState<Doc<"notes"> | null>(null)
+  const [editingNote, setEditingNote] = useState<NoteWithAccess | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     content: "",
+    locked: false,
+    password: "",
+    removePassword: false,
   })
   const [previewMode, setPreviewMode] = useState<"edit" | "preview">("edit")
 
   const handleCreate = async () => {
-    await createNote({ courseId, title: formData.title, content: formData.content })
+    if (formData.password && formData.password.length < 4) {
+      alert("Note passwords must be at least 4 characters")
+      return
+    }
+    await createNote({
+      courseId,
+      title: formData.title,
+      content: formData.content,
+      locked: formData.locked,
+      password: formData.password || undefined,
+    })
     setIsCreateOpen(false)
     resetForm()
   }
 
   const handleUpdate = async () => {
     if (!editingNote) return
-    await updateNote({ id: editingNote._id, title: formData.title, content: formData.content })
+    if (formData.password && formData.password.length < 4) {
+      alert("Note passwords must be at least 4 characters")
+      return
+    }
+    await updateNote({
+      id: editingNote._id,
+      title: formData.title,
+      content: formData.content,
+      locked: formData.locked,
+      password: formData.password || undefined,
+      removePassword: formData.removePassword,
+    })
     setEditingNote(null)
     resetForm()
   }
@@ -59,15 +86,18 @@ export function NotesManager({ courseId }: NotesManagerProps) {
   }
 
   const resetForm = () => {
-    setFormData({ title: "", content: "" })
+    setFormData({ title: "", content: "", locked: false, password: "", removePassword: false })
     setPreviewMode("edit")
   }
 
-  const openEdit = (note: Doc<"notes">) => {
+  const openEdit = (note: NoteWithAccess) => {
     setEditingNote(note)
     setFormData({
       title: note.title,
       content: note.content,
+      locked: note.locked ?? false,
+      password: "",
+      removePassword: false,
     })
   }
 
@@ -145,6 +175,56 @@ export function NotesManager({ courseId }: NotesManagerProps) {
                 />
               </div>
 
+              <div>
+                <Label htmlFor="note-password">
+                  {editingNote?.passwordProtected ? "Replace Access Password" : "Access Password (Optional)"}
+                </Label>
+                <Input
+                  id="note-password"
+                  type="password"
+                  minLength={4}
+                  maxLength={128}
+                  placeholder={editingNote?.passwordProtected ? "Leave blank to keep current password" : "At least 4 characters"}
+                  value={formData.password}
+                  disabled={formData.removePassword}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Students must enter this in addition to any course password.
+                </p>
+                {editingNote?.passwordProtected && (
+                  <label className="mt-2 flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.removePassword}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          removePassword: e.target.checked,
+                          password: e.target.checked ? "" : formData.password,
+                        })
+                      }
+                    />
+                    Remove note password
+                  </label>
+                )}
+              </div>
+
+              <label className="flex items-start gap-3 rounded-lg border p-4">
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={formData.locked}
+                  onChange={(e) => setFormData({ ...formData, locked: e.target.checked })}
+                />
+                <span>
+                  <span className="block font-medium">Lock note</span>
+                  <span className="block text-sm text-muted-foreground">
+                    Students can see this note but cannot open it.
+                  </span>
+                </span>
+              </label>
+
               <Tabs value={previewMode} onValueChange={(v: any) => setPreviewMode(v)} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 max-w-xs">
                   <TabsTrigger value="edit">Edit</TabsTrigger>
@@ -200,8 +280,12 @@ export function NotesManager({ courseId }: NotesManagerProps) {
             <Card key={note._id}>
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>{note.title}</CardTitle>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <CardTitle>{note.title}</CardTitle>
+                      <LockStatusBadge locked={note.locked ?? false} />
+                      <LockStatusBadge locked={note.passwordProtected} label="Password" />
+                    </div>
                     <CardDescription className="mt-1">
                       Last updated {new Date(note.updatedAt).toLocaleDateString()}
                     </CardDescription>

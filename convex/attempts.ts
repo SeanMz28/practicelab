@@ -49,10 +49,15 @@ export const listForCurrentUser = query({
   handler: async (ctx) => {
     const authUser = await authComponent.safeGetAuthUser(ctx)
     if (!authUser) return []
-    return ctx.db
+    const attempts = await ctx.db
       .query("assessmentAttempts")
       .withIndex("by_userId", (q) => q.eq("userId", authUser._id))
       .collect()
+    const visibleAttempts = []
+    for (const attempt of attempts) {
+      if (await canAccessAssessment(ctx, attempt.assessmentId)) visibleAttempts.push(attempt)
+    }
+    return visibleAttempts
   },
 })
 
@@ -76,13 +81,13 @@ export const get = query({
     if (!authUser) return null
     const attempt = await ctx.db.get(args.id)
     if (!attempt) return null
-    if (attempt.userId === authUser._id) return attempt
-
     const profile = await ctx.db
       .query("userProfiles")
       .withIndex("by_userId", (q) => q.eq("userId", authUser._id))
       .unique()
-    return profile?.role === "tutor" ? attempt : null
+    if (profile?.role === "tutor") return attempt
+    if (attempt.userId !== authUser._id) return null
+    return (await canAccessAssessment(ctx, attempt.assessmentId)) ? attempt : null
   },
 })
 

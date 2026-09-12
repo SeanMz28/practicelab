@@ -130,6 +130,13 @@ export const dummyCourses: Course[] = [
     description: "Security engineering principles: Least Privilege, Fail-Safe Defaults, Zero Trust, and the named traps.",
     color: "bg-red-500",
   },
+  {
+    id: "8",
+    name: "Bible Studies",
+    code: "BIBLE101",
+    description: "Bible studies focused on building a deeper relationship with God.",
+    color: "bg-indigo-500",
+  },
 ]
 
 // Dummy notes
@@ -252,7 +259,256 @@ fruits.remove("banana")
   },
 ]
 
+const wordOfGodStudyQuiz: Assessment = {
+    id: "word-of-god-study-quiz",
+    courseId: "8",
+    title: "Word of God Study Quiz",
+    description:
+      "Review the key lessons, illustrations, and scriptures from the Word of God Bible study.",
+    type: "quiz",
+    timeLimit: 15,
+    createdAt: "2026-09-10T10:00:00Z",
+    questions: [
+      {
+        id: "wg-q1",
+        type: "multiple-choice",
+        question: "What is the main purpose of the Word of God study?",
+        points: 1,
+        options: [
+          "To memorize every book of the Bible",
+          "To make the Bible your standard for life and build conviction about what it says about itself",
+          "To compare different religious traditions",
+          "To learn only the historical facts of the Bible",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The study's stated purpose is to help you decide to make the Bible your standard for life and build conviction about what the Bible says about itself.",
+      },
+      {
+        id: "wg-q2",
+        type: "multiple-choice",
+        question: "Which set of facts about the Bible is given in the study?",
+        points: 1,
+        options: [
+          "66 books, about 40 authors, and three original languages",
+          "40 books, 66 authors, and two original languages",
+          "66 books, one author, and one original language",
+          "73 books, about 12 authors, and four original languages",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The study describes 66 books written by about 40 authors in Hebrew, Aramaic, and Greek.",
+      },
+      {
+        id: "wg-q3",
+        type: "multiple-choice",
+        question: "According to the study, over approximately how many years was the Bible written?",
+        points: 1,
+        options: ["150 years", "500 years", "1,000 years", "1,500 years"],
+        correctAnswer: 3,
+        explanation:
+          "The facts section says the Bible was written over an approximately 1,500-year period.",
+      },
+      {
+        id: "wg-q4",
+        type: "multiple-choice",
+        question: "What does the ruler illustration teach about measuring our lives?",
+        points: 1,
+        options: [
+          "Every person should invent a private standard",
+          "Feelings are the most accurate measurement",
+          "A reliable judgment requires a fixed standard, and the Bible should be that standard",
+          "Standards are unnecessary when intentions are sincere",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Just as a ruler provides a trustworthy standard of length, the study calls us to use God's Word as the standard for our lives.",
+      },
+      {
+        id: "wg-q5",
+        type: "multiple-choice",
+        question: "According to 2 Timothy 3:16–17, Scripture is useful for which four purposes?",
+        points: 1,
+        options: [
+          "Teaching, rebuking, correcting, and training in righteousness",
+          "Predicting, debating, entertaining, and inspiring",
+          "Singing, fasting, travelling, and celebrating",
+          "Reading, copying, translating, and publishing",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "2 Timothy 3:16–17 teaches that Scripture is God-breathed and useful for teaching, rebuking, correcting, and training in righteousness.",
+      },
+      {
+        id: "wg-q6",
+        type: "multiple-choice",
+        question: "In the study, what is needed for a person to be ‘thoroughly equipped’?",
+        points: 1,
+        options: [
+          "Knowing many Bible facts without changing",
+          "Depending only on someone else's interpretation",
+          "Using the Bible and allowing it to impact their life",
+          "Following whichever teaching feels easiest",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The study says we must use the Bible and allow it to impact our lives in order to be thoroughly equipped.",
+      },
+      {
+        id: "wg-q7",
+        type: "multiple-choice",
+        question: "What does Hebrews 4:12–13 teach about the Word of God?",
+        points: 1,
+        options: [
+          "It was useful only in the ancient world",
+          "It is living and active and exposes the human heart",
+          "It avoids addressing a person's motives",
+          "It changes according to each person's emotions",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "Hebrews 4 describes God's Word as living and active. The study emphasizes that it cuts through the layers of the heart and exposes the truth.",
+      },
+      {
+        id: "wg-q8",
+        type: "multiple-choice",
+        question: "Which three things does the study say can take away from God's Word?",
+        points: 1,
+        options: [
+          "Questions, study, and prayer",
+          "History, language, and culture",
+          "Teaching, correction, and training",
+          "Interpretation, emotions, and traditions",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "The second section identifies interpretation, emotions, and traditions as three influences that can keep people from obeying God's Word.",
+      },
+      {
+        id: "wg-q9",
+        type: "multiple-choice",
+        question: "What principle does the study draw from 2 Peter 1:19–21?",
+        points: 1,
+        options: [
+          "Scripture should be changed whenever culture changes",
+          "Personal opinions determine what Scripture means",
+          "The Bible should be read and applied, not changed to suit our opinions",
+          "Only church leaders should examine Scripture",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "Under ‘Interpretation,’ the study says the Bible is meant to be read and applied rather than altered to fit our opinions.",
+      },
+      {
+        id: "wg-q10",
+        type: "multiple-choice",
+        question: "According to the lesson from John 8:31–32, what shows that someone is truly a disciple of Jesus?",
+        points: 1,
+        options: [
+          "Holding to Jesus' teaching",
+          "Sincerely feeling that every belief is correct",
+          "Never encountering a challenging command",
+          "Following religious tradition without question",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "Jesus connects discipleship with holding to his teaching. The study warns that feelings and sincerity do not replace obedience to Scripture.",
+      },
+      {
+        id: "wg-q11",
+        type: "multiple-choice",
+        question: "What warning about tradition is emphasized from Mark 7:1–13?",
+        points: 1,
+        options: [
+          "Every cultural tradition is automatically sinful",
+          "Tradition is more authoritative than Scripture",
+          "Traditions should never be discussed",
+          "Tradition that overrides God's Word can make worship vain",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "The study teaches that religious or cultural tradition must not supersede God's Word; worship built on such tradition is in vain.",
+      },
+      {
+        id: "wg-q12",
+        type: "multiple-choice",
+        question: "According to 1 Timothy 4:16, which is more important: life or doctrine?",
+        points: 1,
+        options: [
+          "Life only",
+          "Doctrine only",
+          "Both are equally important",
+          "Neither matters if a person is sincere",
+        ],
+        correctAnswer: 2,
+        explanation:
+          "The study answers that life and doctrine are both important and must be watched closely.",
+      },
+      {
+        id: "wg-q13",
+        type: "multiple-choice",
+        question: "Why are the Bereans described as noble in Acts 17:10–11?",
+        points: 1,
+        options: [
+          "They eagerly examined the Scriptures every day for themselves",
+          "They accepted every teaching without checking it",
+          "They relied entirely on tradition",
+          "They avoided difficult passages",
+        ],
+        correctAnswer: 0,
+        explanation:
+          "The Bereans received the message eagerly and examined the Scriptures daily. The study calls us to do the same for ourselves.",
+      },
+      {
+        id: "wg-q14",
+        type: "multiple-choice",
+        question: "What illustration does James 1:22–25 use for the Word of God?",
+        points: 1,
+        options: [
+          "A locked door that hides our character",
+          "A mirror that reveals our character so we can change",
+          "A map that removes the need for action",
+          "A scale that compares us with other people",
+        ],
+        correctAnswer: 1,
+        explanation:
+          "The Word is compared to a mirror. We should not merely listen and forget, but look intently and do what it says.",
+      },
+      {
+        id: "wg-q15",
+        type: "multiple-choice",
+        question: "According to John 12:48, what will judge a person on the last day?",
+        points: 1,
+        options: [
+          "Popular opinion",
+          "Personal feelings",
+          "Religious customs",
+          "The words Jesus spoke",
+        ],
+        correctAnswer: 3,
+        explanation:
+          "Jesus says that the words he spoke will judge on the last day. The study concludes by challenging us to make God's Word our standard for life.",
+      },
+      {
+        id: "wg-q16",
+        type: "memory-verse",
+        question: "Write Philippians 4:13 from memory.",
+        points: 1,
+        correctText: "I can do all this through him who gives me strength.",
+      },
+      {
+        id: "wg-q17",
+        type: "memory-verse",
+        question: "Write John 8:31–32 from memory.",
+        points: 1,
+        correctText:
+          "To the Jews who had believed him, Jesus said, If you hold to my teaching, you are really my disciples. Then you will know the truth, and the truth will set you free.",
+      },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
+  wordOfGodStudyQuiz,
   {
     id: "pc-test-1",
     courseId: "6",
