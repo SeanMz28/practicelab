@@ -371,18 +371,16 @@ const wordOfGodStudyQuiz: Assessment = {
       },
       {
         id: "wg-q8",
-        type: "multiple-choice",
-        question: "Which three things does the study say can take away from God's Word?",
-        points: 1,
-        options: [
-          "Questions, study, and prayer",
-          "History, language, and culture",
-          "Teaching, correction, and training",
-          "Interpretation, emotions, and traditions",
+        type: "ordered-list",
+        question:
+          "List the three things that take away from God's Word and give the supporting scripture for each.",
+        points: 3,
+        correctAnswers: [
+          "Interpretation — 2 Peter 1:19–21",
+          "Emotions — John 8:31–32",
+          "Traditions — Mark 7:1–13",
         ],
-        correctAnswer: 3,
-        explanation:
-          "The second section identifies interpretation, emotions, and traditions as three influences that can keep people from obeying God's Word.",
+        orderedListHint: "Thing — supporting scripture",
       },
       {
         id: "wg-q9",
