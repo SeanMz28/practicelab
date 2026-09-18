@@ -370,6 +370,112 @@ Eagerly examine the Scriptures every day so that you can make God's Word your st
     createdAt: "2026-09-12T10:00:00Z",
     updatedAt: "2026-09-12T10:00:00Z",
   },
+  {
+    id: "discipleship-notes",
+    courseId: "8",
+    title: "Discipleship",
+    content: `# Discipleship
+
+> **Purpose:** Explore how Jesus calls people to follow him, learn from him, love one another, and help others become disciples. Adapted from the supplied *Discipleship* study notes.
+
+## The Great Commission — Matthew 28:16–20
+
+After his resurrection, Jesus speaks to the eleven disciples in Galilee. He says that all authority in heaven and on earth has been given to him. He sends them to **make disciples of all nations**, baptize them, and teach them to obey everything he commanded. He promises to be with them always.
+
+- The commission is addressed to disciples, who are to make and teach other disciples.
+- Teaching obedience is an ongoing part of discipleship, not a one-time lesson.
+- **Discuss:** How does this commission shape your priorities and the way you help others follow Jesus?
+
+## Disciples and Christians — Acts 11:25–26
+
+Barnabas brought Saul to Antioch, where they taught the church for a year. Acts says that **the disciples were first called Christians at Antioch**. The study uses this passage to argue that “Christian” and “disciple” describe the same followers of Jesus; it challenges the idea of a less committed category of Christian.
+
+The other New Testament uses of “Christian” are **Acts 26:28** and **1 Peter 4:16**. Read those passages alongside Acts 11 and consider what they add.
+
+- **Discuss:** What do you mean by “Christian” and “disciple”? Does your definition reflect the way these passages use the words?
+
+## Jesus calls his first disciples — Mark 1:14–18
+
+Jesus announces the good news of God's kingdom and calls Simon and Andrew away from their fishing nets to follow him. They respond at once. The study highlights **following Jesus** and **fishing for people**—helping others come to him—as parts of their new purpose. Their immediate response and abandoned nets illustrate urgency and sacrifice.
+
+- **Discuss:** What might your “nets” be: the work, ambitions, or habits you would find hard to release?
+
+## Following daily — Luke 9:23–26
+
+Jesus addresses everyone who wants to be his disciple: deny yourself, take up your cross **daily**, and follow him. The study explains self-denial as choosing Jesus' will over one's own desires and ambitions. In the Roman world, a cross was an instrument of execution; the image conveys a costly, daily surrender. Jesus also warns against being ashamed of him and his words.
+
+- **Discuss:** Where do your choices show that you follow Jesus? Where do they pull in another direction?
+
+## Counting the cost — Luke 14:25–33
+
+Jesus tells the large crowds to count the cost, using the examples of a builder planning a tower and a king weighing a battle. He calls for loyalty to him above family, possessions, and even one's own life. The study stresses that discipleship calls for a whole-life commitment. Read **1 Timothy 4:16** alongside this section: watch both your life and doctrine and persevere in them.
+
+- **Discuss:** What would putting Jesus first cost you in practice? What helps you persevere?
+
+## Learning to pray — Luke 11:1–4
+
+When a disciple asks Jesus to teach them to pray, Jesus gives a pattern that honours the Father, asks for daily provision and forgiveness, and seeks help against temptation. The study offers **ACTS** as another prayer guide:
+
+1. **Adoration** — praise God.
+2. **Confession** — admit sin and seek forgiveness.
+3. **Thanksgiving** — thank God.
+4. **Supplication** — bring requests to God.
+
+## Love in action — Matthew 22:34–40; John 13:34–35
+
+Jesus names love for God with all your heart, soul, and mind as the greatest commandment, followed by love for your neighbour as yourself. He commands his disciples to love one another **as he loved them**; that love makes their discipleship visible to others. The study describes this love as humble service and concrete action, not merely a feeling (see **1 John 3:18**).
+
+- **Discuss:** What specific act of love could you offer someone this week?
+
+## Holding to Jesus' teaching — John 8:31–32
+
+Jesus says that those who hold to his teaching are truly his disciples. The study connects discipleship with continuing to learn, obey, and imitate him. A disciple is a **learner, follower, and apprentice of Jesus Christ**. Return to Matthew 28:18–20: disciples who are taught to obey are also sent to make disciples.
+
+- **Reflect:** Would your daily life be recognisable as that of a disciple of Jesus? What is one next step?
+
+### Closing questions from the study
+
+1. Would Jesus describe you as his disciple?
+2. How does that shape the way you understand being a Christian?
+3. What do these scriptures lead you to believe about your relationship with God today?
+
+## Memory scriptures (NIV)
+
+- **Mark 1:17:** “Come, follow me,” Jesus said, “and I will send you out to fish for people.” ([NIV text](https://www.biblica.com/bible/niv/mark/1/klb/))
+- **John 13:34–35:** “A new command I give you: Love one another. As I have loved you, so you must love one another. By this everyone will know that you are my disciples, if you love one another.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AJohn+13%3A31%E2%80%9335))
+
+## Books of the Bible: Genesis through Jeremiah
+
+Memorize these **24 books in order**:
+
+1. Genesis
+2. Exodus
+3. Leviticus
+4. Numbers
+5. Deuteronomy
+6. Joshua
+7. Judges
+8. Ruth
+9. 1 Samuel
+10. 2 Samuel
+11. 1 Kings
+12. 2 Kings
+13. 1 Chronicles
+14. 2 Chronicles
+15. Ezra
+16. Nehemiah
+17. Esther
+18. Job
+19. Psalms
+20. Proverbs
+21. Ecclesiastes
+22. Song of Songs
+23. Isaiah
+24. Jeremiah
+`,
+    createdAt: "2026-09-14T10:00:00Z",
+    updatedAt: "2026-09-14T10:00:00Z",
+  },
 ]
 
 const wordOfGodStudyQuiz: Assessment = {
@@ -636,8 +742,225 @@ const wordOfGodStudyQuiz: Assessment = {
   ],
 }
 
+const discipleshipStudyQuiz: Assessment = {
+  id: "discipleship-study-quiz",
+  courseId: "8",
+  title: "Discipleship Study Quiz",
+  description:
+    "Review the Discipleship study, recite Mark 1:17 and John 13:34–35 (NIV), and put Genesis through Jeremiah in order.",
+  type: "quiz",
+  timeLimit: 40,
+  createdAt: "2026-09-14T10:00:00Z",
+  questions: [
+    {
+      id: "ds-q1",
+      type: "multiple-choice",
+      question: "In Matthew 28:18–20, what does Jesus tell the eleven disciples to do?",
+      points: 1,
+      options: [
+        "Remain in Galilee and wait for others to come to them",
+        "Make disciples of all nations, baptize them, and teach them to obey his commands",
+        "Teach only those who already know every command",
+        "Choose a new leader before speaking to anyone else",
+      ],
+      correctAnswer: 1,
+      explanation: "Jesus commissions his disciples to make, baptize, and teach disciples of all nations.",
+    },
+    {
+      id: "ds-q2",
+      type: "multiple-choice",
+      question: "According to Acts 11:25–26, what were the disciples first called in Antioch?",
+      points: 1,
+      options: ["Apostles", "Prophets", "Christians", "Pharisees"],
+      correctAnswer: 2,
+      explanation: "Acts 11:26 says that the disciples were first called Christians at Antioch.",
+    },
+    {
+      id: "ds-q3",
+      type: "multiple-choice",
+      question: "What two parts of Jesus' call does the study emphasize in Mark 1:17?",
+      points: 1,
+      options: [
+        "Follow Jesus and fish for people",
+        "Stay at home and keep fishing",
+        "Build a tower and count its cost",
+        "Pray and fast without helping others",
+      ],
+      correctAnswer: 0,
+      explanation: "Jesus calls Simon and Andrew to follow him and to fish for people.",
+    },
+    {
+      id: "ds-q4",
+      type: "multiple-choice",
+      question: "What do Simon and Andrew do after Jesus calls them in Mark 1:18?",
+      points: 1,
+      options: [
+        "They ask him to return the next year",
+        "They invite the whole town to a meeting first",
+        "They leave their nets at once and follow him",
+        "They continue fishing until evening",
+      ],
+      correctAnswer: 2,
+      explanation: "Their immediate response and abandoned nets are the study's examples of urgency and sacrifice.",
+    },
+    {
+      id: "ds-q5",
+      type: "multiple-choice",
+      question: "According to Luke 9:23, what must a person who wants to be Jesus' disciple do?",
+      points: 1,
+      options: [
+        "Deny themselves, take up their cross daily, and follow him",
+        "Gain the whole world before following him",
+        "Carry a cross only when others are watching",
+        "Avoid speaking about Jesus or his words",
+      ],
+      correctAnswer: 0,
+      explanation: "Jesus describes self-denial, taking up the cross daily, and following him.",
+    },
+    {
+      id: "ds-q6",
+      type: "multiple-choice",
+      question: "Why does Jesus use the tower and the king in Luke 14:28–33?",
+      points: 1,
+      options: [
+        "To teach construction and military strategy",
+        "To encourage people to count the cost of following him",
+        "To show that only rulers can become disciples",
+        "To say possessions are the measure of faith",
+      ],
+      correctAnswer: 1,
+      explanation: "Both examples call listeners to consider the cost before committing to discipleship.",
+    },
+    {
+      id: "ds-q7",
+      type: "multiple-choice",
+      question: "In the study, what does ACTS stand for as a prayer guide?",
+      points: 1,
+      options: [
+        "Action, Courage, Truth, Service",
+        "Adoration, Confession, Thanksgiving, Supplication",
+        "Ask, Consider, Teach, Share",
+        "Awareness, Commitment, Trust, Salvation",
+      ],
+      correctAnswer: 1,
+      explanation: "ACTS is Adoration, Confession, Thanksgiving, and Supplication.",
+    },
+    {
+      id: "ds-q8",
+      type: "multiple-choice",
+      question: "What are the two greatest commandments named in Matthew 22:37–40?",
+      points: 1,
+      options: [
+        "Love God fully and love your neighbour as yourself",
+        "Pray daily and never ask for help",
+        "Build a tower and win a battle",
+        "Learn every book name and avoid all traditions",
+      ],
+      correctAnswer: 0,
+      explanation: "Jesus names wholehearted love for God and love for one's neighbour.",
+    },
+    {
+      id: "ds-q9",
+      type: "multiple-choice",
+      question: "According to John 13:34–35, what will show others that people are Jesus' disciples?",
+      points: 1,
+      options: [
+        "Their social standing",
+        "Their love for one another",
+        "Their knowledge of architecture",
+        "Their ability to avoid all questions",
+      ],
+      correctAnswer: 1,
+      explanation: "Jesus says that love for one another will identify his disciples.",
+    },
+    {
+      id: "ds-q10",
+      type: "multiple-choice",
+      question: "What does Jesus say marks a true disciple in John 8:31–32?",
+      points: 1,
+      options: [
+        "Holding to his teaching",
+        "Hearing a teaching once and then forgetting it",
+        "Being called a Christian by a neighbour",
+        "Following only when it is convenient",
+      ],
+      correctAnswer: 0,
+      explanation: "Jesus connects true discipleship with continuing to hold to his teaching.",
+    },
+    {
+      id: "ds-q11",
+      type: "multiple-choice",
+      question: "In Luke 11:1–4, what does a disciple ask Jesus to teach them?",
+      points: 1,
+      options: ["How to pray", "How to fish", "How to build", "How to govern"],
+      correctAnswer: 0,
+      explanation: "One of the disciples asks, ‘Lord, teach us to pray.’",
+    },
+    {
+      id: "ds-q12",
+      type: "multiple-choice",
+      question: "According to 1 Timothy 4:16, what should a disciple watch closely?",
+      points: 1,
+      options: [
+        "Life and doctrine",
+        "Possessions and status",
+        "Only what others do",
+        "Only the first day of commitment",
+      ],
+      correctAnswer: 0,
+      explanation: "The study asks readers to watch both life and doctrine and persevere in them.",
+    },
+    {
+      id: "ds-q13",
+      type: "memory-verse",
+      question: "Write Mark 1:17 from memory (NIV).",
+      points: 3,
+      correctText: "“Come, follow me,” Jesus said, “and I will send you out to fish for people.”",
+    },
+    {
+      id: "ds-q14",
+      type: "memory-verse",
+      question: "Write John 13:34–35 from memory (NIV).",
+      points: 3,
+      correctText:
+        "“A new command I give you: Love one another. As I have loved you, so you must love one another. By this everyone will know that you are my disciples, if you love one another.”",
+    },
+    {
+      id: "ds-q15",
+      type: "ordered-list",
+      question: "Write the first eight books of the Bible, Genesis through Ruth, in order.",
+      points: 8,
+      correctAnswers: [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+    {
+      id: "ds-q16",
+      type: "ordered-list",
+      question: "Continue the books of the Bible from 1 Samuel through Nehemiah, in order.",
+      points: 8,
+      correctAnswers: [
+        "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+    {
+      id: "ds-q17",
+      type: "ordered-list",
+      question: "Continue the books of the Bible from Esther through Jeremiah, in order.",
+      points: 8,
+      correctAnswers: [
+        "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs", "Isaiah", "Jeremiah",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
+  discipleshipStudyQuiz,
   {
     id: "pc-test-1",
     courseId: "6",

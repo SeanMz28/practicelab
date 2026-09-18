@@ -102,10 +102,8 @@ export function DataInitializer() {
 
         const bibleCourse = dummyCourses.find((c) => c.code === "BIBLE101")
         if (bibleCourse) {
-          const wordOfGodNote = dummyNotes.find(
-            (note) => note.courseId === bibleCourse.id && note.title === "The Word of God",
-          )
-          if (wordOfGodNote) {
+          const bibleNotes = dummyNotes.filter((note) => note.courseId === bibleCourse.id)
+          for (const note of bibleNotes) {
             await ensureCourseWithNote({
               course: {
                 name: bibleCourse.name,
@@ -114,10 +112,10 @@ export function DataInitializer() {
                 color: bibleCourse.color,
               },
               note: {
-                title: wordOfGodNote.title,
-                content: wordOfGodNote.content,
-                createdAt: wordOfGodNote.createdAt,
-                updatedAt: wordOfGodNote.updatedAt,
+                title: note.title,
+                content: note.content,
+                createdAt: note.createdAt,
+                updatedAt: note.updatedAt,
               },
             })
           }
