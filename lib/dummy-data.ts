@@ -36,12 +36,14 @@ export interface Assessment {
 
 export interface Question {
   id: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select" | "matching"
   question: string
   points: number
-  options?: string[] // For multiple-choice and multi-select
+  options?: string[] // For multiple-choice, multi-select, and matching (the draggable answers)
   correctAnswer?: number // For multiple-choice
   correctOptions?: number[] // For multi-select: indices of every option to pick
+  matchPrompts?: string[] // For matching: the fields answers are dropped into
+  correctMatches?: number[] // For matching: for each prompt, the index of its option
   correctText?: string // For memory scripture
   correctAnswers?: string[] // For ordered lists
   orderedListHint?: string // Optional prompt shown while entering ordered-list items
@@ -66,7 +68,7 @@ export interface AssessmentAttempt {
 
 export interface Answer {
   questionId: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select" | "matching"
   value: number | string | string[] | number[] | FileSubmission
   isCorrect?: boolean // For auto-graded questions
   pointsAwarded?: number
@@ -1211,13 +1213,14 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     },
     {
       id: "kog-q4",
-      type: "multiple-choice",
-      question: "In Daniel 2, which kingdom do the legs of iron and feet of clay represent?",
-      points: 1,
-      options: ["Babylon", "Medo-Persia", "Greece", "Rome"],
-      correctAnswer: 3,
+      type: "matching",
+      question: "Daniel 2 statue: drag each part of the statue onto the kingdom it represents.",
+      points: 4,
+      matchPrompts: ["Greece", "Babylon", "Rome", "Medo-Persia"],
+      options: ["Head of gold", "Chest and arms of silver", "Belly and thighs of bronze", "Legs of iron and feet of clay"],
+      correctMatches: [2, 0, 3, 1],
       explanation:
-        "The legs of iron and feet of clay represent Rome (63 B.C. to 476 A.D.). God's kingdom strikes the statue at the feet.",
+        "Gold is Babylon (605–539 B.C.), silver is Medo-Persia (539–331 B.C.), bronze is Greece (331–63 B.C.), and iron and clay is Rome (63 B.C.–476 A.D.). God's kingdom strikes the statue at the feet.",
     },
     {
       id: "kog-q5",

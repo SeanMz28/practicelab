@@ -127,6 +127,139 @@ function MultiSelectOptionsEditor({
   )
 }
 
+// Editors keep matching questions in a canonical shape: options start with each prompt's answer in
+// prompt order, followed by any distractors.
+function toCanonicalMatching(question: Partial<Question>) {
+  const prompts = question.matchPrompts ?? []
+  const options = question.options ?? []
+  const matches = question.correctMatches ?? []
+  const pairAnswers = prompts.map((_, i) => options[matches[i]] ?? "")
+  const distractors = options.filter((_, i) => !matches.includes(i))
+  return {
+    matchPrompts: [...prompts],
+    options: [...pairAnswers, ...distractors],
+    correctMatches: prompts.map((_, i) => i),
+  }
+}
+
+function matchingDraft(question: Partial<Question>) {
+  const prompts = question.matchPrompts ?? ["", ""]
+  const options = question.matchPrompts ? question.options ?? [] : ["", ""]
+  return {
+    prompts,
+    answers: prompts.map((_, i) => options[i] ?? ""),
+    distractors: options.slice(prompts.length),
+  }
+}
+
+function matchingFields(question: Partial<Question>) {
+  const { prompts, answers, distractors } = matchingDraft(question)
+  return {
+    matchPrompts: prompts.map((prompt) => prompt.trim()),
+    options: [
+      ...answers.map((answer) => answer.trim()),
+      ...distractors.map((answer) => answer.trim()).filter(Boolean),
+    ],
+    correctMatches: prompts.map((_, i) => i),
+  }
+}
+
+function matchingError(question: Partial<Question>) {
+  const { matchPrompts, options } = matchingFields(question)
+  if (matchPrompts.length < 2) return "Please add at least two pairs"
+  if (matchPrompts.some((prompt) => !prompt) || options.slice(0, matchPrompts.length).some((answer) => !answer)) {
+    return "Please fill in every field and its answer"
+  }
+  const normalized = options.map((answer) => answer.toLocaleLowerCase())
+  if (new Set(normalized).size !== normalized.length) return "Each answer must be different"
+  return null
+}
+
+function MatchingPairsEditor({
+  question,
+  onChange,
+}: {
+  question: Partial<Question>
+  onChange: (next: Pick<Question, "matchPrompts" | "options" | "correctMatches">) => void
+}) {
+  const { prompts, answers, distractors } = matchingDraft(question)
+  const emit = (nextPrompts: string[], nextAnswers: string[], nextDistractors: string[]) =>
+    onChange({
+      matchPrompts: nextPrompts,
+      options: [...nextAnswers, ...nextDistractors],
+      correctMatches: nextPrompts.map((_, i) => i),
+    })
+
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label>Fields and Correct Answers</Label>
+        <p className="text-xs text-muted-foreground">
+          Students drag each answer into its field. Answers are shuffled for every attempt.
+        </p>
+        {prompts.map((prompt, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <Input
+              placeholder={`Field ${index + 1}, e.g. Babylon`}
+              value={prompt}
+              onChange={(e) =>
+                emit(prompts.map((p, i) => (i === index ? e.target.value : p)), answers, distractors)
+              }
+            />
+            <span className="text-muted-foreground" aria-hidden="true">
+              →
+            </span>
+            <Input
+              placeholder="Correct answer, e.g. Head of gold"
+              value={answers[index]}
+              onChange={(e) =>
+                emit(prompts, answers.map((a, i) => (i === index ? e.target.value : a)), distractors)
+              }
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              title="Remove pair"
+              disabled={prompts.length <= 2}
+              onClick={() =>
+                emit(
+                  prompts.filter((_, i) => i !== index),
+                  answers.filter((_, i) => i !== index),
+                  distractors,
+                )
+              }
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => emit([...prompts, ""], [...answers, ""], distractors)}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Pair
+        </Button>
+      </div>
+      <div>
+        <Label>Extra Answers (Optional)</Label>
+        <Textarea
+          className="min-h-20"
+          placeholder={"Assyria\nEgypt"}
+          value={distractors.join("\n")}
+          onChange={(e) => emit(prompts, answers, e.target.value.split("\n"))}
+        />
+        <p className="mt-1 text-xs text-muted-foreground">
+          One per line. These appear in the answer bank but belong in no field.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
   const assessments = useQuery(api.assessments.listByCourse, { courseId }) ?? []
   const createAssessment = useMutation(api.assessments.create)
@@ -243,6 +376,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       options: q.options ? [...q.options] : ["", "", "", ""],
       correctOptions: q.correctOptions ? [...q.correctOptions] : [],
       acceptedFileTypes: q.acceptedFileTypes ? [...q.acceptedFileTypes] : undefined,
+      ...(q.type === "matching" && toCanonicalMatching(q)),
     })
   }
 
@@ -282,6 +416,13 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
         return
       }
     }
+    if (questionDraft.type === "matching") {
+      const error = matchingError(questionDraft)
+      if (error) {
+        alert(error)
+        return
+      }
+    }
     const original = questions[editingQuestionIndex]
     const updated: Question = {
       id: original.id,
@@ -310,6 +451,10 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       ...(questionDraft.type === "multi-select" && {
         options: questionDraft.options?.map((option) => option.trim()),
         correctOptions: questionDraft.correctOptions,
+        explanation: questionDraft.explanation,
+      }),
+      ...(questionDraft.type === "matching" && {
+        ...matchingFields(questionDraft),
         explanation: questionDraft.explanation,
       }),
     }
@@ -381,6 +526,13 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
         return
       }
     }
+    if (currentQuestion.type === "matching") {
+      const error = matchingError(currentQuestion)
+      if (error) {
+        alert(error)
+        return
+      }
+    }
 
     const newQuestion: Question = {
       id: Date.now().toString(),
@@ -409,6 +561,10 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       ...(currentQuestion.type === "multi-select" && {
         options: currentQuestion.options?.map((option) => option.trim()),
         correctOptions: currentQuestion.correctOptions,
+        explanation: currentQuestion.explanation,
+      }),
+      ...(currentQuestion.type === "matching" && {
+        ...matchingFields(currentQuestion),
         explanation: currentQuestion.explanation,
       }),
     }
@@ -637,6 +793,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                     <SelectItem value="memory-verse">Memory Scripture</SelectItem>
                                     <SelectItem value="spelling">Spelling</SelectItem>
                                     <SelectItem value="multi-select">Pick Several</SelectItem>
+                                    <SelectItem value="matching">Drag &amp; Drop Matching</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -804,6 +961,23 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 </div>
                               </>
                             )}
+                            {questionDraft.type === "matching" && (
+                              <>
+                                <MatchingPairsEditor
+                                  question={questionDraft}
+                                  onChange={(fields) => setQuestionDraft({ ...questionDraft, ...fields })}
+                                />
+                                <div>
+                                  <Label>Explanation (Optional)</Label>
+                                  <Textarea
+                                    value={questionDraft.explanation ?? ""}
+                                    onChange={(e) =>
+                                      setQuestionDraft({ ...questionDraft, explanation: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </>
+                            )}
                             {questionDraft.type === "spelling" && (
                               <div>
                                 <Label>Accepted Answers</Label>
@@ -852,6 +1026,24 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                       {i === q.correctAnswer && <span className="text-green-600">(Correct)</span>}
                                     </div>
                                   ))}
+                                </div>
+                              )}
+                              {q.type === "matching" && (
+                                <div className="mt-2 space-y-1 text-xs">
+                                  {q.matchPrompts?.map((prompt, i) => (
+                                    <div key={i}>
+                                      {prompt} →{" "}
+                                      <span className="text-green-600 font-semibold">
+                                        {q.options?.[q.correctMatches?.[i] ?? -1]}
+                                      </span>
+                                    </div>
+                                  ))}
+                                  {(q.options?.length ?? 0) > (q.matchPrompts?.length ?? 0) && (
+                                    <div className="text-muted-foreground">
+                                      Extra answers:{" "}
+                                      {q.options?.filter((_, i) => !q.correctMatches?.includes(i)).join(", ")}
+                                    </div>
+                                  )}
                                 </div>
                               )}
                               {q.type === "multi-select" && (
@@ -966,6 +1158,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                             <SelectItem value="memory-verse">Memory Scripture</SelectItem>
                             <SelectItem value="spelling">Spelling</SelectItem>
                             <SelectItem value="multi-select">Pick Several</SelectItem>
+                            <SelectItem value="matching">Drag &amp; Drop Matching</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -1128,6 +1321,23 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                           <Textarea
                             id="multi-select-explanation"
                             placeholder="Explain the correct answers"
+                            value={currentQuestion.explanation || ""}
+                            onChange={(e) => setCurrentQuestion({ ...currentQuestion, explanation: e.target.value })}
+                          />
+                        </div>
+                      </>
+                    )}
+                    {currentQuestion.type === "matching" && (
+                      <>
+                        <MatchingPairsEditor
+                          question={currentQuestion}
+                          onChange={(fields) => setCurrentQuestion({ ...currentQuestion, ...fields })}
+                        />
+                        <div>
+                          <Label htmlFor="matching-explanation">Explanation (Optional)</Label>
+                          <Textarea
+                            id="matching-explanation"
+                            placeholder="Explain the correct matches"
                             value={currentQuestion.explanation || ""}
                             onChange={(e) => setCurrentQuestion({ ...currentQuestion, explanation: e.target.value })}
                           />

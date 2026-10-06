@@ -141,7 +141,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
             question.type === "memory-verse" ||
             question.type === "ordered-list" ||
             question.type === "spelling" ||
-            question.type === "multi-select"
+            question.type === "multi-select" ||
+            question.type === "matching"
           const isCorrect = answer.isCorrect
 
           return (
@@ -196,6 +197,11 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                         {question.type === "spelling" && (
                           <Badge variant="outline" className="bg-orange-50">
                             Spelling
+                          </Badge>
+                        )}
+                        {question.type === "matching" && (
+                          <Badge variant="outline" className="bg-amber-50">
+                            Drag &amp; Drop
                           </Badge>
                         )}
                         {question.type === "multi-select" && (
@@ -280,6 +286,43 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                               )}
                               {!isUserAnswer && isCorrectAnswer && (
                                 <span className="ml-auto text-xs text-green-600 font-medium">Missed</span>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )
+                })()}
+
+                {question.type === "matching" && question.matchPrompts && (() => {
+                  const placed = Array.isArray(answer.value) ? answer.value : []
+                  return (
+                    <div className="space-y-2">
+                      {question.matchPrompts.map((prompt, pIndex) => {
+                        const chosen = placed[pIndex]
+                        const correctIndex = question.correctMatches?.[pIndex]
+                        const chosenText = typeof chosen === "number" && chosen >= 0 ? question.options?.[chosen] : undefined
+                        const isMatch = typeof chosen === "number" && chosen === correctIndex
+                        return (
+                          <div
+                            key={pIndex}
+                            className={`grid gap-2 rounded-lg border-2 p-3 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:items-center ${
+                              isMatch ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50"
+                            }`}
+                          >
+                            <span className="font-medium">{prompt}</span>
+                            <div className="flex flex-wrap items-center gap-2">
+                              {isMatch ? (
+                                <CheckCircle2 className="w-4 h-4 shrink-0 text-green-600" />
+                              ) : (
+                                <XCircle className="w-4 h-4 shrink-0 text-red-600" />
+                              )}
+                              <span>{chosenText ?? "Not answered"}</span>
+                              {!isMatch && correctIndex !== undefined && (
+                                <span className="text-xs text-green-700 font-medium">
+                                  Correct: {question.options?.[correctIndex]}
+                                </span>
                               )}
                             </div>
                           </div>
@@ -390,7 +433,10 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {question.explanation && (question.type === "multiple-choice" || question.type === "multi-select") && (
+                {question.explanation &&
+                  (question.type === "multiple-choice" ||
+                    question.type === "multi-select" ||
+                    question.type === "matching") && (
                   <div className="bg-muted/50 p-4 rounded-lg">
                     <p className="text-sm font-semibold mb-1">Explanation:</p>
                     <p className="text-sm text-muted-foreground">{question.explanation}</p>

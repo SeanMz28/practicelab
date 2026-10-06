@@ -28,6 +28,7 @@ import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
+import { MatchingQuestion } from "@/components/assessment/matching-question"
 import {
   Dialog,
   DialogContent,
@@ -47,7 +48,7 @@ interface LocalFileAnswer {
 
 interface LocalAnswer {
   questionId: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select" | "matching"
   value: number | string | string[] | number[] | LocalFileAnswer | null
   isCorrect?: boolean
   pointsAwarded?: number
@@ -93,12 +94,24 @@ function isQuestionAnswered(answer: LocalAnswer, question: AssessmentQuestion) {
     const requiredCount = question.correctOptions?.length ?? 0
     return Array.isArray(answer.value) && requiredCount > 0 && answer.value.length === requiredCount
   }
+  if (answer.type === "matching") {
+    const promptCount = question.matchPrompts?.length ?? 0
+    return (
+      Array.isArray(answer.value) &&
+      promptCount > 0 &&
+      answer.value.length === promptCount &&
+      answer.value.every((item) => typeof item === "number" && item >= 0)
+    )
+  }
   if (answer.type === "file") return answer.value !== null
   return false
 }
 
 function hasShuffledOptions(question: AssessmentQuestion) {
-  return (question.type === "multiple-choice" || question.type === "multi-select") && !!question.options
+  return (
+    (question.type === "multiple-choice" || question.type === "multi-select" || question.type === "matching") &&
+    !!question.options
+  )
 }
 
 function randomIndex(maxExclusive: number) {
@@ -140,6 +153,8 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           ? -1
           : q.type === "ordered-list" || q.type === "multi-select"
             ? []
+            : q.type === "matching"
+              ? Array.from({ length: q.matchPrompts?.length ?? 0 }, () => -1)
             : q.type === "file"
               ? null
               : "",
@@ -192,6 +207,10 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         return { ...answer, value: [...selected, optionIndex] }
       }),
     )
+  }
+
+  const handleMatchingChange = (questionIndex: number, value: number[]) => {
+    setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
   }
 
   const handleTextChange = (questionIndex: number, value: string) => {
@@ -642,6 +661,9 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
             {question.type === "spelling" && (
               <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Spelling</span>
             )}
+            {question.type === "matching" && (
+              <span className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full">Drag &amp; Drop</span>
+            )}
             {question.type === "multi-select" && (
               <span className="text-xs px-2 py-1 bg-sky-100 text-sky-700 rounded-full">
                 Pick {question.correctOptions?.length ?? 0}
@@ -764,6 +786,17 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               </div>
             )
           })()}
+
+          {question.type === "matching" && question.options && question.matchPrompts && (
+            <MatchingQuestion
+              key={question.id}
+              prompts={question.matchPrompts}
+              options={question.options}
+              optionOrder={shuffledOrders[currentQuestion] ?? question.options.map((_, i) => i)}
+              value={Array.isArray(currentAnswer.value) ? (currentAnswer.value as number[]) : []}
+              onChange={(value) => handleMatchingChange(currentQuestion, value)}
+            />
+          )}
 
           {question.type === "text" && (
             <div className="space-y-2">

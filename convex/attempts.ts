@@ -22,6 +22,7 @@ const answerValidator = v.object({
     v.literal("memory-verse"),
     v.literal("spelling"),
     v.literal("multi-select"),
+    v.literal("matching"),
   ),
   value: v.union(v.number(), v.string(), v.array(v.string()), v.array(v.number()), fileSubmissionValidator),
   isCorrect: v.optional(v.boolean()),
@@ -183,6 +184,30 @@ export const submit = mutation({
           ),
         ].slice(0, expected.length)
         const correctCount = value.filter((item) => expected.includes(item)).length
+        const isCorrect = expected.length > 0 && correctCount === expected.length
+        return {
+          questionId: question.id,
+          type: question.type,
+          value,
+          isCorrect,
+          pointsAwarded:
+            expected.length === 0
+              ? 0
+              : Math.round((correctCount / expected.length) * question.points * 100) / 100,
+        }
+      }
+      if (question.type === "matching") {
+        const expected = question.correctMatches ?? []
+        const optionCount = question.options?.length ?? 0
+        const submittedValues =
+          submitted?.type === "matching" && Array.isArray(submitted.value) ? submitted.value : []
+        const value = expected.map((_, index) => {
+          const item = submittedValues[index]
+          return typeof item === "number" && Number.isInteger(item) && item >= 0 && item < optionCount
+            ? item
+            : -1
+        })
+        const correctCount = value.filter((item, index) => item === expected[index]).length
         const isCorrect = expected.length > 0 && correctCount === expected.length
         return {
           questionId: question.id,
