@@ -1,5 +1,5 @@
 import { v } from "convex/values"
-import { mutation, query } from "./_generated/server"
+import { internalMutation, mutation, query } from "./_generated/server"
 import { authComponent } from "./auth"
 import { requireTutor } from "./users"
 import { canAccessAssessment } from "./access"
@@ -392,5 +392,21 @@ export const grade = mutation({
       gradedAt: new Date().toISOString(),
       gradedBy: authUser._id,
     })
+  },
+})
+
+// Removes an attempt (e.g. a test run) and any files it uploaded. Run from the CLI:
+// `npx convex run --prod attempts:remove '{"id": "<attempt id>"}'`.
+export const remove = internalMutation({
+  args: { id: v.id("assessmentAttempts") },
+  handler: async (ctx, args) => {
+    const attempt = await ctx.db.get(args.id)
+    if (!attempt) throw new Error("Attempt not found")
+    for (const answer of attempt.answers) {
+      const value = answer.value
+      if (typeof value === "object" && !Array.isArray(value)) await ctx.storage.delete(value.storageId)
+    }
+    await ctx.db.delete(args.id)
+    return { removed: args.id }
   },
 })
