@@ -139,7 +139,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
           const isAutoGraded =
             question.type === "multiple-choice" ||
             question.type === "memory-verse" ||
-            question.type === "ordered-list"
+            question.type === "ordered-list" ||
+            question.type === "spelling"
           const isCorrect = answer.isCorrect
 
           return (
@@ -189,6 +190,11 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                         {question.type === "memory-verse" && (
                           <Badge variant="outline" className="bg-violet-50">
                             Memory Scripture
+                          </Badge>
+                        )}
+                        {question.type === "spelling" && (
+                          <Badge variant="outline" className="bg-orange-50">
+                            Spelling
                           </Badge>
                         )}
                       </div>
@@ -258,6 +264,25 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                         <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
                           <p className="whitespace-pre-wrap">{question.correctText}</p>
                         </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {question.type === "spelling" && (
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="font-semibold mb-2">Your Answer:</h4>
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="whitespace-pre-wrap">{answer.value as string}</p>
+                      </div>
+                    </div>
+                    {!answer.isCorrect && (question.correctAnswers?.length ?? 0) > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2 text-green-700">Accepted Spellings:</h4>
+                        <ul className="list-disc list-inside rounded-lg border border-green-200 bg-green-50 p-4 space-y-1">
+                          {question.correctAnswers?.map((item, index) => <li key={index}>{item}</li>)}
+                        </ul>
                       </div>
                     )}
                   </div>

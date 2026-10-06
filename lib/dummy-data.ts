@@ -36,7 +36,7 @@ export interface Assessment {
 
 export interface Question {
   id: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling"
   question: string
   points: number
   options?: string[] // For multiple-choice
@@ -65,7 +65,7 @@ export interface AssessmentAttempt {
 
 export interface Answer {
   questionId: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling"
   value: number | string | string[] | FileSubmission
   isCorrect?: boolean // For auto-graded questions
   pointsAwarded?: number
@@ -475,6 +475,207 @@ Memorize these **24 books in order**:
 `,
     createdAt: "2026-09-14T10:00:00Z",
     updatedAt: "2026-09-14T10:00:00Z",
+  },
+  {
+    id: "coming-of-the-kingdom-notes",
+    courseId: "8",
+    title: "The Coming of the Kingdom",
+    content: `# The Coming of the Kingdom
+
+> **Purpose:** Discover the purpose of God's kingdom on earth. Adapted from the supplied *The Coming of the Kingdom* study notes.
+
+## Six questions
+
+1. What is the kingdom of God?
+2. When did the kingdom of God come — if it did?
+3. How does one enter the kingdom?
+4. Do the Old Testament and New Testament fit together?
+5. Is it important where I go to church?
+6. Is it important if I go to church?
+
+Keep these questions in mind; the study answers each one from Scripture.
+
+## Old Testament predictions of the kingdom
+
+Israel was at the height of its glory under King David, around 1000 B.C. The prophets later looked ahead to a greater kingdom.
+
+### Isaiah 2:1–4 (750 B.C.)
+
+- In the last days, the “mountain of the Lord's temple” will be established.
+- **All nations** will stream to it.
+- People will be taught his ways.
+- The word of the Lord will go out from **Jerusalem**.
+
+### Daniel 2:31–45 (550 B.C.)
+
+A large statue represents a timeline of kingdoms:
+
+- **Head of gold:** Babylon (605 B.C. to 539 B.C.)
+- **Chest and arms of silver:** Medo-Persia (539 B.C. to 331 B.C.)
+- **Belly and thighs of bronze:** Greece (331 B.C. to 63 B.C.)
+- **Legs of iron and feet of clay:** Rome and the mixture of nations within it (63 B.C. to 476 A.D.)
+
+A rock strikes the statue on its feet of iron and clay, during the latter part of the Roman reign. The rock becomes a huge mountain and fills the whole earth. “In the time of those kings,” God will set up a kingdom (verse 44). Because the rock strikes the feet, **God's kingdom comes during the Roman reign**.
+
+- **Discuss:** When exactly do you think God's kingdom came?
+
+### Key dates to consider
+
+- **1000 B.C.** — Israel is at the height of its glory under King David.
+- **930 B.C.** — Israel splits in two: Northern Israel and the South (Judah).
+- **750 B.C.** — Isaiah prophesies about the kingdom.
+- **722 B.C.** — Northern Israel is taken by Assyria.
+- **586 B.C.** — Southern Israel is taken by Babylon.
+- **550 B.C.** — Daniel prophesies about the kingdom.
+
+## New Testament predictions of the kingdom
+
+### Matthew 3:1–2 (25 A.D.)
+
+John the Baptist declares that the kingdom is near. Jesus had already been born; John was six months older. This confirms the Old Testament prophecy that the kingdom would come during the Roman reign. **Old and New Testament prophecy are united** (answer to question 4).
+
+### Matthew 4:17 (27 A.D.)
+
+Jesus begins his ministry and declares that the kingdom is near.
+
+### Matthew 16:13–19
+
+- Peter is given the **keys to the kingdom** of God.
+- “Peter” in the Greek is ***petros***, which means “small stone.”
+- “Rock” in the Greek is ***petra***, which means “large foundational rock.”
+- The rock refers to **Jesus** (1 Corinthians 3:11).
+- “Church” in the Greek is ***ekklesia***, meaning “a group called out with a common purpose.”
+- **The church is God's kingdom on earth** (answer to question 1).
+
+**Kingdom = Church**
+
+- **King** = Jesus
+- **Subjects** = Disciples
+- **Law** = Bible
+
+### Mark 9:1
+
+- Some standing with Jesus will not “taste death” — or die — before the kingdom of God comes.
+- The word “some” is significant: Judas Iscariot did not live to see the day this verse was fulfilled.
+- The kingdom will come **with power**.
+
+### John 3:1–7
+
+Nicodemus, a Pharisee and member of the Jewish ruling council, comes to Jesus at night. To enter the kingdom, we must be **born of water and the Spirit** (answer to question 3).
+
+- **Discuss:** What does “born again” mean? Has the kingdom come yet?
+
+### Luke 23:50–51
+
+Joseph of Arimathea, a council member who was waiting for the kingdom of God, asks Pilate for Jesus' body. Jesus has died, but **the kingdom still has not come**.
+
+### Luke 24:44–49
+
+Jesus has risen, but the kingdom still has not come. Here are **four clues** about entering the kingdom:
+
+1. Repentance and forgiveness of sins in Jesus' name
+2. To all nations
+3. Starting in Jerusalem
+4. Power from on high
+
+## Fulfillment
+
+### Acts 1:1–26
+
+- For 40 days after his resurrection, Jesus spoke to his disciples about the kingdom.
+- The disciples did not yet fully understand; they were still waiting for a physical kingdom or an earthly king.
+- Judas' death is a partial fulfillment of Mark 9:1.
+- The prophecies begin to be fulfilled in Acts 1 and 2.
+
+### Acts 2:1–17
+
+Peter's sermon highlights three clues from Luke 24:44–49:
+
+1. **Power from on high** (verses 1–4) — fulfillment of Mark 9:1
+2. **Jerusalem** (verse 5) — fulfillment of Isaiah 2:3
+3. **Every nation** (verse 5) — fulfillment of Isaiah 2:2
+
+The “last days” (verse 17) also fulfill Isaiah 2:2.
+
+- **Discuss:** Has the kingdom come yet?
+
+### Acts 2:22–24
+
+Peter preaches the essential “keys” to the kingdom — truths we must believe before being born of water and the Spirit (fulfillment of John 3:5):
+
+1. Jesus is from God.
+2. Our sins put him on the cross.
+3. He rose from the dead!
+
+### Acts 2:36–41
+
+Repentance and forgiveness of sins (verse 38) is the biblical answer for entering the kingdom (fulfillment of Luke 24:44–49). **The kingdom of God has come!** About three thousand people are born again of water and the Spirit (answer to question 2).
+
+### Acts 2:42–47 (30 A.D.)
+
+This is the blueprint for the church. Like the first-century disciples, we must be devoted to the **Bible, prayer, fellowship, and communion (the breaking of bread)**. The church practiced daily discipleship and evangelism (verse 46); they were taught by and imitated the ministry of Jesus (Matthew 26:55).
+
+- Is it important where we go to church? **Yes** (answer to question 5).
+
+### Matthew 6:33
+
+- We must seek first the kingdom. Is it important if we go to church? **Yes** (answer to question 6).
+- Our schedules should show that the meetings of the body are a priority: Sunday services, midweeks, devotionals, and Bible Talks.
+- We must be willing to sacrifice to put the church — God's kingdom on earth — first in our lives.
+
+> **Challenge:** Seek first the kingdom by being committed to the fellowship of disciples — the church!
+
+## Memory scriptures (NIV)
+
+- **Ezekiel 18:20:** “The one who sins is the one who will die. The child will not share the guilt of the parent, nor will the parent share the guilt of the child. The righteousness of the righteous will be credited to them, and the wickedness of the wicked will be charged against them.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AEzekiel+18%3A20))
+- **Galatians 1:8:** “But even if we or an angel from heaven should preach a gospel other than the one we preached to you, let them be under God's curse!” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AGalatians+1%3A8))
+
+## Books of the Bible: Genesis through Malachi
+
+Memorize all **39 books of the Old Testament in order**:
+
+1. Genesis
+2. Exodus
+3. Leviticus
+4. Numbers
+5. Deuteronomy
+6. Joshua
+7. Judges
+8. Ruth
+9. 1 Samuel
+10. 2 Samuel
+11. 1 Kings
+12. 2 Kings
+13. 1 Chronicles
+14. 2 Chronicles
+15. Ezra
+16. Nehemiah
+17. Esther
+18. Job
+19. Psalms
+20. Proverbs
+21. Ecclesiastes
+22. Song of Songs
+23. Isaiah
+24. Jeremiah
+25. Lamentations
+26. Ezekiel
+27. Daniel
+28. Hosea
+29. Joel
+30. Amos
+31. Obadiah
+32. Jonah
+33. Micah
+34. Nahum
+35. Habakkuk
+36. Zephaniah
+37. Haggai
+38. Zechariah
+39. Malachi
+`,
+    createdAt: "2026-10-06T10:00:00Z",
+    updatedAt: "2026-10-06T10:00:00Z",
   },
 ]
 
@@ -958,9 +1159,356 @@ const discipleshipStudyQuiz: Assessment = {
   ],
 }
 
+const comingOfTheKingdomStudyQuiz: Assessment = {
+  id: "coming-of-the-kingdom-study-quiz",
+  courseId: "8",
+  title: "The Coming of the Kingdom Study Quiz",
+  description:
+    "Review The Coming of the Kingdom study, recite Ezekiel 18:20 and Galatians 1:8 (NIV), and put Genesis through Malachi in order.",
+  type: "quiz",
+  timeLimit: 45,
+  createdAt: "2026-10-06T10:00:00Z",
+  questions: [
+    {
+      id: "kog-q1",
+      type: "multiple-choice",
+      question: "According to the study, what is the kingdom of God?",
+      points: 1,
+      options: [
+        "A future political kingdom based in Jerusalem",
+        "The church — God's kingdom on earth",
+        "A feeling of peace inside each believer",
+        "The nation of Israel at the height of King David's reign",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "From Matthew 16:13–19, the study concludes that the church is God's kingdom on earth.",
+    },
+    {
+      id: "kog-q2",
+      type: "multiple-choice",
+      question: "In the Kingdom = Church comparison, what do the King, the subjects, and the law correspond to?",
+      points: 1,
+      options: [
+        "King David, Israel, and the Ten Commandments",
+        "Caesar, Roman citizens, and Roman law",
+        "Jesus, disciples, and the Bible",
+        "Peter, the apostles, and tradition",
+      ],
+      correctAnswer: 2,
+      explanation: "The King is Jesus, the subjects are disciples, and the law is the Bible.",
+    },
+    {
+      id: "kog-q3",
+      type: "multiple-choice",
+      question: "According to Isaiah 2:1–4, where would the word of the Lord go out from?",
+      points: 1,
+      options: ["Babylon", "Rome", "Jerusalem", "Galilee"],
+      correctAnswer: 2,
+      explanation:
+        "Isaiah prophesied that all nations would stream to the mountain of the Lord's temple and that the word of the Lord would go out from Jerusalem.",
+    },
+    {
+      id: "kog-q4",
+      type: "multiple-choice",
+      question: "In Daniel 2, which kingdom do the legs of iron and feet of clay represent?",
+      points: 1,
+      options: ["Babylon", "Medo-Persia", "Greece", "Rome"],
+      correctAnswer: 3,
+      explanation:
+        "The legs of iron and feet of clay represent Rome (63 B.C. to 476 A.D.). God's kingdom strikes the statue at the feet.",
+    },
+    {
+      id: "kog-q5",
+      type: "multiple-choice",
+      question: "What does the rock that strikes the statue and becomes a huge mountain represent in Daniel 2?",
+      points: 1,
+      options: [
+        "God's kingdom, set up during the Roman reign",
+        "The Babylonian army",
+        "The return of Israel from exile",
+        "The Greek empire under Alexander",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "“In the time of those kings,” God sets up a kingdom (Daniel 2:44). The rock strikes the feet, so the kingdom comes during the Roman reign.",
+    },
+    {
+      id: "kog-q6",
+      type: "multiple-choice",
+      question: "How does Matthew 3:1–2 show that the Old and New Testaments fit together?",
+      points: 1,
+      options: [
+        "John the Baptist rejects Daniel's prophecy",
+        "John the Baptist declares the kingdom is near during the Roman reign, as Daniel predicted",
+        "John the Baptist says the kingdom will come after Rome falls",
+        "John the Baptist teaches that the kingdom already came under King David",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "John announces that the kingdom is near during the Roman reign, which confirms the Old Testament prophecy.",
+    },
+    {
+      id: "kog-q7",
+      type: "multiple-choice",
+      question: "In Matthew 16:13–19, who is given the keys to the kingdom of God?",
+      points: 1,
+      options: ["John", "Peter", "James", "Paul"],
+      correctAnswer: 1,
+      explanation: "Jesus gives Peter the keys to the kingdom.",
+    },
+    {
+      id: "kog-q8",
+      type: "spelling",
+      question: "“Peter” in the Greek is a word that means “small stone.” Spell that Greek word.",
+      points: 1,
+      correctAnswers: ["petros"],
+      explanation: "“Peter” is petros, a small stone.",
+    },
+    {
+      id: "kog-q9",
+      type: "spelling",
+      question: "“Rock” in the Greek is a word that means “large foundational rock.” Spell that Greek word.",
+      points: 1,
+      correctAnswers: ["petra"],
+      explanation: "“Rock” is petra, a large foundational rock.",
+    },
+    {
+      id: "kog-q10",
+      type: "multiple-choice",
+      question: "What does the “rock” in Matthew 16:18 refer to?",
+      points: 1,
+      options: ["Peter", "The temple", "Jesus", "The Law of Moses"],
+      correctAnswer: 2,
+      explanation: "The rock is Jesus, the church's only foundation (1 Corinthians 3:11).",
+    },
+    {
+      id: "kog-q11",
+      type: "spelling",
+      question: "Spell the Greek word that is translated “church.”",
+      points: 1,
+      correctAnswers: ["ekklesia", "ecclesia"],
+      explanation: "“Church” is ekklesia in the Greek.",
+    },
+    {
+      id: "kog-q12",
+      type: "multiple-choice",
+      question: "What does the Greek word ekklesia mean?",
+      points: 1,
+      options: [
+        "A building set apart for worship",
+        "A group called out with a common purpose",
+        "A gathering of religious leaders",
+        "A small stone",
+      ],
+      correctAnswer: 1,
+      explanation: "Ekklesia means “a group called out with a common purpose.”",
+    },
+    {
+      id: "kog-q13",
+      type: "multiple-choice",
+      question: "According to Mark 9:1, how would the kingdom of God come?",
+      points: 1,
+      options: ["Quietly and unseen", "With power", "After everyone listening had died", "Through a military victory"],
+      correctAnswer: 1,
+      explanation:
+        "Jesus says some standing there will not taste death before the kingdom comes with power. Judas did not live to see it.",
+    },
+    {
+      id: "kog-q14",
+      type: "multiple-choice",
+      question: "How does one enter the kingdom of God, according to John 3:1–7?",
+      points: 1,
+      options: [
+        "By being born into a religious family",
+        "By keeping the Law of Moses",
+        "By being born of water and the Spirit",
+        "By attending church once",
+      ],
+      correctAnswer: 2,
+      explanation: "Jesus tells Nicodemus that no one can enter the kingdom unless they are born of water and the Spirit.",
+    },
+    {
+      id: "kog-q15",
+      type: "multiple-choice",
+      question: "Which two members of the Jewish ruling council became followers of Jesus?",
+      points: 1,
+      options: [
+        "Caiaphas and Annas",
+        "Nicodemus and Joseph of Arimathea",
+        "Gamaliel and Saul",
+        "Nicodemus and Caiaphas",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Nicodemus (John 3:1) and Joseph of Arimathea (Luke 23:50–51) were council members who became followers of Jesus.",
+    },
+    {
+      id: "kog-q16",
+      type: "spelling",
+      question: "Who asked Pilate for the body of Jesus? (Give his full name.)",
+      points: 1,
+      correctAnswers: ["Joseph of Arimathea"],
+      explanation:
+        "Joseph of Arimathea asked for Jesus' body (Luke 23:50–52). He was waiting for the kingdom, which had not yet come.",
+    },
+    {
+      id: "kog-q17",
+      type: "multiple-choice",
+      question: "What are the four clues about entering the kingdom in Luke 24:44–49?",
+      points: 1,
+      options: [
+        "Repentance and forgiveness of sins in Jesus' name; to all nations; starting in Jerusalem; power from on high",
+        "Faith alone; to Israel only; starting in Rome; a sign in the sky",
+        "Keeping the Law; to all nations; starting in Galilee; a new temple",
+        "Prayer; fasting; giving; starting in Bethlehem",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "After his resurrection, Jesus points to repentance and forgiveness in his name, preached to all nations, beginning at Jerusalem, with power from on high.",
+    },
+    {
+      id: "kog-q18",
+      type: "multiple-choice",
+      question: "When did the kingdom of God come?",
+      points: 1,
+      options: [
+        "At Jesus' birth",
+        "At Jesus' death on the cross",
+        "On the day of Pentecost in Acts 2 (about 30 A.D.)",
+        "It has not come yet",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "The kingdom had not come at Jesus' death (Luke 23:50–51) or resurrection (Luke 24). It came with power in Jerusalem in Acts 2.",
+    },
+    {
+      id: "kog-q19",
+      type: "multiple-choice",
+      question: "What three essential truths (“keys”) does Peter preach in Acts 2:22–24?",
+      points: 1,
+      options: [
+        "Jesus is from God; our sins put him on the cross; he rose from the dead",
+        "Jesus was a prophet; the Law saves us; the temple is holy",
+        "Jesus was born in Bethlehem; he performed miracles; he will return",
+        "Keep the Sabbath; give to the poor; pray daily",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "These are the truths we must believe before being born of water and the Spirit.",
+    },
+    {
+      id: "kog-q20",
+      type: "multiple-choice",
+      question: "About how many people were “born again of water and the Spirit” when the kingdom came in Acts 2:41?",
+      points: 1,
+      options: ["Twelve", "One hundred and twenty", "Three thousand", "Five thousand"],
+      correctAnswer: 2,
+      explanation: "About three thousand were added that day.",
+    },
+    {
+      id: "kog-q21",
+      type: "multiple-choice",
+      question: "According to Acts 2:42–47, what were the first-century disciples devoted to?",
+      points: 1,
+      options: [
+        "The Bible (apostles' teaching), prayer, fellowship, and communion (breaking of bread)",
+        "The temple sacrifices, fasting, and the Sabbath",
+        "Their own interpretations and traditions",
+        "Building programs and church buildings",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Acts 2:42 is the blueprint for the church: devotion to the Bible, prayer, fellowship, and the breaking of bread.",
+    },
+    {
+      id: "kog-q22",
+      type: "multiple-choice",
+      question: "How does the study apply Matthew 6:33, “Seek first his kingdom”?",
+      points: 1,
+      options: [
+        "Attend church only when it is convenient",
+        "Make the meetings of the body a priority and sacrifice to put the church first",
+        "Seek the kingdom privately, apart from other disciples",
+        "Wait for a physical kingdom to appear",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "The challenge is to seek first the kingdom by being committed to the fellowship of disciples: the church.",
+    },
+    {
+      id: "kog-q23",
+      type: "memory-verse",
+      question: "Write Ezekiel 18:20 from memory (NIV).",
+      points: 3,
+      correctText:
+        "The one who sins is the one who will die. The child will not share the guilt of the parent, nor will the parent share the guilt of the child. The righteousness of the righteous will be credited to them, and the wickedness of the wicked will be charged against them.",
+    },
+    {
+      id: "kog-q24",
+      type: "memory-verse",
+      question: "Write Galatians 1:8 from memory (NIV).",
+      points: 3,
+      correctText:
+        "But even if we or an angel from heaven should preach a gospel other than the one we preached to you, let them be under God's curse!",
+    },
+    {
+      id: "kog-q25",
+      type: "ordered-list",
+      question: "Write the first eight books of the Bible, Genesis through Ruth, in order.",
+      points: 8,
+      correctAnswers: [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+    {
+      id: "kog-q26",
+      type: "ordered-list",
+      question: "Continue the books of the Bible from 1 Samuel through Nehemiah, in order.",
+      points: 8,
+      correctAnswers: [
+        "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+    {
+      id: "kog-q27",
+      type: "ordered-list",
+      question: "Continue the books of the Bible from Esther through Jeremiah, in order.",
+      points: 8,
+      correctAnswers: [
+        "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs", "Isaiah", "Jeremiah",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+    {
+      id: "kog-q28",
+      type: "ordered-list",
+      question: "Continue the books of the Bible from Lamentations through Jonah, in order.",
+      points: 8,
+      correctAnswers: [
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+    {
+      id: "kog-q29",
+      type: "ordered-list",
+      question: "Finish the Old Testament from Micah through Malachi, in order.",
+      points: 7,
+      correctAnswers: [
+        "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+      ],
+      orderedListHint: "Type the next book…",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
   discipleshipStudyQuiz,
+  comingOfTheKingdomStudyQuiz,
   {
     id: "pc-test-1",
     courseId: "6",

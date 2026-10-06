@@ -182,6 +182,11 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                           Memory Scripture
                         </Badge>
                       )}
+                      {question.type === "spelling" && (
+                        <Badge variant="outline" className="bg-orange-50">
+                          Spelling
+                        </Badge>
+                      )}
                       <span className="text-sm text-muted-foreground">{question.points} points</span>
                     </div>
                   </div>
@@ -244,6 +249,18 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                       <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
                         <p className="text-sm font-semibold text-green-800 mb-1">Correct wording</p>
                         <p className="whitespace-pre-wrap">{question.correctText}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {question.type === "spelling" && (
+                    <div className="space-y-3">
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="whitespace-pre-wrap">{answer.value as string}</p>
+                      </div>
+                      <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
+                        <p className="text-sm font-semibold text-green-800 mb-1">Accepted spellings</p>
+                        <p className="whitespace-pre-wrap">{(question.correctAnswers ?? []).join("; ")}</p>
                       </div>
                     </div>
                   )}

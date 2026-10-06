@@ -169,6 +169,13 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       alert("Please enter at least one expected answer")
       return
     }
+    if (
+      questionDraft.type === "spelling" &&
+      !questionDraft.correctAnswers?.some((answer) => answer.trim())
+    ) {
+      alert("Please enter at least one accepted spelling")
+      return
+    }
     const original = questions[editingQuestionIndex]
     const updated: Question = {
       id: original.id,
@@ -190,6 +197,9 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
         correctAnswers: questionDraft.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
         orderedListHint: questionDraft.orderedListHint?.trim() || undefined,
         answerLayout: questionDraft.answerLayout,
+      }),
+      ...(questionDraft.type === "spelling" && {
+        correctAnswers: questionDraft.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
       }),
     }
     const next = [...questions]
@@ -246,6 +256,13 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       alert("Please enter at least one expected answer")
       return
     }
+    if (
+      currentQuestion.type === "spelling" &&
+      !currentQuestion.correctAnswers?.some((answer) => answer.trim())
+    ) {
+      alert("Please enter at least one accepted spelling")
+      return
+    }
 
     const newQuestion: Question = {
       id: Date.now().toString(),
@@ -267,6 +284,9 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
         correctAnswers: currentQuestion.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
         orderedListHint: currentQuestion.orderedListHint?.trim() || undefined,
         answerLayout: currentQuestion.answerLayout,
+      }),
+      ...(currentQuestion.type === "spelling" && {
+        correctAnswers: currentQuestion.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
       }),
     }
 
@@ -492,6 +512,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                     <SelectItem value="file">File Upload</SelectItem>
                                     <SelectItem value="ordered-list">Ordered List</SelectItem>
                                     <SelectItem value="memory-verse">Memory Scripture</SelectItem>
+                                    <SelectItem value="spelling">Spelling</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -639,6 +660,25 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 </div>
                               </div>
                             )}
+                            {questionDraft.type === "spelling" && (
+                              <div>
+                                <Label>Accepted Spellings</Label>
+                                <Textarea
+                                  className="min-h-28"
+                                  placeholder={"color\ncolour"}
+                                  value={questionDraft.correctAnswers?.join("\n") ?? ""}
+                                  onChange={(e) =>
+                                    setQuestionDraft({
+                                      ...questionDraft,
+                                      correctAnswers: e.target.value.split("\n"),
+                                    })
+                                  }
+                                />
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                  Enter one accepted spelling per line. Capitalization is ignored; spelling and punctuation must match.
+                                </p>
+                              </div>
+                            )}
                             <div className="flex justify-end gap-2">
                               <Button variant="outline" onClick={cancelEditQuestion}>
                                 Cancel
@@ -682,6 +722,11 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 <p className="mt-2 text-xs text-green-700">
                                   {q.answerLayout === "paired" ? "Correct pairs: " : "Correct order: "}
                                   {q.correctAnswers.join(q.answerLayout === "paired" ? "; " : " → ")}
+                                </p>
+                              )}
+                              {q.type === "spelling" && q.correctAnswers && (
+                                <p className="mt-2 text-xs text-green-700">
+                                  Accepted spellings: {q.correctAnswers.join("; ")}
                                 </p>
                               )}
                               {q.explanation && (
@@ -760,6 +805,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                             <SelectItem value="file">File Upload</SelectItem>
                             <SelectItem value="ordered-list">Ordered List</SelectItem>
                             <SelectItem value="memory-verse">Memory Scripture</SelectItem>
+                            <SelectItem value="spelling">Spelling</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -906,6 +952,26 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                             Shown inside the answer field. The default is “Type the next item…”
                           </p>
                         </div>
+                      </div>
+                    )}
+                    {currentQuestion.type === "spelling" && (
+                      <div>
+                        <Label htmlFor="accepted-spellings">Accepted Spellings</Label>
+                        <Textarea
+                          id="accepted-spellings"
+                          className="min-h-28"
+                          placeholder={"color\ncolour"}
+                          value={currentQuestion.correctAnswers?.join("\n") ?? ""}
+                          onChange={(e) =>
+                            setCurrentQuestion({
+                              ...currentQuestion,
+                              correctAnswers: e.target.value.split("\n"),
+                            })
+                          }
+                        />
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Enter one accepted spelling per line. Capitalization is ignored; spelling and punctuation must match.
+                        </p>
                       </div>
                     )}
 

@@ -10,6 +10,7 @@ const questionValidator = v.object({
     v.literal("file"),
     v.literal("ordered-list"),
     v.literal("memory-verse"),
+    v.literal("spelling"),
   ),
   question: v.string(),
   points: v.number(),

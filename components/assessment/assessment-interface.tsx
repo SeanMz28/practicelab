@@ -47,7 +47,7 @@ interface LocalFileAnswer {
 
 interface LocalAnswer {
   questionId: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling"
   value: number | string | string[] | LocalFileAnswer | null
   isCorrect?: boolean
   pointsAwarded?: number
@@ -72,7 +72,7 @@ function isQuestionAnswered(answer: LocalAnswer, question: AssessmentQuestion) {
   if (answer.type === "multiple-choice") {
     return typeof answer.value === "number" && answer.value !== -1
   }
-  if (answer.type === "text" || answer.type === "memory-verse") {
+  if (answer.type === "text" || answer.type === "memory-verse" || answer.type === "spelling") {
     return typeof answer.value === "string" && answer.value.trim() !== ""
   }
   if (answer.type === "ordered-list") {
@@ -616,6 +616,9 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
             {question.type === "memory-verse" && (
               <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded-full">Memory Scripture</span>
             )}
+            {question.type === "spelling" && (
+              <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Spelling</span>
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -682,6 +685,22 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               <div className="rounded-md bg-muted/50 p-3 text-sm text-muted-foreground">
                 Capital letters and punctuation do not affect your score. Spelling and word order must match exactly.
               </div>
+            </div>
+          )}
+
+          {question.type === "spelling" && (
+            <div className="space-y-2">
+              <Input
+                value={currentAnswer.value as string}
+                onChange={(e) => handleTextChange(currentQuestion, e.target.value)}
+                placeholder="Type one answer…"
+                autoComplete="off"
+                spellCheck={false}
+                aria-label="Spelling answer"
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter one answer. Capitalization does not affect your score; spelling and punctuation must match.
+              </p>
             </div>
           )}
 

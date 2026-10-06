@@ -20,6 +20,7 @@ const answerValidator = v.object({
     v.literal("file"),
     v.literal("ordered-list"),
     v.literal("memory-verse"),
+    v.literal("spelling"),
   ),
   value: v.union(v.number(), v.string(), v.array(v.string()), fileSubmissionValidator),
   isCorrect: v.optional(v.boolean()),
@@ -32,6 +33,14 @@ function normalizeAssessmentText(value: string) {
     .normalize("NFKC")
     .toLocaleLowerCase("en")
     .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function normalizeSpellingAnswer(value: string) {
+  return value
+    .normalize("NFKC")
+    .toLocaleLowerCase("en")
     .replace(/\s+/g, " ")
     .trim()
 }
@@ -129,6 +138,26 @@ export const submit = mutation({
             : ""
         const expected = normalizeAssessmentText(question.correctText ?? "")
         const isCorrect = expected.length > 0 && normalizeAssessmentText(value) === expected
+        return {
+          questionId: question.id,
+          type: question.type,
+          value,
+          isCorrect,
+          pointsAwarded: isCorrect ? question.points : 0,
+        }
+      }
+      if (question.type === "spelling") {
+        const value =
+          submitted?.type === "spelling" && typeof submitted.value === "string"
+            ? submitted.value
+            : ""
+        const expectedAnswers = question.correctAnswers ?? []
+        const normalizedValue = normalizeSpellingAnswer(value)
+        const isCorrect =
+          normalizedValue.length > 0 &&
+          expectedAnswers.some(
+            (answer) => normalizeSpellingAnswer(answer) === normalizedValue,
+          )
         return {
           questionId: question.id,
           type: question.type,
