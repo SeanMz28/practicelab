@@ -19,9 +19,9 @@ interface GradingInterfaceProps {
   attemptId: string
 }
 
-function displayOrderedAnswer(value: string, paired: boolean) {
+function displayOrderedAnswer(value: string | number, paired: boolean) {
   if (!paired) return value
-  const [thing = "", scripture = ""] = value.split("\t")
+  const [thing = "", scripture = ""] = String(value).split("\t")
   return `${thing || "Not answered"} — ${scripture || "Not answered"}`
 }
 
@@ -187,6 +187,11 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                           Spelling
                         </Badge>
                       )}
+                      {question.type === "multi-select" && (
+                        <Badge variant="outline" className="bg-sky-50">
+                          Pick {question.correctOptions?.length ?? 0}
+                        </Badge>
+                      )}
                       <span className="text-sm text-muted-foreground">{question.points} points</span>
                     </div>
                   </div>
@@ -235,6 +240,53 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                     </div>
                   )}
 
+                  {question.type === "multi-select" && (() => {
+                    const selected = Array.isArray(answer.value)
+                      ? answer.value.filter((item): item is number => typeof item === "number")
+                      : []
+                    const correctOptions = question.correctOptions ?? []
+                    return (
+                      <div className="space-y-2">
+                        {question.options?.map((option, optIndex) => {
+                          const isPicked = selected.includes(optIndex)
+                          const isCorrectOption = correctOptions.includes(optIndex)
+                          return (
+                            <div
+                              key={optIndex}
+                              className={`p-3 rounded-lg border-2 ${
+                                isPicked
+                                  ? isCorrectOption
+                                    ? "border-green-500 bg-green-50"
+                                    : "border-red-500 bg-red-50"
+                                  : isCorrectOption
+                                    ? "border-green-300 bg-green-50/50"
+                                    : "border-border"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span>{option}</span>
+                                {isPicked &&
+                                  (isCorrectOption ? (
+                                    <CheckCircle className="w-5 h-5 text-green-600" />
+                                  ) : (
+                                    <XCircle className="w-5 h-5 text-red-600" />
+                                  ))}
+                                {!isPicked && isCorrectOption && (
+                                  <span className="text-xs text-green-600 font-medium">Missed</span>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })}
+                        {question.explanation && (
+                          <p className="text-sm text-muted-foreground mt-2">
+                            <strong>Explanation:</strong> {question.explanation}
+                          </p>
+                        )}
+                      </div>
+                    )
+                  })()}
+
                   {question.type === "text" && (
                     <div className="bg-muted/50 p-4 rounded-lg">
                       <p className="whitespace-pre-wrap">{answer.value as string}</p>
@@ -259,7 +311,7 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                         <p className="whitespace-pre-wrap">{answer.value as string}</p>
                       </div>
                       <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
-                        <p className="text-sm font-semibold text-green-800 mb-1">Accepted spellings</p>
+                        <p className="text-sm font-semibold text-green-800 mb-1">Accepted answers</p>
                         <p className="whitespace-pre-wrap">{(question.correctAnswers ?? []).join("; ")}</p>
                       </div>
                     </div>

@@ -21,12 +21,110 @@ import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { LockStatusBadge } from "@/components/access/lock-status-badge"
+import { cn } from "@/lib/utils"
 
 type Question = Doc<"assessments">["questions"][number]
 type AssessmentWithAccess = Doc<"assessments"> & { passwordProtected: boolean }
 
 interface AssessmentsManagerProps {
   courseId: Id<"courses">
+}
+
+function multiSelectError(question: Partial<Question>) {
+  const options = question.options ?? []
+  const correctCount = question.correctOptions?.length ?? 0
+  if (options.length < 2) return "Please add at least two options"
+  if (options.some((option) => !option.trim())) return "Please fill in or remove empty options"
+  if (correctCount === 0) return "Please tick at least one correct option"
+  if (correctCount >= options.length) return "Please add at least one incorrect option"
+  return null
+}
+
+function MultiSelectOptionsEditor({
+  options,
+  correctOptions,
+  onChange,
+}: {
+  options: string[]
+  correctOptions: number[]
+  onChange: (next: { options: string[]; correctOptions: number[] }) => void
+}) {
+  const toggleCorrect = (index: number) =>
+    onChange({
+      options,
+      correctOptions: correctOptions.includes(index)
+        ? correctOptions.filter((item) => item !== index)
+        : [...correctOptions, index].sort((a, b) => a - b),
+    })
+  const updateOption = (index: number, value: string) =>
+    onChange({ options: options.map((option, i) => (i === index ? value : option)), correctOptions })
+  const removeOption = (index: number) =>
+    onChange({
+      options: options.filter((_, i) => i !== index),
+      correctOptions: correctOptions
+        .filter((item) => item !== index)
+        .map((item) => (item > index ? item - 1 : item)),
+    })
+
+  return (
+    <div className="space-y-2">
+      <Label>Options</Label>
+      <p className="text-xs text-muted-foreground">
+        Tick every correct option. Students must pick exactly that many and earn credit for each correct pick.
+      </p>
+      {options.map((option, index) => {
+        const isCorrect = correctOptions.includes(index)
+        return (
+          <div key={index} className="flex items-center gap-2">
+            <button
+              type="button"
+              role="checkbox"
+              aria-checked={isCorrect}
+              aria-label={`Mark option ${String.fromCharCode(65 + index)} as correct`}
+              onClick={() => toggleCorrect(index)}
+              className={cn(
+                "flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors",
+                isCorrect
+                  ? "border-green-600 bg-green-600 text-white"
+                  : "border-muted-foreground/40 hover:border-green-600",
+              )}
+            >
+              {isCorrect && <Check className="h-4 w-4" />}
+            </button>
+            <Input
+              placeholder={`Option ${index + 1}`}
+              value={option}
+              onChange={(e) => updateOption(index, e.target.value)}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              title="Remove option"
+              disabled={options.length <= 2}
+              onClick={() => removeOption(index)}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        )
+      })}
+      <div className="flex items-center justify-between">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onChange({ options: [...options, ""], correctOptions })}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Option
+        </Button>
+        <span className="text-xs text-muted-foreground">
+          {correctOptions.length} of {options.length} marked correct
+        </span>
+      </div>
+    </div>
+  )
 }
 
 export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
@@ -143,6 +241,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
     setQuestionDraft({
       ...q,
       options: q.options ? [...q.options] : ["", "", "", ""],
+      correctOptions: q.correctOptions ? [...q.correctOptions] : [],
       acceptedFileTypes: q.acceptedFileTypes ? [...q.acceptedFileTypes] : undefined,
     })
   }
@@ -173,8 +272,15 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       questionDraft.type === "spelling" &&
       !questionDraft.correctAnswers?.some((answer) => answer.trim())
     ) {
-      alert("Please enter at least one accepted spelling")
+      alert("Please enter at least one accepted answer")
       return
+    }
+    if (questionDraft.type === "multi-select") {
+      const error = multiSelectError(questionDraft)
+      if (error) {
+        alert(error)
+        return
+      }
     }
     const original = questions[editingQuestionIndex]
     const updated: Question = {
@@ -200,6 +306,11 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       }),
       ...(questionDraft.type === "spelling" && {
         correctAnswers: questionDraft.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
+      }),
+      ...(questionDraft.type === "multi-select" && {
+        options: questionDraft.options?.map((option) => option.trim()),
+        correctOptions: questionDraft.correctOptions,
+        explanation: questionDraft.explanation,
       }),
     }
     const next = [...questions]
@@ -260,8 +371,15 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       currentQuestion.type === "spelling" &&
       !currentQuestion.correctAnswers?.some((answer) => answer.trim())
     ) {
-      alert("Please enter at least one accepted spelling")
+      alert("Please enter at least one accepted answer")
       return
+    }
+    if (currentQuestion.type === "multi-select") {
+      const error = multiSelectError(currentQuestion)
+      if (error) {
+        alert(error)
+        return
+      }
     }
 
     const newQuestion: Question = {
@@ -287,6 +405,11 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       }),
       ...(currentQuestion.type === "spelling" && {
         correctAnswers: currentQuestion.correctAnswers?.map((answer) => answer.trim()).filter(Boolean),
+      }),
+      ...(currentQuestion.type === "multi-select" && {
+        options: currentQuestion.options?.map((option) => option.trim()),
+        correctOptions: currentQuestion.correctOptions,
+        explanation: currentQuestion.explanation,
       }),
     }
 
@@ -513,6 +636,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                     <SelectItem value="ordered-list">Ordered List</SelectItem>
                                     <SelectItem value="memory-verse">Memory Scripture</SelectItem>
                                     <SelectItem value="spelling">Spelling</SelectItem>
+                                    <SelectItem value="multi-select">Pick Several</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -660,12 +784,32 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 </div>
                               </div>
                             )}
+                            {questionDraft.type === "multi-select" && (
+                              <>
+                                <MultiSelectOptionsEditor
+                                  options={questionDraft.options ?? ["", "", "", ""]}
+                                  correctOptions={questionDraft.correctOptions ?? []}
+                                  onChange={({ options, correctOptions }) =>
+                                    setQuestionDraft({ ...questionDraft, options, correctOptions })
+                                  }
+                                />
+                                <div>
+                                  <Label>Explanation (Optional)</Label>
+                                  <Textarea
+                                    value={questionDraft.explanation ?? ""}
+                                    onChange={(e) =>
+                                      setQuestionDraft({ ...questionDraft, explanation: e.target.value })
+                                    }
+                                  />
+                                </div>
+                              </>
+                            )}
                             {questionDraft.type === "spelling" && (
                               <div>
-                                <Label>Accepted Spellings</Label>
+                                <Label>Accepted Answers</Label>
                                 <Textarea
                                   className="min-h-28"
-                                  placeholder={"color\ncolour"}
+                                  placeholder={"Joseph of Arimathea\nJoseph"}
                                   value={questionDraft.correctAnswers?.join("\n") ?? ""}
                                   onChange={(e) =>
                                     setQuestionDraft({
@@ -675,7 +819,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                   }
                                 />
                                 <p className="mt-1 text-xs text-muted-foreground">
-                                  Enter one accepted spelling per line. Capitalization is ignored; spelling and punctuation must match.
+                                  Enter one accepted answer per line, such as a full name and a short name. Capitalization is ignored; spelling and punctuation must match.
                                 </p>
                               </div>
                             )}
@@ -710,6 +854,21 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                   ))}
                                 </div>
                               )}
+                              {q.type === "multi-select" && (
+                                <div className="mt-2 space-y-1">
+                                  {q.options?.map((opt, i) => {
+                                    const isCorrect = q.correctOptions?.includes(i) ?? false
+                                    return (
+                                      <div key={i} className="text-xs flex items-center gap-2">
+                                        <span className={isCorrect ? "text-green-600 font-semibold" : ""}>
+                                          {String.fromCharCode(65 + i)}. {opt}
+                                        </span>
+                                        {isCorrect && <span className="text-green-600">(Correct)</span>}
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              )}
                               {q.type === "file" && q.acceptedFileTypes && q.acceptedFileTypes.length > 0 && (
                                 <p className="mt-2 text-xs text-muted-foreground">
                                   Accepts: {q.acceptedFileTypes.join(", ")}
@@ -726,7 +885,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                               )}
                               {q.type === "spelling" && q.correctAnswers && (
                                 <p className="mt-2 text-xs text-green-700">
-                                  Accepted spellings: {q.correctAnswers.join("; ")}
+                                  Accepted answers: {q.correctAnswers.join("; ")}
                                 </p>
                               )}
                               {q.explanation && (
@@ -806,6 +965,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                             <SelectItem value="ordered-list">Ordered List</SelectItem>
                             <SelectItem value="memory-verse">Memory Scripture</SelectItem>
                             <SelectItem value="spelling">Spelling</SelectItem>
+                            <SelectItem value="multi-select">Pick Several</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -954,13 +1114,33 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                         </div>
                       </div>
                     )}
+                    {currentQuestion.type === "multi-select" && (
+                      <>
+                        <MultiSelectOptionsEditor
+                          options={currentQuestion.options ?? ["", "", "", ""]}
+                          correctOptions={currentQuestion.correctOptions ?? []}
+                          onChange={({ options, correctOptions }) =>
+                            setCurrentQuestion({ ...currentQuestion, options, correctOptions })
+                          }
+                        />
+                        <div>
+                          <Label htmlFor="multi-select-explanation">Explanation (Optional)</Label>
+                          <Textarea
+                            id="multi-select-explanation"
+                            placeholder="Explain the correct answers"
+                            value={currentQuestion.explanation || ""}
+                            onChange={(e) => setCurrentQuestion({ ...currentQuestion, explanation: e.target.value })}
+                          />
+                        </div>
+                      </>
+                    )}
                     {currentQuestion.type === "spelling" && (
                       <div>
-                        <Label htmlFor="accepted-spellings">Accepted Spellings</Label>
+                        <Label htmlFor="accepted-spellings">Accepted Answers</Label>
                         <Textarea
                           id="accepted-spellings"
                           className="min-h-28"
-                          placeholder={"color\ncolour"}
+                          placeholder={"Joseph of Arimathea\nJoseph"}
                           value={currentQuestion.correctAnswers?.join("\n") ?? ""}
                           onChange={(e) =>
                             setCurrentQuestion({
@@ -970,7 +1150,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                           }
                         />
                         <p className="mt-1 text-xs text-muted-foreground">
-                          Enter one accepted spelling per line. Capitalization is ignored; spelling and punctuation must match.
+                          Enter one accepted answer per line, such as a full name and a short name. Capitalization is ignored; spelling and punctuation must match.
                         </p>
                       </div>
                     )}

@@ -18,9 +18,9 @@ interface AssessmentResultsProps {
   attemptId?: string
 }
 
-function displayOrderedAnswer(value: string, paired: boolean) {
+function displayOrderedAnswer(value: string | number, paired: boolean) {
   if (!paired) return value
-  const [thing = "", scripture = ""] = value.split("\t")
+  const [thing = "", scripture = ""] = String(value).split("\t")
   return `${thing || "Not answered"} — ${scripture || "Not answered"}`
 }
 
@@ -140,7 +140,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
             question.type === "multiple-choice" ||
             question.type === "memory-verse" ||
             question.type === "ordered-list" ||
-            question.type === "spelling"
+            question.type === "spelling" ||
+            question.type === "multi-select"
           const isCorrect = answer.isCorrect
 
           return (
@@ -197,6 +198,11 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                             Spelling
                           </Badge>
                         )}
+                        {question.type === "multi-select" && (
+                          <Badge variant="outline" className="bg-sky-50">
+                            Pick {question.correctOptions?.length ?? 0}
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -241,6 +247,48 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
+                {question.type === "multi-select" && question.options && (() => {
+                  const selected = Array.isArray(answer.value)
+                    ? answer.value.filter((item): item is number => typeof item === "number")
+                    : []
+                  const correctOptions = question.correctOptions ?? []
+                  return (
+                    <div className="space-y-2">
+                      {question.options.map((option, oIndex) => {
+                        const isUserAnswer = selected.includes(oIndex)
+                        const isCorrectAnswer = correctOptions.includes(oIndex)
+                        return (
+                          <div
+                            key={oIndex}
+                            className={`p-3 rounded-lg border-2 ${
+                              isCorrectAnswer
+                                ? "border-green-500 bg-green-50"
+                                : isUserAnswer
+                                  ? "border-red-500 bg-red-50"
+                                  : "border-border"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              {isCorrectAnswer && isUserAnswer && <CheckCircle2 className="w-4 h-4 text-green-600" />}
+                              {isUserAnswer && !isCorrectAnswer && <XCircle className="w-4 h-4 text-red-600" />}
+                              <span className={isCorrectAnswer ? "font-semibold" : ""}>{option}</span>
+                              {isUserAnswer && isCorrectAnswer && (
+                                <span className="ml-auto text-xs text-green-600 font-medium">Your pick · Correct</span>
+                              )}
+                              {isUserAnswer && !isCorrectAnswer && (
+                                <span className="ml-auto text-xs text-muted-foreground">Your pick</span>
+                              )}
+                              {!isUserAnswer && isCorrectAnswer && (
+                                <span className="ml-auto text-xs text-green-600 font-medium">Missed</span>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )
+                })()}
+
                 {question.type === "text" && (
                   <div>
                     <h4 className="font-semibold mb-2">Your Answer:</h4>
@@ -279,7 +327,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                     </div>
                     {!answer.isCorrect && (question.correctAnswers?.length ?? 0) > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-2 text-green-700">Accepted Spellings:</h4>
+                        <h4 className="font-semibold mb-2 text-green-700">Accepted Answers:</h4>
                         <ul className="list-disc list-inside rounded-lg border border-green-200 bg-green-50 p-4 space-y-1">
                           {question.correctAnswers?.map((item, index) => <li key={index}>{item}</li>)}
                         </ul>
@@ -342,7 +390,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                   </div>
                 )}
 
-                {question.explanation && question.type === "multiple-choice" && (
+                {question.explanation && (question.type === "multiple-choice" || question.type === "multi-select") && (
                   <div className="bg-muted/50 p-4 rounded-lg">
                     <p className="text-sm font-semibold mb-1">Explanation:</p>
                     <p className="text-sm text-muted-foreground">{question.explanation}</p>

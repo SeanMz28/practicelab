@@ -21,8 +21,9 @@ const answerValidator = v.object({
     v.literal("ordered-list"),
     v.literal("memory-verse"),
     v.literal("spelling"),
+    v.literal("multi-select"),
   ),
-  value: v.union(v.number(), v.string(), v.array(v.string()), fileSubmissionValidator),
+  value: v.union(v.number(), v.string(), v.array(v.string()), v.array(v.number()), fileSubmissionValidator),
   isCorrect: v.optional(v.boolean()),
   pointsAwarded: v.optional(v.number()),
   feedback: v.optional(v.string()),
@@ -166,10 +167,38 @@ export const submit = mutation({
           pointsAwarded: isCorrect ? question.points : 0,
         }
       }
+      if (question.type === "multi-select") {
+        const expected = question.correctOptions ?? []
+        const optionCount = question.options?.length ?? 0
+        const submittedValues =
+          submitted?.type === "multi-select" && Array.isArray(submitted.value)
+            ? submitted.value
+            : []
+        const value = [
+          ...new Set(
+            submittedValues.filter(
+              (item): item is number =>
+                typeof item === "number" && Number.isInteger(item) && item >= 0 && item < optionCount,
+            ),
+          ),
+        ].slice(0, expected.length)
+        const correctCount = value.filter((item) => expected.includes(item)).length
+        const isCorrect = expected.length > 0 && correctCount === expected.length
+        return {
+          questionId: question.id,
+          type: question.type,
+          value,
+          isCorrect,
+          pointsAwarded:
+            expected.length === 0
+              ? 0
+              : Math.round((correctCount / expected.length) * question.points * 100) / 100,
+        }
+      }
       if (question.type === "ordered-list") {
         const value =
           submitted?.type === "ordered-list" && Array.isArray(submitted.value)
-            ? submitted.value
+            ? submitted.value.filter((item): item is string => typeof item === "string")
             : []
         const expected = question.correctAnswers ?? []
         const unmatchedPairedAnswers = expected.map(normalizeAssessmentText)

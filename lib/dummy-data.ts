@@ -36,11 +36,12 @@ export interface Assessment {
 
 export interface Question {
   id: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling"
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select"
   question: string
   points: number
-  options?: string[] // For multiple-choice
+  options?: string[] // For multiple-choice and multi-select
   correctAnswer?: number // For multiple-choice
+  correctOptions?: number[] // For multi-select: indices of every option to pick
   correctText?: string // For memory scripture
   correctAnswers?: string[] // For ordered lists
   orderedListHint?: string // Optional prompt shown while entering ordered-list items
@@ -65,8 +66,8 @@ export interface AssessmentAttempt {
 
 export interface Answer {
   questionId: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling"
-  value: number | string | string[] | FileSubmission
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select"
+  value: number | string | string[] | number[] | FileSubmission
   isCorrect?: boolean // For auto-graded questions
   pointsAwarded?: number
   feedback?: string // Tutor feedback
@@ -1346,24 +1347,28 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     {
       id: "kog-q16",
       type: "spelling",
-      question: "Who asked Pilate for the body of Jesus? (Give his full name.)",
+      question: "Who asked Pilate for the body of Jesus?",
       points: 1,
-      correctAnswers: ["Joseph of Arimathea"],
+      correctAnswers: ["Joseph of Arimathea", "Joseph"],
       explanation:
         "Joseph of Arimathea asked for Jesus' body (Luke 23:50–52). He was waiting for the kingdom, which had not yet come.",
     },
     {
       id: "kog-q17",
-      type: "multiple-choice",
-      question: "What are the four clues about entering the kingdom in Luke 24:44–49?",
-      points: 1,
+      type: "multi-select",
+      question: "Pick the four clues about entering the kingdom in Luke 24:44–49.",
+      points: 4,
       options: [
-        "Repentance and forgiveness of sins in Jesus' name; to all nations; starting in Jerusalem; power from on high",
-        "Faith alone; to Israel only; starting in Rome; a sign in the sky",
-        "Keeping the Law; to all nations; starting in Galilee; a new temple",
-        "Prayer; fasting; giving; starting in Bethlehem",
+        "Repentance and forgiveness of sins in Jesus' name",
+        "Keeping the Law of Moses",
+        "Preached to all nations",
+        "Preached to Israel only",
+        "Starting in Jerusalem",
+        "Starting in Galilee",
+        "Power from on high",
+        "Rebuilding the temple",
       ],
-      correctAnswer: 0,
+      correctOptions: [0, 2, 4, 6],
       explanation:
         "After his resurrection, Jesus points to repentance and forgiveness in his name, preached to all nations, beginning at Jerusalem, with power from on high.",
     },
@@ -1384,16 +1389,18 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     },
     {
       id: "kog-q19",
-      type: "multiple-choice",
-      question: "What three essential truths (“keys”) does Peter preach in Acts 2:22–24?",
-      points: 1,
+      type: "multi-select",
+      question: "Pick the three essential truths (“keys”) Peter preaches in Acts 2:22–24.",
+      points: 3,
       options: [
-        "Jesus is from God; our sins put him on the cross; he rose from the dead",
-        "Jesus was a prophet; the Law saves us; the temple is holy",
-        "Jesus was born in Bethlehem; he performed miracles; he will return",
-        "Keep the Sabbath; give to the poor; pray daily",
+        "Jesus is from God",
+        "Jesus was only a prophet",
+        "Our sins put him on the cross",
+        "The Law of Moses saves us",
+        "He rose from the dead",
+        "He will set up an earthly throne",
       ],
-      correctAnswer: 0,
+      correctOptions: [0, 2, 4],
       explanation:
         "These are the truths we must believe before being born of water and the Spirit.",
     },
@@ -1408,16 +1415,20 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     },
     {
       id: "kog-q21",
-      type: "multiple-choice",
-      question: "According to Acts 2:42–47, what were the first-century disciples devoted to?",
-      points: 1,
+      type: "multi-select",
+      question: "According to Acts 2:42–47, pick the four things the first-century disciples were devoted to.",
+      points: 4,
       options: [
-        "The Bible (apostles' teaching), prayer, fellowship, and communion (breaking of bread)",
-        "The temple sacrifices, fasting, and the Sabbath",
-        "Their own interpretations and traditions",
-        "Building programs and church buildings",
+        "The Bible (the apostles' teaching)",
+        "Temple sacrifices",
+        "Prayer",
+        "Their own traditions",
+        "Fellowship",
+        "Keeping the Sabbath",
+        "Communion (the breaking of bread)",
+        "Building programs",
       ],
-      correctAnswer: 0,
+      correctOptions: [0, 2, 4, 6],
       explanation:
         "Acts 2:42 is the blueprint for the church: devotion to the Bible, prayer, fellowship, and the breaking of bread.",
     },

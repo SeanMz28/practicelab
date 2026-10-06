@@ -47,8 +47,8 @@ interface LocalFileAnswer {
 
 interface LocalAnswer {
   questionId: string
-  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling"
-  value: number | string | string[] | LocalFileAnswer | null
+  type: "multiple-choice" | "text" | "file" | "ordered-list" | "memory-verse" | "spelling" | "multi-select"
+  value: number | string | string[] | number[] | LocalFileAnswer | null
   isCorrect?: boolean
   pointsAwarded?: number
   feedback?: string
@@ -63,8 +63,8 @@ type AssessmentQuestion = Doc<"assessments">["questions"][number]
 
 const PAIRED_ANSWER_SEPARATOR = "\t"
 
-function splitPairedAnswer(value: string | undefined) {
-  const [thing = "", scripture = ""] = (value ?? "").split(PAIRED_ANSWER_SEPARATOR)
+function splitPairedAnswer(value: string | number | undefined) {
+  const [thing = "", scripture = ""] = (typeof value === "string" ? value : "").split(PAIRED_ANSWER_SEPARATOR)
   return { thing, scripture }
 }
 
@@ -89,8 +89,16 @@ function isQuestionAnswered(answer: LocalAnswer, question: AssessmentQuestion) {
     }
     return Array.isArray(answer.value) && expectedCount > 0 && answer.value.length === expectedCount
   }
+  if (answer.type === "multi-select") {
+    const requiredCount = question.correctOptions?.length ?? 0
+    return Array.isArray(answer.value) && requiredCount > 0 && answer.value.length === requiredCount
+  }
   if (answer.type === "file") return answer.value !== null
   return false
+}
+
+function hasShuffledOptions(question: AssessmentQuestion) {
+  return (question.type === "multiple-choice" || question.type === "multi-select") && !!question.options
 }
 
 function randomIndex(maxExclusive: number) {
@@ -130,7 +138,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
       value:
         q.type === "multiple-choice"
           ? -1
-          : q.type === "ordered-list"
+          : q.type === "ordered-list" || q.type === "multi-select"
             ? []
             : q.type === "file"
               ? null
@@ -139,7 +147,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
   )
   const [shuffledOrders, setShuffledOrders] = useState<number[][]>(() =>
     assessment.questions.map((q) =>
-      q.type === "multiple-choice" && q.options
+      hasShuffledOptions(q) && q.options
         ? Array.from({ length: q.options.length }, (_, index) => index)
         : [],
     ),
@@ -169,6 +177,21 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
 
   const handleMultipleChoiceChange = (questionIndex: number, value: number) => {
     setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
+  }
+
+  const handleMultiSelectToggle = (questionIndex: number, optionIndex: number) => {
+    const requiredCount = assessment.questions[questionIndex].correctOptions?.length ?? 0
+    setAnswers((prev) =>
+      prev.map((answer, index) => {
+        if (index !== questionIndex) return answer
+        const selected = Array.isArray(answer.value) ? (answer.value as number[]) : []
+        if (selected.includes(optionIndex)) {
+          return { ...answer, value: selected.filter((item) => item !== optionIndex) }
+        }
+        if (selected.length >= requiredCount) return answer
+        return { ...answer, value: [...selected, optionIndex] }
+      }),
+    )
   }
 
   const handleTextChange = (questionIndex: number, value: string) => {
@@ -417,7 +440,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
     }
 
     const nextOrders = assessment.questions.map((item, index) =>
-      item.type === "multiple-choice" && item.options
+      hasShuffledOptions(item) && item.options
         ? shuffleIndices(item.options.length, previousOrders[index])
         : [],
     )
@@ -619,6 +642,11 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
             {question.type === "spelling" && (
               <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Spelling</span>
             )}
+            {question.type === "multi-select" && (
+              <span className="text-xs px-2 py-1 bg-sky-100 text-sky-700 rounded-full">
+                Pick {question.correctOptions?.length ?? 0}
+              </span>
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -660,6 +688,82 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
               </div>
             </RadioGroup>
           )}
+
+          {question.type === "multi-select" && question.options && (() => {
+            const options = question.options
+            const requiredCount = question.correctOptions?.length ?? 0
+            const selected = Array.isArray(currentAnswer.value) ? (currentAnswer.value as number[]) : []
+            const isFull = selected.length >= requiredCount
+            return (
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/30 px-4 py-3">
+                  <p className="text-sm font-medium">
+                    {isFull ? "All picks made" : `Pick ${requiredCount - selected.length} more`}
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="flex gap-1.5" aria-hidden="true">
+                      {Array.from({ length: requiredCount }, (_, index) => (
+                        <span
+                          key={index}
+                          className={cn(
+                            "h-2 w-6 rounded-full transition-colors",
+                            index < selected.length ? "bg-primary" : "bg-muted-foreground/20",
+                          )}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm tabular-nums text-muted-foreground" aria-live="polite">
+                      {selected.length} of {requiredCount} selected
+                    </span>
+                  </div>
+                </div>
+                <div
+                  role="group"
+                  aria-label={`Select ${requiredCount} answers`}
+                  className="grid gap-3 sm:grid-cols-2"
+                >
+                  {(shuffledOrders[currentQuestion] ?? options.map((_, i) => i)).map((originalIndex) => {
+                    const isSelected = selected.includes(originalIndex)
+                    const isDisabled = isFull && !isSelected
+                    return (
+                      <button
+                        key={originalIndex}
+                        type="button"
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        disabled={isDisabled}
+                        onClick={() => handleMultiSelectToggle(currentQuestion, originalIndex)}
+                        className={cn(
+                          "flex min-h-14 items-center gap-3 rounded-lg border-2 p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                          isSelected
+                            ? "border-primary bg-primary/5 shadow-sm"
+                            : "border-border hover:border-primary/50 hover:bg-muted/40",
+                          isDisabled && "cursor-not-allowed opacity-50 hover:border-border hover:bg-transparent",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors",
+                            isSelected
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-muted-foreground/40",
+                          )}
+                        >
+                          {isSelected && <Check className="h-4 w-4" />}
+                        </span>
+                        <span className="text-sm leading-snug">{options[originalIndex]}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {isFull
+                    ? "Tap a selected answer to swap it for another."
+                    : `Choose ${requiredCount} answers. You earn credit for each correct pick.`}
+                </p>
+              </div>
+            )
+          })()}
 
           {question.type === "text" && (
             <div className="space-y-2">

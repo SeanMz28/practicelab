@@ -1,5 +1,5 @@
 import { v } from "convex/values"
-import { mutation } from "./_generated/server"
+import { internalMutation, mutation } from "./_generated/server"
 import type { Id } from "./_generated/dataModel"
 
 const questionValidator = v.object({
@@ -11,11 +11,13 @@ const questionValidator = v.object({
     v.literal("ordered-list"),
     v.literal("memory-verse"),
     v.literal("spelling"),
+    v.literal("multi-select"),
   ),
   question: v.string(),
   points: v.number(),
   options: v.optional(v.array(v.string())),
   correctAnswer: v.optional(v.number()),
+  correctOptions: v.optional(v.array(v.number())),
   correctText: v.optional(v.string()),
   correctAnswers: v.optional(v.array(v.string())),
   orderedListHint: v.optional(v.string()),
@@ -199,5 +201,30 @@ export const ensureCourseWithNote = mutation({
       courseId,
     })
     return { courseId, noteId, created: true }
+  },
+})
+
+// Seeding never overwrites an existing assessment, so use this from the CLI to push edited
+// seed questions to a deployment, e.g. `npx convex run --prod seed:replaceAssessmentQuestions`.
+export const replaceAssessmentQuestions = internalMutation({
+  args: {
+    courseCode: v.string(),
+    title: v.string(),
+    questions: v.array(questionValidator),
+  },
+  handler: async (ctx, args) => {
+    const allCourses = await ctx.db.query("courses").collect()
+    const course = allCourses.find((c) => c.code === args.courseCode)
+    if (!course) throw new Error(`Course ${args.courseCode} not found`)
+
+    const assessments = await ctx.db
+      .query("assessments")
+      .withIndex("by_courseId", (q) => q.eq("courseId", course._id))
+      .collect()
+    const assessment = assessments.find((a) => a.title === args.title)
+    if (!assessment) throw new Error(`Assessment "${args.title}" not found in ${args.courseCode}`)
+
+    await ctx.db.patch(assessment._id, { questions: args.questions })
+    return { assessmentId: assessment._id, questionCount: args.questions.length }
   },
 })
