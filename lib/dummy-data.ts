@@ -1173,13 +1173,27 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
   createdAt: "2026-10-06T10:00:00Z",
   questions: [
     {
+      id: "kog-purpose",
+      type: "multiple-choice",
+      question: "What is the purpose of The Coming of the Kingdom study?",
+      points: 1,
+      options: [
+        "To predict when the world will end",
+        "To trace the history of the Roman Empire",
+        "To discover the purpose for God's kingdom on earth",
+        "To memorize the kings of Israel and Judah",
+      ],
+      correctAnswer: 2,
+      explanation: "The study's stated purpose is to discover the purpose for God's kingdom on earth.",
+    },
+    {
       id: "kog-q1",
       type: "multiple-choice",
       question: "According to the study, what is the kingdom of God?",
       points: 1,
       options: [
         "A future political kingdom based in Jerusalem",
-        "The church — God's kingdom on earth",
+        "The church",
         "A feeling of peace inside each believer",
         "The nation of Israel at the height of King David's reign",
       ],
@@ -1214,11 +1228,11 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     {
       id: "kog-q4",
       type: "matching",
-      question: "Daniel 2 statue: drag each part of the statue onto the kingdom it represents.",
+      question: "Daniel 2 statue: drag each kingdom onto the part of the statue it matches.",
       points: 4,
-      matchPrompts: ["Greece", "Babylon", "Rome", "Medo-Persia"],
-      options: ["Head of gold", "Chest and arms of silver", "Belly and thighs of bronze", "Legs of iron and feet of clay"],
-      correctMatches: [2, 0, 3, 1],
+      matchPrompts: ["Belly and thighs of bronze", "Head of gold", "Legs of iron and feet of clay", "Chest and arms of silver"],
+      options: ["Greece", "Babylon", "Rome", "Medo-Persia"],
+      correctMatches: [0, 1, 2, 3],
       explanation:
         "Gold is Babylon (605–539 B.C.), silver is Medo-Persia (539–331 B.C.), bronze is Greece (331–63 B.C.), and iron and clay is Rome (63 B.C.–476 A.D.). God's kingdom strikes the statue at the feet.",
     },
@@ -1228,7 +1242,7 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
       question: "What does the rock that strikes the statue and becomes a huge mountain represent in Daniel 2?",
       points: 1,
       options: [
-        "God's kingdom, set up during the Roman reign",
+        "God's kingdom",
         "The Babylonian army",
         "The return of Israel from exile",
         "The Greek empire under Alexander",
@@ -1264,18 +1278,16 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     {
       id: "kog-q8",
       type: "spelling",
-      question: "“Peter” in the Greek is a word that means “small stone.” Spell that Greek word.",
+      question: 'What is the  Greek word for Peter, which means "small stone"?',
       points: 1,
       correctAnswers: ["petros"],
-      explanation: "“Peter” is petros, a small stone.",
     },
     {
       id: "kog-q9",
       type: "spelling",
-      question: "“Rock” in the Greek is a word that means “large foundational rock.” Spell that Greek word.",
+      question: "What is the Greek word that means “large foundational rock”?",
       points: 1,
       correctAnswers: ["petra"],
-      explanation: "“Rock” is petra, a large foundational rock.",
     },
     {
       id: "kog-q10",
@@ -1289,10 +1301,9 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
     {
       id: "kog-q11",
       type: "spelling",
-      question: "Spell the Greek word that is translated “church.”",
+      question: "What is the Greek word for “church”",
       points: 1,
       correctAnswers: ["ekklesia", "ecclesia"],
-      explanation: "“Church” is ekklesia in the Greek.",
     },
     {
       id: "kog-q12",
@@ -1383,7 +1394,7 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
       options: [
         "At Jesus' birth",
         "At Jesus' death on the cross",
-        "On the day of Pentecost in Acts 2 (about 30 A.D.)",
+        "On the day of Pentecost",
         "It has not come yet",
       ],
       correctAnswer: 2,
@@ -1422,13 +1433,13 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
       question: "According to Acts 2:42–47, pick the four things the first-century disciples were devoted to.",
       points: 4,
       options: [
-        "The Bible (the apostles' teaching)",
+        "The apostles' teaching",
         "Temple sacrifices",
         "Prayer",
         "Their own traditions",
         "Fellowship",
         "Keeping the Sabbath",
-        "Communion (the breaking of bread)",
+        "The breaking of bread",
         "Building programs",
       ],
       correctOptions: [0, 2, 4, 6],
