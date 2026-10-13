@@ -24,6 +24,16 @@ function displayOrderedAnswer(value: string | number, paired: boolean) {
   return `${thing || "Not answered"} — ${scripture || "Not answered"}`
 }
 
+// Mirrors the server's ordered-list grading, which ignores case and punctuation.
+function normalizeOrderedAnswer(value: string | number) {
+  return String(value)
+    .normalize("NFKC")
+    .toLocaleLowerCase("en")
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 export function AssessmentResults({ courseId, assessmentId, attemptId }: AssessmentResultsProps) {
   const convex = useConvex()
   const attempt = useQuery(
@@ -384,9 +394,25 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                     <div>
                       <h4 className="font-semibold mb-2">Your Answer:</h4>
                       <ol className="list-decimal list-inside rounded-lg bg-muted/50 p-4 space-y-1">
-                        {(Array.isArray(answer.value) ? answer.value : []).map((item, index) => (
-                          <li key={index}>{displayOrderedAnswer(item, question.answerLayout === "paired")}</li>
-                        ))}
+                        {(Array.isArray(answer.value) ? answer.value : []).map((item, index) => {
+                          const isPaired = question.answerLayout === "paired"
+                          const expected = question.correctAnswers?.[index]
+                          const isMisplaced =
+                            !isPaired &&
+                            (expected === undefined ||
+                              normalizeOrderedAnswer(item) !== normalizeOrderedAnswer(expected))
+                          return (
+                            <li key={index} className={isMisplaced ? "text-red-700" : undefined}>
+                              {displayOrderedAnswer(item, isPaired)}
+                              {isMisplaced && (
+                                <>
+                                  <XCircle className="ml-1 inline h-4 w-4 align-text-bottom" aria-hidden="true" />
+                                  <span className="sr-only"> (wrong position)</span>
+                                </>
+                              )}
+                            </li>
+                          )
+                        })}
                       </ol>
                     </div>
                     <div>

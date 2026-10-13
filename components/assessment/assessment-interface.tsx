@@ -29,6 +29,7 @@ import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
 import { MatchingQuestion } from "@/components/assessment/matching-question"
+import { ReorderableListQuestion } from "@/components/assessment/reorderable-list-question"
 import {
   Dialog,
   DialogContent,
@@ -210,6 +211,10 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
   }
 
   const handleMatchingChange = (questionIndex: number, value: number[]) => {
+    setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
+  }
+
+  const handleReorderableListChange = (questionIndex: number, value: string[]) => {
     setAnswers((prev) => prev.map((a, i) => (i === questionIndex ? { ...a, value } : a)))
   }
 
@@ -844,6 +849,18 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           {question.type === "ordered-list" && (() => {
             const expected = question.correctAnswers ?? []
             const completed = Array.isArray(currentAnswer.value) ? currentAnswer.value : []
+            if (question.answerLayout === "reorderable") {
+              return (
+                <ReorderableListQuestion
+                  key={question.id}
+                  questionId={question.id}
+                  items={expected}
+                  value={completed as string[]}
+                  onChange={(value) => handleReorderableListChange(currentQuestion, value)}
+                  placeholder={question.orderedListHint?.trim() || "Type the next item…"}
+                />
+              )
+            }
             if (question.answerLayout === "paired") {
               return (
                 <div className="space-y-4">

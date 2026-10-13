@@ -47,7 +47,7 @@ export interface Question {
   correctText?: string // For memory scripture
   correctAnswers?: string[] // For ordered lists
   orderedListHint?: string // Optional prompt shown while entering ordered-list items
-  answerLayout?: "paired" // Show each ordered-list answer as a pair of fields
+  answerLayout?: "paired" | "reorderable" // Ordered lists: answer in pairs of fields, or add items in any order and rearrange them
   explanation?: string
   acceptedFileTypes?: string[] // For file uploads
 }
@@ -679,6 +679,214 @@ Memorize all **39 books of the Old Testament in order**:
 `,
     createdAt: "2026-10-06T10:00:00Z",
     updatedAt: "2026-10-06T10:00:00Z",
+  },
+  {
+    id: "sin-and-repentance-notes",
+    courseId: "8",
+    title: "Sin and Repentance",
+    content: `# Sin and Repentance
+
+> **Purpose:** To display our love of God by understanding why we need to hate sin and repent of it. Adapted from the supplied *Sin & Repentance* study notes and First Principles class.
+
+## Sin
+
+### Isaiah 59:1–2
+
+- “Sin” is an archery term that means to **miss the mark**. Jesus' standard is the bullseye.
+- The Lord's arm is not too short to save, nor his ear too dull to hear. **Our sins separate us from God.**
+- **The wall:** sin is a wall between man, in darkness, and God, in the light.
+- **The curtain illustration:** curtains drawn over a sunny window darken the room, not because the sun has been destroyed but because we have shut out its light. Sin does not weaken God's power to save; we separate ourselves from him.
+- **Discuss:** Are you in darkness or in the light right now? How do you know?
+
+### Romans 3:23
+
+- All have sinned and fall short of the glory of God.
+- Who has sinned against God? **Everyone**, no matter how “small” a sin may seem.
+- Most people consider themselves good people. We compare ourselves with the worst people in history, or assume God ranks sins the way courts rank crimes. But the standard is Jesus, and we all fall short of it.
+
+**Person A, Person B, and Person C** have piles of sin of different sizes, but all three stand on the same side of the wall, cut off from the glory of God.
+
+- Which person is further from God: a person who sins a little or a lot? **Neither. Sin is sin, and both fall short.**
+- **The hole illustration:** if a hole is 100 km wide, a person who jumps 10 km and a person who jumps 99.9 km both fall in. Our moral efforts fall short; we need Jesus to bridge the gap.
+- A good moral life doesn't save you, because **salvation cannot be earned through your deeds**.
+
+### Galatians 5:19–21
+
+The acts of the sinful nature are obvious: sexual immorality, impurity and debauchery; idolatry and witchcraft; hatred, discord, jealousy, fits of rage, selfish ambition, dissensions, factions and envy; drunkenness, orgies, and the like. Paul warns that those who live like this will not inherit the kingdom of God.
+
+**Sin definitions (Appendix A):**
+
+- **Sexual Immorality** (*porneía*): To commit sexual intercourse or any sexual sin outside of marriage.
+- **Impurity** (*akatharsía*): Uncleanness or filth in a natural or physical sense; moral uncleanness, lewdness, any unnatural pollution, whether acted out by oneself (masturbation), or with another (petting, oral sex).
+- **Debauchery** (*asélgeia*): Lack of self-control which involves one's behaviour (overindulgence; food, sleep, etc.)
+- **Idolatry** (*eidololatreía*): Worshipping anything other than God (career, school, pleasure, sports).
+- **Witchcraft** (*pharmakeía*): The occult, sorcery, witchcraft, illicit pharmaceuticals, trance, magical incantation with drugs.
+- **Hatred** (*échthra*): Being hostile. Animosity towards others.
+- **Discord** (*éris*): Rivalry or a lack of harmony between people.
+- **Jealousy** (*zelos*): Grief and desire because you do not have what someone else has.
+- **Fits of Rage** (*thumós*): A state of intense displeasure, anger, wrath, rage, indignation.
+- **Selfish Ambition** (*eritheía*): Strife and rivalry because of selfish motives.
+- **Dissension** (*dichostasía*): A separate faction; division between people.
+- **Factions** (*haíresis*): Creating a separation between people because of a different opinion.
+- **Envy** (*phthónos*): Pain and bitterness felt at the sight of another's excellence or happiness.
+- **Drunkenness** (*méthe*): Excess intake of alcohol.
+- **Orgies** (*komos*): Living without restraint. Partying.
+
+**From the class:** Paul's lists of sins usually begin with sexual sin, which shows how serious it is, however much the world minimises it. Anger itself is not sin (“In your anger do not sin,” Ephesians 4:26), and ambition is not wrong (Romans 15:20); the sins are fits of rage and selfish ambition.
+
+**“And the like”:** the list is not exhaustive. Lying, cheating, murder, and theft also miss the mark.
+
+**“Those who live like this”:** Paul means a person who knows their sin and keeps living in it, even if they come to church.
+
+Paul follows this list with the fruit of the Spirit: love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, and self-control (verses 22–23). Satan teaches us to look for love, joy, and peace through the acts of the sinful nature; God gives them through his Spirit.
+
+- **Discuss:** Which of these sins do you need to repent of today?
+
+### 2 Timothy 3:1–5
+
+- These are **sins of the heart**. Some sins are blatant; others are more deceitful.
+- People will be lovers of themselves, lovers of money, boastful, proud, abusive, disobedient to their parents, ungrateful, unholy, without love, unforgiving, slanderous, without self-control, brutal, not lovers of the good, treacherous, rash, conceited, lovers of pleasure rather than lovers of God.
+- **Having a form of godliness but denying its power:** looking godly on the outside while living in sin, like a worship leader who spent the night before at a club. Paul says to have nothing to do with such people, and that begins with separating ourselves from these sins.
+- **Discuss:** Which of these sins do you need to repent of?
+
+### James 4:17
+
+- Knowing what is right and not doing it is also sin: the **sin of omission**.
+- With knowledge of God's Word comes responsibility to obey it. Once you understand what it means to be a disciple, choosing not to become one is sin.
+- **Discuss:** Do you need to repent of this?
+
+### James 5:16
+
+- We are called to **confess our sins to one another**, not only to a priest, and to pray for each other so that we may be healed.
+- Getting open brings sin into the light. Sometimes we need someone objective to point out sin we did not recognise.
+- Prayer is powerful and effective.
+
+### Romans 6:23
+
+- A **wage** is what you have earned, not a wager or bet. When we sin, we earn eternal death: separation from God.
+- A **gift** is unearned and free. What does God want to give you? **The gift of eternal life!**
+- **Wages of sin:** death, hell, darkness.
+- **Gift of God:** eternal life, heaven, light.
+
+## Repentance
+
+### 2 Corinthians 7:8–11
+
+- You cannot repent without having **godly sorrow**. What are the characteristics of godly sorrow?
+- **Worldly sorrow** is self-centred, such as embarrassment or shame at being found out, and it brings death. **Godly sorrow** is centred on God and brings repentance that leads to salvation and leaves no regret.
+- Godly sorrow produces earnestness, eagerness to clear yourselves, indignation, alarm, longing, concern, and readiness to see justice done (verse 11). Negotiating, debating, making excuses, and shifting blame are signs of worldly sorrow.
+- The answer to sin is repentance. The Greek word is ***metanoia***, a **change of mind**: we no longer see sin as something we want, but as something to flee and be rescued from.
+- A change of mind should lead to a change in actions.
+
+### Luke 13:1–5
+
+- First-century Jews believed disasters were divine punishment for personal sins. Jesus rejected this view: the Galileans killed by Pilate and the eighteen who died when the tower in Siloam fell were no worse sinners than anyone else. We are all sinners!
+- Unless a person repents, they are in peril of eternal condemnation, not just physical death. **We must repent, or we will perish!**
+
+### Colossians 3:5–10
+
+- **Put to death** whatever belongs to your earthly nature: sexual immorality, impurity, lust, evil desires, and greed, which is idolatry. Rid yourself of anger, rage, malice, slander, filthy language, and lying.
+- The wrath of God is coming, so break free from sin's slavery!
+- Putting sin to death is practical: get rid of whatever you have used to sin, and cut off whoever you have been sinning with.
+- **Discuss:** Are you ready to put these sins to death once and for all?
+
+### Matthew 5:27–30
+
+- Anyone who looks at a woman lustfully has already committed adultery with her in his heart.
+- “Gouge out your eye” and “cut off your hand” are not calls to harm our bodies. We must be **radical** in removing the things that cause us to sin.
+- Repentance is not just external behaviour modification. The goal is a **heart transformation** that overflows into new attitudes and actions.
+
+### Acts 26:20
+
+- We **prove our repentance by our deeds**!
+- One student, after getting open about his drug use, asked the brothers studying with him to come home with him that night, where he threw out all his drugs and paraphernalia. That was his plan of repentance, proven by his deeds.
+- **Discuss:** What is your plan to repent of the sins in your life?
+
+> **Challenge:** Have a clear plan of repentance — addressing both sins of commission and omission. It may be helpful to write out a personal sin list to clear your conscience and come into the light by confessing your sins. (This should remain a highly confidential process between those studying the Bible.)
+
+## Memory scriptures (NIV)
+
+- **John 15:8:** “This is to my Father's glory, that you bear much fruit, showing yourselves to be my disciples.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AJohn+15%3A8))
+- **Matthew 22:37–39:** Jesus replied: “‘Love the Lord your God with all your heart and with all your soul and with all your mind.’ This is the first and greatest commandment. And the second is like it: ‘Love your neighbor as yourself.’” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AMatthew+22%3A37%E2%80%9339))
+
+## Books of the Bible: Genesis through Revelation
+
+Memorize all **66 books of the Bible in order**: the 39 books of the Old Testament and the 27 books of the New Testament.
+
+### Old Testament: Genesis through Malachi
+
+1. Genesis
+2. Exodus
+3. Leviticus
+4. Numbers
+5. Deuteronomy
+6. Joshua
+7. Judges
+8. Ruth
+9. 1 Samuel
+10. 2 Samuel
+11. 1 Kings
+12. 2 Kings
+13. 1 Chronicles
+14. 2 Chronicles
+15. Ezra
+16. Nehemiah
+17. Esther
+18. Job
+19. Psalms
+20. Proverbs
+21. Ecclesiastes
+22. Song of Songs
+23. Isaiah
+24. Jeremiah
+25. Lamentations
+26. Ezekiel
+27. Daniel
+28. Hosea
+29. Joel
+30. Amos
+31. Obadiah
+32. Jonah
+33. Micah
+34. Nahum
+35. Habakkuk
+36. Zephaniah
+37. Haggai
+38. Zechariah
+39. Malachi
+
+### New Testament: Matthew through Revelation
+
+1. Matthew
+2. Mark
+3. Luke
+4. John
+5. Acts
+6. Romans
+7. 1 Corinthians
+8. 2 Corinthians
+9. Galatians
+10. Ephesians
+11. Philippians
+12. Colossians
+13. 1 Thessalonians
+14. 2 Thessalonians
+15. 1 Timothy
+16. 2 Timothy
+17. Titus
+18. Philemon
+19. Hebrews
+20. James
+21. 1 Peter
+22. 2 Peter
+23. 1 John
+24. 2 John
+25. 3 John
+26. Jude
+27. Revelation
+`,
+    createdAt: "2026-10-13T10:00:00Z",
+    updatedAt: "2026-10-13T10:00:00Z",
   },
 ]
 
@@ -1530,10 +1738,422 @@ const comingOfTheKingdomStudyQuiz: Assessment = {
   ],
 }
 
+const sinAndRepentanceStudyQuiz: Assessment = {
+  id: "sin-and-repentance-study-quiz",
+  courseId: "8",
+  title: "Sin and Repentance Study Quiz",
+  description:
+    "Review the Sin and Repentance study, recite John 15:8 and Matthew 22:37–39 (NIV), and put Genesis through Revelation in order.",
+  type: "quiz",
+  timeLimit: 55,
+  createdAt: "2026-10-13T10:00:00Z",
+  questions: [
+    {
+      id: "sr-purpose",
+      type: "multiple-choice",
+      question: "What is the purpose of the Sin and Repentance study?",
+      points: 1,
+      options: [
+        "To rank sins from the least serious to the most serious",
+        "To show that good deeds can make up for our sins",
+        "To display our love of God by understanding why we need to hate sin and repent of it",
+        "To learn how the early church practised confession",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "The study's stated purpose is to display our love of God by understanding why we need to hate sin and repent of it.",
+    },
+    {
+      id: "sr-q1",
+      type: "multiple-choice",
+      question: "“Sin” is an archery term. What does it mean?",
+      points: 1,
+      options: ["To miss the mark", "To break a promise", "To lose your way", "To cross a line"],
+      correctAnswer: 0,
+      explanation: "Sin means to miss the mark. Jesus' standard is the bullseye.",
+    },
+    {
+      id: "sr-q2",
+      type: "multiple-choice",
+      question: "According to Isaiah 59:1–2, why does God not hear?",
+      points: 1,
+      options: [
+        "His arm is too short to save",
+        "His ear is too dull to hear",
+        "Our sins have separated us from him",
+        "He has stopped caring about people",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "God's power is not the problem; our sins separate us from him. Like curtains drawn over a sunny window, sin shuts out his light without weakening it.",
+    },
+    {
+      id: "sr-q3",
+      type: "multiple-choice",
+      question: "Many people judge whether they are good by comparing themselves with others. According to the study, what is the standard?",
+      points: 1,
+      options: [
+        "The worst people in history",
+        "Our own conscience",
+        "The laws of our country",
+        "Jesus",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "We tend to compare ourselves with the worst people in history, or assume God ranks sins the way courts rank crimes. Jesus is the bullseye, and we all fall short of him.",
+    },
+    {
+      id: "sr-q4",
+      type: "multiple-choice",
+      question:
+        "Romans 3:23 says all have sinned and fall short of the glory of God. Which person is further from God: a person who sins a little or a lot?",
+      points: 1,
+      options: [
+        "The person who sins a lot",
+        "Neither; both fall short of the glory of God",
+        "It depends on how much their sin hurts others",
+        "It depends on how often they go to church",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Sin is sin. If a hole is 100 km wide, someone who jumps 10 km and someone who jumps 99.9 km both fall in. A good moral life doesn't save us, because salvation cannot be earned through our deeds; we need Jesus to bridge the gap.",
+    },
+    {
+      id: "sr-q5",
+      type: "matching",
+      question: "Galatians 5:19–20: drag each sin onto its definition.",
+      points: 5,
+      matchPrompts: [
+        "Worshipping anything other than God (career, school, pleasure, sports).",
+        "To commit sexual intercourse or any sexual sin outside of marriage.",
+        "Being hostile. Animosity towards others.",
+        "Lack of self-control which involves one's behaviour (overindulgence; food, sleep, etc.)",
+        "Uncleanness or filth in a natural or physical sense; moral uncleanness, lewdness, any unnatural pollution, whether acted out by oneself (masturbation), or with another (petting, oral sex).",
+      ],
+      options: ["Idolatry", "Sexual immorality", "Hatred", "Debauchery", "Impurity"],
+      correctMatches: [0, 1, 2, 3, 4],
+      explanation:
+        "These are the Appendix A definitions. The Greek words are porneía (sexual immorality), akatharsía (impurity), asélgeia (debauchery), eidololatreía (idolatry), and échthra (hatred).",
+    },
+    {
+      id: "sr-q6",
+      type: "spelling",
+      question: "What is the Greek word for “witchcraft” in Galatians 5:20, which also refers to drugs?",
+      points: 1,
+      correctAnswers: ["pharmakeia", "pharmakeía", "pharmakia"],
+    },
+    {
+      id: "sr-q7",
+      type: "matching",
+      question: "Galatians 5:20–21: drag each sin onto its definition.",
+      points: 5,
+      matchPrompts: [
+        "Grief and desire because you do not have what someone else has.",
+        "Creating a separation between people because of a different opinion.",
+        "Pain and bitterness felt at the sight of another's excellence or happiness.",
+        "Rivalry or a lack of harmony between people.",
+        "Living without restraint. Partying.",
+      ],
+      options: ["Jealousy", "Factions", "Envy", "Discord", "Orgies"],
+      correctMatches: [0, 1, 2, 3, 4],
+      explanation:
+        "These are the Appendix A definitions. The Greek words are éris (discord), zelos (jealousy), haíresis (factions), phthónos (envy), and komos (orgies).",
+    },
+    {
+      id: "sr-q8",
+      type: "multiple-choice",
+      question: "According to the study, when does anger become sin?",
+      points: 1,
+      options: [
+        "Whenever we feel angry, even for a moment",
+        "Only when someone is physically hurt",
+        "When it becomes intense displeasure, wrath, and rage",
+        "Never, as long as we have a good reason",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Anger itself is not sin: “In your anger do not sin” (Ephesians 4:26). The sin is fits of rage (thumós): a state of intense displeasure, anger, wrath, rage, indignation.",
+    },
+    {
+      id: "sr-q9",
+      type: "multiple-choice",
+      question:
+        "Galatians 5:21 warns that “those who live like this will not inherit the kingdom of God.” Who is Paul describing?",
+      points: 1,
+      options: [
+        "Anyone who has ever had a sinful thought",
+        "Someone who knows their sin and keeps living in it",
+        "Someone who has never been to church",
+        "Anyone whose sin has been found out",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Paul means a person who knows their sin and continues in it, even if they come to church. The list ends with “and the like”: lying, cheating, murder, and theft also miss the mark.",
+    },
+    {
+      id: "sr-q10",
+      type: "multi-select",
+      question: "Pick the four sins of the heart listed in 2 Timothy 3:2–5.",
+      points: 4,
+      options: [
+        "Lovers of money",
+        "Witchcraft",
+        "Ungrateful",
+        "Orgies",
+        "Unforgiving",
+        "Factions",
+        "Conceited",
+        "Sexual immorality",
+      ],
+      correctOptions: [0, 2, 4, 6],
+      explanation:
+        "Galatians 5 lists obvious acts of the sinful nature. 2 Timothy 3 lists sins of the heart, some blatant and others more deceitful: lovers of themselves, lovers of money, boastful, proud, abusive, disobedient to their parents, ungrateful, unholy, without love, unforgiving, slanderous, without self-control, brutal, not lovers of the good, treacherous, rash, conceited, and lovers of pleasure rather than lovers of God.",
+    },
+    {
+      id: "sr-q11",
+      type: "multiple-choice",
+      question: "What does “having a form of godliness but denying its power” (2 Timothy 3:5) describe?",
+      points: 1,
+      options: [
+        "Being too shy to talk about God",
+        "Reading the Bible without understanding it",
+        "Praying only in private",
+        "Looking godly on the outside while living in sin",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "Like a worship leader who spent the night before at a club, it is looking godly while living in sin. Paul says to have nothing to do with such people, which begins with separating ourselves from these sins.",
+    },
+    {
+      id: "sr-q12",
+      type: "multiple-choice",
+      question: "According to James 4:17, what is it when someone knows the good they ought to do and doesn't do it?",
+      points: 1,
+      options: [
+        "A mistake, but not a sin",
+        "The sin of commission",
+        "The sin of omission",
+        "Only a sin for church leaders",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Knowing what is right and not doing it is the sin of omission. With knowledge of God's Word comes the responsibility to obey it.",
+    },
+    {
+      id: "sr-q13",
+      type: "multiple-choice",
+      question: "According to James 5:16, what should we do so that we may be healed?",
+      points: 1,
+      options: [
+        "Confess our sins only to a priest",
+        "Keep our sins between ourselves and God",
+        "Wait until our sins are found out",
+        "Confess our sins to each other and pray for each other",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "We are called to confess our sins to one another and pray for each other. Getting open brings sin into the light, and prayer is powerful and effective.",
+    },
+    {
+      id: "sr-q14",
+      type: "multiple-choice",
+      question: "In Romans 6:23, what is the difference between the wages of sin and the gift of God?",
+      points: 1,
+      options: [
+        "Death is what our sin has earned; eternal life is a free gift we cannot earn",
+        "Death is a gamble we take each time we sin; eternal life is the prize",
+        "Death comes only to the worst sinners; eternal life comes to everyone else",
+        "Both death and eternal life are earned by our deeds",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "A wage is earned and owed, not a wager or bet. Our sin earns death, eternal separation from God. The gift of God is unearned and free: eternal life in Christ Jesus our Lord.",
+    },
+    {
+      id: "sr-q15",
+      type: "multiple-choice",
+      question: "According to the study, what is the difference between worldly sorrow and godly sorrow?",
+      points: 1,
+      options: [
+        "Worldly sorrow lasts longer than godly sorrow",
+        "Worldly sorrow is self-centred; godly sorrow is centred on God",
+        "Godly sorrow is embarrassment at being found out",
+        "There is no real difference between them",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Worldly sorrow is self-centred, such as shame at being found out, and brings death. Godly sorrow is centred on God and brings repentance that leads to salvation and leaves no regret (2 Corinthians 7:10).",
+    },
+    {
+      id: "sr-q16",
+      type: "multi-select",
+      question: "According to 2 Corinthians 7:11, pick the four things godly sorrow produces.",
+      points: 4,
+      options: [
+        "Earnestness",
+        "Embarrassment at being found out",
+        "Eagerness to clear yourselves",
+        "Blaming others",
+        "Alarm",
+        "Making excuses",
+        "Readiness to see justice done",
+        "Negotiating over what counts as sin",
+      ],
+      correctOptions: [0, 2, 4, 6],
+      explanation:
+        "Godly sorrow produces earnestness, eagerness to clear yourselves, indignation, alarm, longing, concern, and readiness to see justice done. Negotiating, excuses, and blame-shifting are signs of worldly sorrow.",
+    },
+    {
+      id: "sr-q17",
+      type: "spelling",
+      question: "What is the Greek word for “repentance”?",
+      points: 1,
+      correctAnswers: ["metanoia"],
+    },
+    {
+      id: "sr-q18",
+      type: "multiple-choice",
+      question: "In the Greek, what does the word for “repentance” mean?",
+      points: 1,
+      options: ["A feeling of regret", "A sorrowful heart", "A change of mind", "A promise to try harder"],
+      correctAnswer: 2,
+      explanation:
+        "Repentance (metanoia) is a change of mind: we no longer see sin as something we want, but as something to flee. A change of mind should lead to a change in actions.",
+    },
+    {
+      id: "sr-q19",
+      type: "multiple-choice",
+      question:
+        "In Luke 13:1–5, what does Jesus say about the Galileans Pilate killed and the eighteen who died when the tower in Siloam fell?",
+      points: 1,
+      options: [
+        "They were worse sinners than everyone else",
+        "They were no worse sinners; unless we repent, we too will perish",
+        "They were punished for their parents' sins",
+        "Only the people of Jerusalem needed to repent",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "First-century Jews believed disasters were punishment for personal sins. Jesus rejected this: we are all sinners, and unless we repent, we face eternal condemnation, not just physical death.",
+    },
+    {
+      id: "sr-q20",
+      type: "multiple-choice",
+      question: "What does Colossians 3:5 tell us to do with whatever belongs to our earthly nature?",
+      points: 1,
+      options: ["Manage it carefully", "Hide it from others", "Put it to death", "Confess it once a year"],
+      correctAnswer: 2,
+      explanation:
+        "Put it to death, so it is no longer active in our lives. The wrath of God is coming, so break free from sin's slavery!",
+    },
+    {
+      id: "sr-q21",
+      type: "multiple-choice",
+      question:
+        "In Matthew 5:29–30, why does Jesus say to gouge out your eye or cut off your hand if it causes you to sin?",
+      points: 1,
+      options: [
+        "To show how radical we must be in removing what causes us to sin",
+        "To command us to harm our bodies",
+        "To teach that only outward actions count as sin",
+        "To show that some sins are too small to worry about",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Jesus was not calling for bodily harm. He wants us to hate sin enough to be radical in removing the things that cause us to sin.",
+    },
+    {
+      id: "sr-q22",
+      type: "multiple-choice",
+      question: "According to the study, what is the goal of repentance?",
+      points: 1,
+      options: [
+        "Changing outward behaviour so that others approve",
+        "Feeling sorry enough about our sins",
+        "A changed heart that overflows into new attitudes and actions",
+        "Avoiding the consequences of being found out",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Repentance is not just external behaviour modification. The goal is a heart transformation that overflows into new attitudes and actions.",
+    },
+    {
+      id: "sr-q23",
+      type: "multiple-choice",
+      question: "According to Acts 26:20, how do we prove our repentance?",
+      points: 1,
+      options: ["By our feelings", "By our deeds", "By our words", "By our church attendance"],
+      correctAnswer: 1,
+      explanation:
+        "Paul preached that people should repent, turn to God, and prove their repentance by their deeds. Repentance needs a plan and real action, not just a feeling.",
+    },
+    {
+      id: "sr-q24",
+      type: "multiple-choice",
+      question: "What is the challenge at the end of the study?",
+      points: 1,
+      options: [
+        "Repent only of the sins other people have noticed",
+        "Share your written sin list with the whole church",
+        "Wait until you feel ready before changing anything",
+        "Have a clear plan of repentance for sins of commission and omission",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "The challenge is a clear plan of repentance addressing sins of commission and omission. A personal sin list can help you confess and come into the light, but it stays highly confidential between those studying the Bible.",
+    },
+    {
+      id: "sr-q25",
+      type: "memory-verse",
+      question: "Write John 15:8 from memory (NIV).",
+      points: 3,
+      correctText: "This is to my Father's glory, that you bear much fruit, showing yourselves to be my disciples.",
+    },
+    {
+      id: "sr-q26",
+      type: "memory-verse",
+      question: "Write Matthew 22:37–39 from memory (NIV).",
+      points: 3,
+      correctText:
+        "Jesus replied: “‘Love the Lord your God with all your heart and with all your soul and with all your mind.’ This is the first and greatest commandment. And the second is like it: ‘Love your neighbor as yourself.’”",
+    },
+    {
+      id: "sr-q27",
+      type: "ordered-list",
+      question: "Write the 39 books of the Old Testament, Genesis through Malachi, in order.",
+      points: 39,
+      correctAnswers: [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+        "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah",
+        "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs", "Isaiah", "Jeremiah",
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+        "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+    {
+      id: "sr-q28",
+      type: "ordered-list",
+      question: "Write the 27 books of the New Testament, Matthew through Revelation, in order.",
+      points: 27,
+      correctAnswers: [
+        "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
+        "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy",
+        "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude",
+        "Revelation",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
   discipleshipStudyQuiz,
   comingOfTheKingdomStudyQuiz,
+  sinAndRepentanceStudyQuiz,
   {
     id: "pc-test-1",
     courseId: "6",

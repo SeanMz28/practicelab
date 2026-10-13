@@ -32,7 +32,7 @@ const questionValidator = v.object({
   correctText: v.optional(v.string()),
   correctAnswers: v.optional(v.array(v.string())),
   orderedListHint: v.optional(v.string()),
-  answerLayout: v.optional(v.literal("paired")),
+  answerLayout: v.optional(v.union(v.literal("paired"), v.literal("reorderable"))),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
 })
