@@ -888,6 +888,100 @@ Memorize all **66 books of the Bible in order**: the 39 books of the Old Testame
     createdAt: "2026-10-13T10:00:00Z",
     updatedAt: "2026-10-13T10:00:00Z",
   },
+  {
+    id: "light-and-darkness-notes",
+    courseId: "8",
+    title: "Light and Darkness",
+    content: `# Light and Darkness
+
+> **Purpose:** To understand how to be saved. Adapted from the supplied *Light & Darkness* study notes.
+
+## Your spiritual timeline
+
+What are your spiritual highlights? If it helps, draw a timeline.
+
+- When do you believe you were saved?
+- When did you receive the Holy Spirit?
+- When did you receive the forgiveness of sin?
+
+## Light and darkness
+
+### 1 Peter 2:9–10
+
+- **Darkness:** not a people of God, no mercy; lost, not a Christian, not a disciple.
+- **Light:** people of God, mercy; saved, Christian, disciple.
+- Every person is either in the darkness or the light. **There is no twilight zone.** Where are you?
+
+### John 3:1–7
+
+- We must be **born again of water and the Spirit**.
+- This is a personal decision as an adult.
+
+### Acts 2:22–24
+
+What message must one believe to be saved?
+
+1. That Jesus is from God (verse 22).
+2. That Jesus was physically raised from the dead (verse 24).
+3. That everyone is responsible for the crucifixion of Christ (verse 23), because all have sinned.
+
+### Acts 2:37
+
+- What does it mean to be “cut to the heart”? **Deep emotional sorrow.**
+- The people recognized their responsibility for the death of Jesus.
+- Their response reflected godly sorrow: “What should we do?”
+
+### Acts 2:38–42
+
+Once the people believed, what did they do?
+
+- **Repent** (turn to God).
+- **Be baptized** (be immersed in water).
+  - Their sins were forgiven. This is the point in time when a person is saved.
+  - The Holy Spirit is given to those who are baptized.
+
+## Why baptism?
+
+### Romans 6:1–8
+
+- Baptism is the **participation in the death, burial, and resurrection of Christ** — it is more than just a symbol.
+- This is the point in time when we are freed from sin and united with Christ. The wall of sin is broken down — we are forgiven of our sins!
+- **The diagram:** Jesus died, was buried, and was resurrected. In baptism, our old life dies with Christ, is buried with Christ, and is raised to a new life.
+
+From darkness to light:
+
+- **Sin separates us from God** → **sin is forgiven** (Acts 2:38).
+- **Born again of water and the Spirit** (John 3:5) → **water = baptism; the Spirit is received at baptism** (Acts 2:38).
+- **Faith in the blood of Jesus saves us** (Romans 3:25) → Jesus shed his blood when he died. In baptism we share by faith in the death, burial, and resurrection of Jesus. Thus we contact the blood in baptism and are forgiven of our sins and **saved**!
+
+### Colossians 2:11–12
+
+- What activates the power of God at baptism? **It is our faith!**
+- We are saved by faith at the moment of baptism — not by the water itself.
+
+### Matthew 15:6–9
+
+- False doctrines often arise from **religious tradition**.
+- **Infant baptism** is refuted by Ezekiel 18:20 and 28:15. It began around the second century AD and became church doctrine in 549 AD.
+- **Praying Jesus into your heart** is a misinterpretation of Revelation 3:20. That passage was addressed to baptized disciples, and the practice originated in early-1800s America.
+
+### 1 Peter 3:18–22
+
+- What does the water represent in this passage? **Noah's flood.**
+- In the same way the flood washed away the sinful people in Noah's time, baptism cleanses us of sin through Christ!
+- Baptism “now saves you” — this confirms again that baptism is not merely symbolic, but the moment our sins are forgiven.
+- **Review your timeline:** does it align with the biblical process of salvation? If not, now is the time to repent and be baptized!
+
+> **Challenge:** Respond urgently: be baptized for the forgiveness of your sins so you can be united with Jesus!
+
+## Memory scriptures (NIV)
+
+- **Matthew 28:18–20:** Then Jesus came to them and said, “All authority in heaven and on earth has been given to me. Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, and teaching them to obey everything I have commanded you. And surely I am with you always, to the very end of the age.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AMatthew+28%3A18%E2%80%9320))
+- **Luke 19:10:** “For the Son of Man came to seek and to save the lost.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3ALuke+19%3A10))
+`,
+    createdAt: "2026-10-16T10:00:00Z",
+    updatedAt: "2026-10-16T10:00:00Z",
+  },
 ]
 
 const wordOfGodStudyQuiz: Assessment = {
@@ -2149,11 +2243,334 @@ const sinAndRepentanceStudyQuiz: Assessment = {
   ],
 }
 
+const lightAndDarknessStudyQuiz: Assessment = {
+  id: "light-and-darkness-study-quiz",
+  courseId: "8",
+  title: "Light and Darkness Study Quiz",
+  description: "Review the Light and Darkness study and recite Matthew 28:18–20 and Luke 19:10 (NIV).",
+  type: "quiz",
+  timeLimit: 25,
+  createdAt: "2026-10-16T10:00:00Z",
+  questions: [
+    {
+      id: "ld-purpose",
+      type: "multiple-choice",
+      question: "What is the purpose of the Light and Darkness study?",
+      points: 1,
+      options: [
+        "To make the Bible your standard for life",
+        "To understand how to be saved",
+        "To discover when the kingdom of God came",
+        "To understand why we need to hate sin",
+      ],
+      correctAnswer: 1,
+      explanation: "The study's stated purpose is to understand how to be saved.",
+    },
+    {
+      id: "ld-q1",
+      type: "multiple-choice",
+      question: "According to the study, where does every person stand with God?",
+      points: 1,
+      options: [
+        "Somewhere between darkness and light",
+        "In the light, as long as they are a good person",
+        "Either in the darkness or the light; there is no twilight zone",
+        "In the light once they attend church regularly",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Every person is either in the darkness or the light (1 Peter 2:9–10). There is no twilight zone.",
+    },
+    {
+      id: "ld-q2",
+      type: "multiple-choice",
+      question: "On the light side of the 1 Peter 2:9–10 diagram, a person who is saved is also…",
+      points: 1,
+      options: [
+        "A Christian, but not necessarily a disciple",
+        "Religious, but not yet a Christian",
+        "A disciple only after years of growth",
+        "A Christian and a disciple",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "The light side reads people of God, mercy, saved, Christian, disciple. The darkness side reads not a people of God, no mercy, lost, not a Christian, not a disciple.",
+    },
+    {
+      id: "ld-q3",
+      type: "spelling",
+      question: "Who came to Jesus at night in John 3 and was told he must be born again?",
+      points: 1,
+      correctAnswers: ["Nicodemus"],
+    },
+    {
+      id: "ld-q4",
+      type: "multiple-choice",
+      question: "According to the study, being born again of water and the Spirit (John 3:1–7) is…",
+      points: 1,
+      options: [
+        "A decision parents make for their baby",
+        "A personal decision we make as adults",
+        "Something that happens without our decision",
+        "A feeling that comes over us at church",
+      ],
+      correctAnswer: 1,
+      explanation: "We must be born again of water and the Spirit, and this is a personal decision as an adult.",
+    },
+    {
+      id: "ld-q5",
+      type: "multi-select",
+      question: "Pick the three things the study says one must believe to be saved (Acts 2:22–24).",
+      points: 3,
+      options: [
+        "Jesus is from God",
+        "Jesus was only a great teacher",
+        "Jesus was physically raised from the dead",
+        "Jesus rose only in spirit",
+        "Everyone is responsible for the crucifixion, because all have sinned",
+        "Only the Romans were responsible for the crucifixion",
+      ],
+      correctOptions: [0, 2, 4],
+      explanation:
+        "Jesus is from God (verse 22), he was physically raised from the dead (verse 24), and everyone is responsible for his crucifixion (verse 23), because all have sinned.",
+    },
+    {
+      id: "ld-q6",
+      type: "multiple-choice",
+      question: "In Acts 2:37 the people were “cut to the heart.” What does that mean?",
+      points: 1,
+      options: ["Anger at being accused", "Deep emotional sorrow", "Fear of the Romans", "Confusion about the message"],
+      correctAnswer: 1,
+      explanation: "To be cut to the heart is to feel deep emotional sorrow.",
+    },
+    {
+      id: "ld-q7",
+      type: "multiple-choice",
+      question: "Why were the people cut to the heart in Acts 2:37?",
+      points: 1,
+      options: [
+        "They were embarrassed in front of the crowd",
+        "They disagreed with Peter's message",
+        "They recognized their responsibility for the death of Jesus",
+        "They were afraid of being punished",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "They recognized their responsibility for Jesus' death. Their response, “What should we do?”, reflected godly sorrow.",
+    },
+    {
+      id: "ld-q8",
+      type: "multiple-choice",
+      question: "Once the people believed, what did Peter tell them to do (Acts 2:38)?",
+      points: 1,
+      options: [
+        "Pray and wait for a sign",
+        "Fast and give to the poor",
+        "Believe, and nothing more",
+        "Repent and be baptized",
+      ],
+      correctAnswer: 3,
+      explanation: "Peter told them to repent (turn to God) and be baptized (be immersed in water).",
+    },
+    {
+      id: "ld-q9",
+      type: "multiple-choice",
+      question: "According to the study, what does it mean to be baptized?",
+      points: 1,
+      options: [
+        "To be sprinkled with water",
+        "To be immersed in water",
+        "To have water poured over your head",
+        "To pray a prayer of commitment",
+      ],
+      correctAnswer: 1,
+      explanation: "To be baptized is to be immersed in water.",
+    },
+    {
+      id: "ld-q10",
+      type: "multiple-choice",
+      question:
+        "The timeline asks when you were saved, received the Holy Spirit, and received forgiveness of sin. According to Acts 2:38, when do all three happen?",
+      points: 1,
+      options: [
+        "When we first pray to accept Jesus",
+        "At baptism",
+        "When we first feel sorry for our sins",
+        "At different times in our lives",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "At baptism our sins are forgiven and we receive the Holy Spirit. This is the point in time when a person is saved.",
+    },
+    {
+      id: "ld-q11",
+      type: "matching",
+      question: "Acts 2: drag each part of the people's response into the order it happened.",
+      points: 5,
+      matchPrompts: ["First", "Second", "Third", "Fourth", "Fifth"],
+      options: [
+        "Heard the message about Jesus",
+        "Were cut to the heart",
+        "Repented",
+        "Were baptized",
+        "Received forgiveness and the Holy Spirit",
+      ],
+      correctMatches: [0, 1, 2, 3, 4],
+      explanation:
+        "They heard Peter's message (verses 22–36), were cut to the heart (verse 37), repented and were baptized, and received forgiveness of their sins and the gift of the Holy Spirit (verse 38).",
+    },
+    {
+      id: "ld-q12",
+      type: "multiple-choice",
+      question: "According to the study, what is baptism (Romans 6:1–8)?",
+      points: 1,
+      options: [
+        "A symbol of a salvation that already happened",
+        "A public announcement of faith",
+        "Participation in the death, burial, and resurrection of Christ",
+        "A ceremony for joining a church",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Baptism is more than just a symbol: it is the point in time when we are freed from sin and united with Christ. The wall of sin is broken down, and we are forgiven.",
+    },
+    {
+      id: "ld-q13",
+      type: "multiple-choice",
+      question: "In the Romans 6 diagram, what happens to our old life in baptism?",
+      points: 1,
+      options: [
+        "It dies with Christ, is buried with him, and is raised to a new life",
+        "It improves a little at a time until we die",
+        "It stays the same, but God overlooks it",
+        "It ends only when we die physically",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Jesus died, was buried, and was resurrected. In baptism our old life dies with Christ, is buried with Christ, and is raised to a new life.",
+    },
+    {
+      id: "ld-q14",
+      type: "multiple-choice",
+      question: "According to the study, what do “water” and “Spirit” in John 3:5 refer to?",
+      points: 1,
+      options: [
+        "Water is physical birth; the Spirit is received later",
+        "Water is baptism; the Spirit is received at baptism",
+        "Water is a symbol; the Spirit is received before baptism",
+        "Both describe a feeling of being saved",
+      ],
+      correctAnswer: 1,
+      explanation: "Born again of water and the Spirit: water is baptism, and the Spirit is received at baptism (Acts 2:38).",
+    },
+    {
+      id: "ld-q15",
+      type: "multiple-choice",
+      question: "Romans 3:25 teaches that faith in the blood of Jesus saves us. According to the study, where do we contact his blood?",
+      points: 1,
+      options: ["In prayer", "At communion", "In baptism", "At church"],
+      correctAnswer: 2,
+      explanation:
+        "Jesus shed his blood when he died. In baptism we share by faith in his death, burial, and resurrection, so we contact the blood in baptism and are forgiven of our sins.",
+    },
+    {
+      id: "ld-q16",
+      type: "multiple-choice",
+      question: "According to Colossians 2:11–12, what activates the power of God at baptism?",
+      points: 1,
+      options: ["The water itself", "Our faith", "The person baptizing us", "The words said over us"],
+      correctAnswer: 1,
+      explanation: "It is our faith! We are saved by faith at the moment of baptism, not by the water itself.",
+    },
+    {
+      id: "ld-q17",
+      type: "multiple-choice",
+      question: "According to the study, where do false doctrines often come from (Matthew 15:6–9)?",
+      points: 1,
+      options: [
+        "Studying the Bible for ourselves",
+        "Asking questions about God",
+        "Modern Bible translations",
+        "Religious tradition",
+      ],
+      correctAnswer: 3,
+      explanation: "False doctrines often arise from religious tradition, which can nullify the word of God.",
+    },
+    {
+      id: "ld-q18",
+      type: "multiple-choice",
+      question: "Which scripture does the study use to refute infant baptism?",
+      points: 1,
+      options: ["Romans 3:23", "Matthew 19:14", "Ezekiel 18:20", "John 3:16"],
+      correctAnswer: 2,
+      explanation:
+        "The study refutes infant baptism with Ezekiel 18:20 and 28:15. It says infant baptism began around the second century AD and became church doctrine in 549 AD.",
+    },
+    {
+      id: "ld-q19",
+      type: "multiple-choice",
+      question:
+        "Praying Jesus into your heart comes from a misinterpretation of Revelation 3:20. According to the study, why is it a misinterpretation?",
+      points: 1,
+      options: [
+        "The passage was written to people who had never heard of Jesus",
+        "The passage was addressed to baptized disciples",
+        "The passage describes the second coming",
+        "The passage was written to Old Testament Israel",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Revelation 3:20 was addressed to baptized disciples. The study says the practice originated in early-1800s America.",
+    },
+    {
+      id: "ld-q20",
+      type: "multiple-choice",
+      question: "In 1 Peter 3:18–22, what water does Peter compare baptism to?",
+      points: 1,
+      options: ["The Jordan River", "The Red Sea", "Noah's flood", "The pool of Siloam"],
+      correctAnswer: 2,
+      explanation:
+        "As the flood washed away the sinful people in Noah's time, baptism cleanses us of sin through Christ. Baptism “now saves you”: it is not merely symbolic but the moment our sins are forgiven.",
+    },
+    {
+      id: "ld-q21",
+      type: "multiple-choice",
+      question: "What is the challenge at the end of the study?",
+      points: 1,
+      options: [
+        "Wait until you feel completely ready",
+        "Pray Jesus into your heart",
+        "Be baptized as a sign that you are already saved",
+        "Respond urgently: be baptized for the forgiveness of your sins",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "The challenge is to respond urgently: be baptized for the forgiveness of your sins so you can be united with Jesus.",
+    },
+    {
+      id: "ld-q22",
+      type: "memory-verse",
+      question: "Write Matthew 28:18–20 from memory (NIV).",
+      points: 3,
+      correctText:
+        "Then Jesus came to them and said, “All authority in heaven and on earth has been given to me. Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, and teaching them to obey everything I have commanded you. And surely I am with you always, to the very end of the age.”",
+    },
+    {
+      id: "ld-q23",
+      type: "memory-verse",
+      question: "Write Luke 19:10 from memory (NIV).",
+      points: 3,
+      correctText: "“For the Son of Man came to seek and to save the lost.”",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
   discipleshipStudyQuiz,
   comingOfTheKingdomStudyQuiz,
   sinAndRepentanceStudyQuiz,
+  lightAndDarknessStudyQuiz,
   {
     id: "pc-test-1",
     courseId: "6",
