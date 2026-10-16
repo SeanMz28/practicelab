@@ -24,9 +24,9 @@ export function CourseContent({ course }: CourseContentProps) {
 
   const getAssessmentTypeBadge = (type: string) => {
     const badges = {
-      quiz: { label: "Quiz", color: "bg-blue-100 text-blue-700" },
-      assignment: { label: "Assignment", color: "bg-green-100 text-green-700" },
-      test: { label: "Test", color: "bg-purple-100 text-purple-700" },
+      quiz: { label: "Quiz", color: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400" },
+      assignment: { label: "Assignment", color: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" },
+      test: { label: "Test", color: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" },
     }
     return badges[type as keyof typeof badges] || badges.quiz
   }
@@ -98,7 +98,7 @@ export function CourseContent({ course }: CourseContentProps) {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <CardTitle className="flex items-center gap-2 mb-2">
-                          <ClipboardList className="w-5 h-5 text-secondary-foreground" />
+                          <ClipboardList className="w-5 h-5 text-secondary-foreground dark:text-secondary" />
                           {assessment.title}
                           <LockStatusBadge locked={assessment.locked} />
                           <LockStatusBadge locked={!assessment.locked && assessment.passwordLocked} label="Password" />

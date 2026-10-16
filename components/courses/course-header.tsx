@@ -7,7 +7,7 @@ interface CourseHeaderProps {
 
 export function CourseHeader({ course }: CourseHeaderProps) {
   return (
-    <div className="bg-primary text-primary-foreground">
+    <div className="bg-primary text-primary-foreground dark:bg-primary/20 dark:text-foreground">
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center gap-4 mb-4">
           <div className={`w-16 h-16 ${course.color} rounded-lg flex items-center justify-center`}>

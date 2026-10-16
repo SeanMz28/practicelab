@@ -140,7 +140,7 @@ export default function TutorCoursesPage() {
           </div>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-blue-600 text-white hover:bg-blue-700">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Course
               </Button>
@@ -225,7 +225,7 @@ export default function TutorCoursesPage() {
                         key={option.value}
                         onClick={() => setFormData({ ...formData, color: option.value })}
                         className={`h-10 rounded-md ${option.value} ${
-                          formData.color === option.value ? "ring-2 ring-offset-2 ring-blue-600" : ""
+                          formData.color === option.value ? "ring-2 ring-offset-2 ring-offset-background ring-blue-600" : ""
                         }`}
                         title={option.label}
                       />
@@ -253,7 +253,10 @@ export default function TutorCoursesPage() {
                     <LockStatusBadge locked={course.locked ?? false} />
                     <LockStatusBadge locked={course.passwordProtected} label="Password" />
                     {course.hidden && (
-                      <Badge variant="outline" className="gap-1 border-slate-300 bg-slate-50 text-slate-800">
+                      <Badge
+                        variant="outline"
+                        className="gap-1 border-slate-300 bg-slate-50 text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                      >
                         <EyeOff className="h-3 w-3" />
                         Hidden
                       </Badge>
@@ -371,7 +374,7 @@ export default function TutorCoursesPage() {
                                 key={option.value}
                                 onClick={() => setFormData({ ...formData, color: option.value })}
                                 className={`h-10 rounded-md ${option.value} ${
-                                  formData.color === option.value ? "ring-2 ring-offset-2 ring-blue-600" : ""
+                                  formData.color === option.value ? "ring-2 ring-offset-2 ring-offset-background ring-blue-600" : ""
                                 }`}
                                 title={option.label}
                               />
@@ -385,7 +388,7 @@ export default function TutorCoursesPage() {
                     </DialogContent>
                   </Dialog>
                   <Button variant="outline" size="icon" onClick={() => handleDelete(course._id)}>
-                    <Trash2 className="w-4 h-4 text-red-600" />
+                    <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
                   </Button>
                 </div>
               </CardContent>

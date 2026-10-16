@@ -38,7 +38,7 @@ export function StatsCards() {
               <p className="text-3xl font-bold">{totalAssessments}</p>
             </div>
             <div className="w-12 h-12 bg-secondary/30 rounded-lg flex items-center justify-center">
-              <Trophy className="w-6 h-6 text-secondary-foreground" />
+              <Trophy className="w-6 h-6 text-secondary-foreground dark:text-secondary" />
             </div>
           </div>
         </CardContent>
@@ -66,7 +66,7 @@ export function StatsCards() {
               <p className="text-3xl font-bold">{graded.filter((a) => a.score === 100).length}</p>
             </div>
             <div className="w-12 h-12 bg-secondary/30 rounded-lg flex items-center justify-center">
-              <Award className="w-6 h-6 text-secondary-foreground" />
+              <Award className="w-6 h-6 text-secondary-foreground dark:text-secondary" />
             </div>
           </div>
         </CardContent>

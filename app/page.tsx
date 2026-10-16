@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { BookOpen, GraduationCap, FileText, Award } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function HomePage() {
   return (
@@ -15,6 +16,7 @@ export default function HomePage() {
             <span className="text-xl font-bold">Practice Lab</span>
           </div>
           <nav className="flex items-center gap-4">
+            <ThemeToggle className="hidden sm:inline-flex" />
             <Link href="/sign-in">
               <Button variant="ghost">Sign In</Button>
             </Link>
@@ -64,7 +66,7 @@ export default function HomePage() {
 
             <div className="bg-card p-6 rounded-lg border">
               <div className="w-12 h-12 bg-secondary/30 rounded-lg flex items-center justify-center mb-4">
-                <FileText className="w-6 h-6 text-secondary-foreground" />
+                <FileText className="w-6 h-6 text-secondary-foreground dark:text-secondary" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Interactive Quizzes</h3>
               <p className="text-sm text-muted-foreground">Test your knowledge with quizzes and get instant feedback</p>
@@ -80,7 +82,7 @@ export default function HomePage() {
 
             <div className="bg-card p-6 rounded-lg border">
               <div className="w-12 h-12 bg-secondary/30 rounded-lg flex items-center justify-center mb-4">
-                <GraduationCap className="w-6 h-6 text-secondary-foreground" />
+                <GraduationCap className="w-6 h-6 text-secondary-foreground dark:text-secondary" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Detailed Reviews</h3>
               <p className="text-sm text-muted-foreground">Review your quiz answers and learn from your mistakes</p>

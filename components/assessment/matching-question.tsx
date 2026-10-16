@@ -166,7 +166,7 @@ export function MatchingQuestion({ prompts, options, optionOrder, value, onChang
 
   const chipClassName = (optionIndex: number) =>
     cn(
-      "flex touch-none select-none items-center gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm font-medium shadow-sm transition-all cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "flex touch-none select-none items-center gap-2 rounded-md border bg-background px-3 py-2 text-left text-sm font-medium shadow-sm transition-all cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background",
       selectedOption === optionIndex && "border-primary ring-2 ring-primary/40",
       drag?.optionIndex === optionIndex && "opacity-40",
     )

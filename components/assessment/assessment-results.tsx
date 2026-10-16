@@ -72,8 +72,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
             {isPending ? (
-              <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center">
-                <Clock className="w-10 h-10 text-yellow-600" />
+              <div className="w-20 h-20 bg-yellow-100 dark:bg-yellow-500/15 rounded-full flex items-center justify-center">
+                <Clock className="w-10 h-10 text-yellow-600 dark:text-yellow-400" />
               </div>
             ) : isPassing ? (
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
@@ -113,8 +113,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
           </div>
 
           {isPending && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <p className="text-sm text-yellow-800">
+            <div className="bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/30 rounded-lg p-4 mb-6">
+              <p className="text-sm text-yellow-800 dark:text-yellow-300">
                 <strong>Note:</strong> Your submission contains questions that require manual grading. You'll receive
                 your final score once your tutor has reviewed your work.
               </p>
@@ -166,12 +166,12 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                     <div className="flex-shrink-0 mt-1">
                       {isAutoGraded ? (
                         isCorrect ? (
-                          <CheckCircle2 className="w-6 h-6 text-green-600" />
+                          <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
                         ) : (
-                          <XCircle className="w-6 h-6 text-red-600" />
+                          <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
                         )
                       ) : (
-                        <FileText className="w-6 h-6 text-blue-600" />
+                        <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                       )}
                     </div>
                     <div className="flex-1">
@@ -180,42 +180,42 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                       </CardTitle>
                       <div className="flex items-center gap-2">
                         {question.type === "multiple-choice" && (
-                          <Badge variant="outline" className="bg-blue-50">
+                          <Badge variant="outline" className="bg-blue-50 dark:bg-blue-500/10">
                             Multiple Choice
                           </Badge>
                         )}
                         {question.type === "text" && (
-                          <Badge variant="outline" className="bg-green-50">
+                          <Badge variant="outline" className="bg-green-50 dark:bg-green-500/10">
                             Written Response
                           </Badge>
                         )}
                         {question.type === "file" && (
-                          <Badge variant="outline" className="bg-yellow-50">
+                          <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-500/10">
                             File Upload
                           </Badge>
                         )}
                         {question.type === "ordered-list" && (
-                          <Badge variant="outline" className="bg-emerald-50">
+                          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-500/10">
                             {question.answerLayout === "paired" ? "3-Part Answer" : "In Order"}
                           </Badge>
                         )}
                         {question.type === "memory-verse" && (
-                          <Badge variant="outline" className="bg-violet-50">
+                          <Badge variant="outline" className="bg-violet-50 dark:bg-violet-500/10">
                             Memory Scripture
                           </Badge>
                         )}
                         {question.type === "spelling" && (
-                          <Badge variant="outline" className="bg-orange-50">
+                          <Badge variant="outline" className="bg-orange-50 dark:bg-orange-500/10">
                             Spelling
                           </Badge>
                         )}
                         {question.type === "matching" && (
-                          <Badge variant="outline" className="bg-amber-50">
+                          <Badge variant="outline" className="bg-amber-50 dark:bg-amber-500/10">
                             Drag &amp; Drop
                           </Badge>
                         )}
                         {question.type === "multi-select" && (
-                          <Badge variant="outline" className="bg-sky-50">
+                          <Badge variant="outline" className="bg-sky-50 dark:bg-sky-500/10">
                             Pick {question.correctOptions?.length ?? 0}
                           </Badge>
                         )}
@@ -242,19 +242,19 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                           key={oIndex}
                           className={`p-3 rounded-lg border-2 ${
                             isCorrectAnswer
-                              ? "border-green-500 bg-green-50"
+                              ? "border-green-500 bg-green-50 dark:bg-green-500/10"
                               : isUserAnswer
-                                ? "border-red-500 bg-red-50"
+                                ? "border-red-500 bg-red-50 dark:bg-red-500/10"
                                 : "border-border"
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            {isCorrectAnswer && <CheckCircle2 className="w-4 h-4 text-green-600" />}
-                            {isUserAnswer && !isCorrectAnswer && <XCircle className="w-4 h-4 text-red-600" />}
+                            {isCorrectAnswer && <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />}
+                            {isUserAnswer && !isCorrectAnswer && <XCircle className="w-4 h-4 text-red-600 dark:text-red-400" />}
                             <span className={isCorrectAnswer ? "font-semibold" : ""}>{option}</span>
                             {isUserAnswer && <span className="ml-auto text-xs text-muted-foreground">Your answer</span>}
                             {isCorrectAnswer && (
-                              <span className="ml-auto text-xs text-green-600 font-medium">Correct answer</span>
+                              <span className="ml-auto text-xs text-green-600 dark:text-green-400 font-medium">Correct answer</span>
                             )}
                           </div>
                         </div>
@@ -278,24 +278,24 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                             key={oIndex}
                             className={`p-3 rounded-lg border-2 ${
                               isCorrectAnswer
-                                ? "border-green-500 bg-green-50"
+                                ? "border-green-500 bg-green-50 dark:bg-green-500/10"
                                 : isUserAnswer
-                                  ? "border-red-500 bg-red-50"
+                                  ? "border-red-500 bg-red-50 dark:bg-red-500/10"
                                   : "border-border"
                             }`}
                           >
                             <div className="flex items-center gap-2">
-                              {isCorrectAnswer && isUserAnswer && <CheckCircle2 className="w-4 h-4 text-green-600" />}
-                              {isUserAnswer && !isCorrectAnswer && <XCircle className="w-4 h-4 text-red-600" />}
+                              {isCorrectAnswer && isUserAnswer && <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />}
+                              {isUserAnswer && !isCorrectAnswer && <XCircle className="w-4 h-4 text-red-600 dark:text-red-400" />}
                               <span className={isCorrectAnswer ? "font-semibold" : ""}>{option}</span>
                               {isUserAnswer && isCorrectAnswer && (
-                                <span className="ml-auto text-xs text-green-600 font-medium">Your pick · Correct</span>
+                                <span className="ml-auto text-xs text-green-600 dark:text-green-400 font-medium">Your pick · Correct</span>
                               )}
                               {isUserAnswer && !isCorrectAnswer && (
                                 <span className="ml-auto text-xs text-muted-foreground">Your pick</span>
                               )}
                               {!isUserAnswer && isCorrectAnswer && (
-                                <span className="ml-auto text-xs text-green-600 font-medium">Missed</span>
+                                <span className="ml-auto text-xs text-green-600 dark:text-green-400 font-medium">Missed</span>
                               )}
                             </div>
                           </div>
@@ -318,19 +318,19 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                           <div
                             key={pIndex}
                             className={`grid gap-2 rounded-lg border-2 p-3 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:items-center ${
-                              isMatch ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50"
+                              isMatch ? "border-green-500 bg-green-50 dark:bg-green-500/10" : "border-red-500 bg-red-50 dark:bg-red-500/10"
                             }`}
                           >
                             <span className="font-medium">{prompt}</span>
                             <div className="flex flex-wrap items-center gap-2">
                               {isMatch ? (
-                                <CheckCircle2 className="w-4 h-4 shrink-0 text-green-600" />
+                                <CheckCircle2 className="w-4 h-4 shrink-0 text-green-600 dark:text-green-400" />
                               ) : (
-                                <XCircle className="w-4 h-4 shrink-0 text-red-600" />
+                                <XCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
                               )}
                               <span>{chosenText ?? "Not answered"}</span>
                               {!isMatch && correctIndex !== undefined && (
-                                <span className="text-xs text-green-700 font-medium">
+                                <span className="text-xs text-green-700 dark:text-green-400 font-medium">
                                   Correct: {question.options?.[correctIndex]}
                                 </span>
                               )}
@@ -361,8 +361,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                     </div>
                     {!answer.isCorrect && question.correctText && (
                       <div>
-                        <h4 className="font-semibold mb-2 text-green-700">Correct Wording:</h4>
-                        <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
+                        <h4 className="font-semibold mb-2 text-green-700 dark:text-green-400">Correct Wording:</h4>
+                        <div className="border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 p-4 rounded-lg">
                           <p className="whitespace-pre-wrap">{question.correctText}</p>
                         </div>
                       </div>
@@ -380,8 +380,8 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                     </div>
                     {!answer.isCorrect && (question.correctAnswers?.length ?? 0) > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-2 text-green-700">Accepted Answers:</h4>
-                        <ul className="list-disc list-inside rounded-lg border border-green-200 bg-green-50 p-4 space-y-1">
+                        <h4 className="font-semibold mb-2 text-green-700 dark:text-green-400">Accepted Answers:</h4>
+                        <ul className="list-disc list-inside rounded-lg border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 p-4 space-y-1">
                           {question.correctAnswers?.map((item, index) => <li key={index}>{item}</li>)}
                         </ul>
                       </div>
@@ -402,7 +402,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                             (expected === undefined ||
                               normalizeOrderedAnswer(item) !== normalizeOrderedAnswer(expected))
                           return (
-                            <li key={index} className={isMisplaced ? "text-red-700" : undefined}>
+                            <li key={index} className={isMisplaced ? "text-red-700 dark:text-red-400" : undefined}>
                               {displayOrderedAnswer(item, isPaired)}
                               {isMisplaced && (
                                 <>
@@ -416,10 +416,10 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                       </ol>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2 text-green-700">
+                      <h4 className="font-semibold mb-2 text-green-700 dark:text-green-400">
                         {question.answerLayout === "paired" ? "Correct Pairs:" : "Correct Order:"}
                       </h4>
-                      <ol className="list-decimal list-inside rounded-lg border border-green-200 bg-green-50 p-4 space-y-1">
+                      <ol className="list-decimal list-inside rounded-lg border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 p-4 space-y-1">
                         {(question.correctAnswers ?? []).map((item, index) => (
                           <li key={index}>{item}</li>
                         ))}
@@ -470,9 +470,9 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                 )}
 
                 {answer.feedback && (
-                  <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                    <p className="text-sm font-semibold mb-1 text-blue-900">Tutor Feedback:</p>
-                    <p className="text-sm text-blue-800">{answer.feedback}</p>
+                  <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 p-4 rounded-lg">
+                    <p className="text-sm font-semibold mb-1 text-blue-900 dark:text-blue-200">Tutor Feedback:</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-300">{answer.feedback}</p>
                   </div>
                 )}
               </CardContent>

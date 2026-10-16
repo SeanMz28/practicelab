@@ -30,7 +30,7 @@ export default async function RootLayout({
   const initialToken = await getToken()
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`} suppressHydrationWarning>
         <Providers initialToken={initialToken}>
           <DataInitializer />

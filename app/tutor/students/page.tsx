@@ -175,13 +175,13 @@ export default function TutorStudentsPage() {
                           <TableCell>{student.totalAttempts}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                              <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
                               {student.completedAssessments}
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-yellow-600" />
+                              <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                               {student.pendingAssessments}
                             </div>
                           </TableCell>

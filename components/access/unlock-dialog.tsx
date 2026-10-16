@@ -71,7 +71,7 @@ export function UnlockDialog({
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-50 text-amber-700 sm:mx-0">
+          <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 sm:mx-0">
             <LockKeyhole className="h-5 w-5" />
           </div>
           <DialogTitle>Unlock {title}</DialogTitle>

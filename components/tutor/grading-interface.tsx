@@ -158,42 +158,42 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                     </CardTitle>
                     <div className="flex items-center gap-2">
                       {question.type === "multiple-choice" && (
-                        <Badge variant="outline" className="bg-blue-50">
+                        <Badge variant="outline" className="bg-blue-50 dark:bg-blue-500/10">
                           Multiple Choice
                         </Badge>
                       )}
                       {question.type === "text" && (
-                        <Badge variant="outline" className="bg-green-50">
+                        <Badge variant="outline" className="bg-green-50 dark:bg-green-500/10">
                           Written Response
                         </Badge>
                       )}
                       {question.type === "file" && (
-                        <Badge variant="outline" className="bg-yellow-50">
+                        <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-500/10">
                           File Upload
                         </Badge>
                       )}
                       {question.type === "ordered-list" && (
-                        <Badge variant="outline" className="bg-emerald-50">
+                        <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-500/10">
                           {question.answerLayout === "paired" ? "3-Part Answer" : "In Order"}
                         </Badge>
                       )}
                       {question.type === "memory-verse" && (
-                        <Badge variant="outline" className="bg-violet-50">
+                        <Badge variant="outline" className="bg-violet-50 dark:bg-violet-500/10">
                           Memory Scripture
                         </Badge>
                       )}
                       {question.type === "spelling" && (
-                        <Badge variant="outline" className="bg-orange-50">
+                        <Badge variant="outline" className="bg-orange-50 dark:bg-orange-500/10">
                           Spelling
                         </Badge>
                       )}
                       {question.type === "matching" && (
-                        <Badge variant="outline" className="bg-amber-50">
+                        <Badge variant="outline" className="bg-amber-50 dark:bg-amber-500/10">
                           Drag &amp; Drop
                         </Badge>
                       )}
                       {question.type === "multi-select" && (
-                        <Badge variant="outline" className="bg-sky-50">
+                        <Badge variant="outline" className="bg-sky-50 dark:bg-sky-500/10">
                           Pick {question.correctOptions?.length ?? 0}
                         </Badge>
                       )}
@@ -213,10 +213,10 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                           className={`p-3 rounded-lg border-2 ${
                             answer.value === optIndex
                               ? answer.isCorrect
-                                ? "border-green-500 bg-green-50"
-                                : "border-red-500 bg-red-50"
+                                ? "border-green-500 bg-green-50 dark:bg-green-500/10"
+                                : "border-red-500 bg-red-50 dark:bg-red-500/10"
                               : optIndex === question.correctAnswer
-                                ? "border-green-300 bg-green-50/50"
+                                ? "border-green-300 dark:border-green-500/40 bg-green-50/50 dark:bg-green-500/5"
                                 : "border-border"
                           }`}
                         >
@@ -225,14 +225,14 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                             {answer.value === optIndex && (
                               <>
                                 {answer.isCorrect ? (
-                                  <CheckCircle className="w-5 h-5 text-green-600" />
+                                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                                 ) : (
-                                  <XCircle className="w-5 h-5 text-red-600" />
+                                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
                                 )}
                               </>
                             )}
                             {optIndex === question.correctAnswer && answer.value !== optIndex && (
-                              <span className="text-xs text-green-600 font-medium">Correct Answer</span>
+                              <span className="text-xs text-green-600 dark:text-green-400 font-medium">Correct Answer</span>
                             )}
                           </div>
                         </div>
@@ -261,10 +261,10 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                               className={`p-3 rounded-lg border-2 ${
                                 isPicked
                                   ? isCorrectOption
-                                    ? "border-green-500 bg-green-50"
-                                    : "border-red-500 bg-red-50"
+                                    ? "border-green-500 bg-green-50 dark:bg-green-500/10"
+                                    : "border-red-500 bg-red-50 dark:bg-red-500/10"
                                   : isCorrectOption
-                                    ? "border-green-300 bg-green-50/50"
+                                    ? "border-green-300 dark:border-green-500/40 bg-green-50/50 dark:bg-green-500/5"
                                     : "border-border"
                               }`}
                             >
@@ -272,12 +272,12 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                                 <span>{option}</span>
                                 {isPicked &&
                                   (isCorrectOption ? (
-                                    <CheckCircle className="w-5 h-5 text-green-600" />
+                                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                                   ) : (
-                                    <XCircle className="w-5 h-5 text-red-600" />
+                                    <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
                                   ))}
                                 {!isPicked && isCorrectOption && (
-                                  <span className="text-xs text-green-600 font-medium">Missed</span>
+                                  <span className="text-xs text-green-600 dark:text-green-400 font-medium">Missed</span>
                                 )}
                               </div>
                             </div>
@@ -305,19 +305,19 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                             <div
                               key={pIndex}
                               className={`grid gap-2 rounded-lg border-2 p-3 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:items-center ${
-                                isMatch ? "border-green-500 bg-green-50" : "border-red-500 bg-red-50"
+                                isMatch ? "border-green-500 bg-green-50 dark:bg-green-500/10" : "border-red-500 bg-red-50 dark:bg-red-500/10"
                               }`}
                             >
                               <span className="font-medium">{prompt}</span>
                               <div className="flex flex-wrap items-center gap-2">
                                 {isMatch ? (
-                                  <CheckCircle className="w-4 h-4 shrink-0 text-green-600" />
+                                  <CheckCircle className="w-4 h-4 shrink-0 text-green-600 dark:text-green-400" />
                                 ) : (
-                                  <XCircle className="w-4 h-4 shrink-0 text-red-600" />
+                                  <XCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
                                 )}
                                 <span>{chosenText ?? "Not answered"}</span>
                                 {!isMatch && correctIndex !== undefined && (
-                                  <span className="text-xs text-green-700 font-medium">
+                                  <span className="text-xs text-green-700 dark:text-green-400 font-medium">
                                     Correct: {question.options?.[correctIndex]}
                                   </span>
                                 )}
@@ -340,8 +340,8 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                       <div className="bg-muted/50 p-4 rounded-lg">
                         <p className="whitespace-pre-wrap">{answer.value as string}</p>
                       </div>
-                      <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
-                        <p className="text-sm font-semibold text-green-800 mb-1">Correct wording</p>
+                      <div className="border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 p-4 rounded-lg">
+                        <p className="text-sm font-semibold text-green-800 dark:text-green-300 mb-1">Correct wording</p>
                         <p className="whitespace-pre-wrap">{question.correctText}</p>
                       </div>
                     </div>
@@ -352,8 +352,8 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                       <div className="bg-muted/50 p-4 rounded-lg">
                         <p className="whitespace-pre-wrap">{answer.value as string}</p>
                       </div>
-                      <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
-                        <p className="text-sm font-semibold text-green-800 mb-1">Accepted answers</p>
+                      <div className="border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 p-4 rounded-lg">
+                        <p className="text-sm font-semibold text-green-800 dark:text-green-300 mb-1">Accepted answers</p>
                         <p className="whitespace-pre-wrap">{(question.correctAnswers ?? []).join("; ")}</p>
                       </div>
                     </div>
@@ -368,7 +368,7 @@ export function GradingInterface({ attemptId }: GradingInterfaceProps) {
                           </li>
                         ))}
                       </ol>
-                      <ol className="list-decimal list-inside border border-green-200 bg-green-50 p-4 rounded-lg space-y-1">
+                      <ol className="list-decimal list-inside border border-green-200 dark:border-green-500/30 bg-green-50 dark:bg-green-500/10 p-4 rounded-lg space-y-1">
                         {(question.correctAnswers ?? []).map((item, itemIndex) => (
                           <li key={itemIndex}>{item}</li>
                         ))}

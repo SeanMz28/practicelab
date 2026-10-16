@@ -138,10 +138,10 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
   }
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith("image/")) return <ImageIcon className="w-8 h-8 text-green-600" />
-    if (fileType.includes("pdf")) return <FileText className="w-8 h-8 text-red-600" />
-    if (fileType.includes("code") || fileType.includes("text/x-")) return <Code className="w-8 h-8 text-blue-600" />
-    return <File className="w-8 h-8 text-gray-600" />
+    if (fileType.startsWith("image/")) return <ImageIcon className="w-8 h-8 text-green-600 dark:text-green-400" />
+    if (fileType.includes("pdf")) return <FileText className="w-8 h-8 text-red-600 dark:text-red-400" />
+    if (fileType.includes("code") || fileType.includes("text/x-")) return <Code className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+    return <File className="w-8 h-8 text-gray-600 dark:text-gray-400" />
   }
 
   const formatFileSize = (bytes: number) => {
@@ -159,7 +159,7 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
         </div>
         <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-blue-600 text-white hover:bg-blue-700">
               <Plus className="w-4 h-4 mr-2" />
               Upload Resource
             </Button>
@@ -289,7 +289,7 @@ export function ResourcesManager({ courseId }: ResourcesManagerProps) {
                       <LockKeyhole className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="icon" onClick={() => handleDelete(resource._id)}>
-                      <Trash2 className="w-4 h-4 text-red-600" />
+                      <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
                     </Button>
                   </div>
                 </div>

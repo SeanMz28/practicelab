@@ -593,11 +593,11 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
 
   const getAssessmentTypeBadge = (type: string) => {
     const badges = {
-      quiz: "bg-blue-100 text-blue-700",
-      assignment: "bg-green-100 text-green-700",
-      test: "bg-purple-100 text-purple-700",
+      quiz: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
+      assignment: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400",
+      test: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
     }
-    return badges[type as keyof typeof badges] || "bg-gray-100 text-gray-700"
+    return badges[type as keyof typeof badges] || "bg-gray-100 dark:bg-gray-500/15 text-gray-700 dark:text-gray-400"
   }
 
   return (
@@ -618,7 +618,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
           }}
         >
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-blue-600 text-white hover:bg-blue-700">
               <Plus className="w-4 h-4 mr-2" />
               Create Assessment
             </Button>
@@ -762,7 +762,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                   return (
                     <Card
                       key={q.id ?? index}
-                      className={`mb-3 ${isEditing ? "border-blue-500 ring-1 ring-blue-200" : ""}`}
+                      className={`mb-3 ${isEditing ? "border-blue-500 ring-1 ring-blue-200 dark:ring-blue-500/30" : ""}`}
                     >
                       <CardContent className="p-4">
                         {isEditing ? (
@@ -1012,7 +1012,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
                                 <span className="font-semibold">Q{index + 1}:</span>
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{q.type}</span>
+                                <span className="text-xs bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 px-2 py-1 rounded">{q.type}</span>
                                 <span className="text-xs text-muted-foreground">{q.points} points</span>
                               </div>
                               <p className="text-sm whitespace-pre-wrap">{q.question}</p>
@@ -1020,10 +1020,10 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 <div className="mt-2 space-y-1">
                                   {q.options?.map((opt, i) => (
                                     <div key={i} className="text-xs flex items-center gap-2">
-                                      <span className={i === q.correctAnswer ? "text-green-600 font-semibold" : ""}>
+                                      <span className={i === q.correctAnswer ? "text-green-600 dark:text-green-400 font-semibold" : ""}>
                                         {String.fromCharCode(65 + i)}. {opt}
                                       </span>
-                                      {i === q.correctAnswer && <span className="text-green-600">(Correct)</span>}
+                                      {i === q.correctAnswer && <span className="text-green-600 dark:text-green-400">(Correct)</span>}
                                     </div>
                                   ))}
                                 </div>
@@ -1033,7 +1033,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                   {q.matchPrompts?.map((prompt, i) => (
                                     <div key={i}>
                                       {prompt} →{" "}
-                                      <span className="text-green-600 font-semibold">
+                                      <span className="text-green-600 dark:text-green-400 font-semibold">
                                         {q.options?.[q.correctMatches?.[i] ?? -1]}
                                       </span>
                                     </div>
@@ -1052,10 +1052,10 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                     const isCorrect = q.correctOptions?.includes(i) ?? false
                                     return (
                                       <div key={i} className="text-xs flex items-center gap-2">
-                                        <span className={isCorrect ? "text-green-600 font-semibold" : ""}>
+                                        <span className={isCorrect ? "text-green-600 dark:text-green-400 font-semibold" : ""}>
                                           {String.fromCharCode(65 + i)}. {opt}
                                         </span>
-                                        {isCorrect && <span className="text-green-600">(Correct)</span>}
+                                        {isCorrect && <span className="text-green-600 dark:text-green-400">(Correct)</span>}
                                       </div>
                                     )
                                   })}
@@ -1067,16 +1067,16 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                                 </p>
                               )}
                               {q.type === "memory-verse" && q.correctText && (
-                                <p className="mt-2 text-xs text-green-700">Correct wording: {q.correctText}</p>
+                                <p className="mt-2 text-xs text-green-700 dark:text-green-400">Correct wording: {q.correctText}</p>
                               )}
                               {q.type === "ordered-list" && q.correctAnswers && (
-                                <p className="mt-2 text-xs text-green-700">
+                                <p className="mt-2 text-xs text-green-700 dark:text-green-400">
                                   {q.answerLayout === "paired" ? "Correct pairs: " : "Correct order: "}
                                   {q.correctAnswers.join(q.answerLayout === "paired" ? "; " : " → ")}
                                 </p>
                               )}
                               {q.type === "spelling" && q.correctAnswers && (
-                                <p className="mt-2 text-xs text-green-700">
+                                <p className="mt-2 text-xs text-green-700 dark:text-green-400">
                                   Accepted answers: {q.correctAnswers.join("; ")}
                                 </p>
                               )}
@@ -1379,7 +1379,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
               </div>
 
               {editingQuestionIndex !== null && (
-                <p className="text-xs text-amber-600 text-center">
+                <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
                   Save or cancel the open question edit before saving the assessment.
                 </p>
               )}
@@ -1430,7 +1430,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
                       <Pencil className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="icon" onClick={() => handleDelete(assessment._id)}>
-                      <Trash2 className="w-4 h-4 text-red-600" />
+                      <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
                     </Button>
                   </div>
                 </div>

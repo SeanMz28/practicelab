@@ -61,10 +61,10 @@ function UnlockedResources({ courseId }: { courseId: Id<"courses"> }) {
   }
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.startsWith("image/")) return <ImageIcon className="w-8 h-8 text-green-600" />
-    if (fileType.includes("pdf")) return <FileText className="w-8 h-8 text-red-600" />
-    if (fileType.includes("code") || fileType.includes("text/x-")) return <Code className="w-8 h-8 text-blue-600" />
-    return <File className="w-8 h-8 text-gray-600" />
+    if (fileType.startsWith("image/")) return <ImageIcon className="w-8 h-8 text-green-600 dark:text-green-400" />
+    if (fileType.includes("pdf")) return <FileText className="w-8 h-8 text-red-600 dark:text-red-400" />
+    if (fileType.includes("code") || fileType.includes("text/x-")) return <Code className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+    return <File className="w-8 h-8 text-gray-600 dark:text-gray-400" />
   }
 
   const formatFileSize = (bytes: number) => {

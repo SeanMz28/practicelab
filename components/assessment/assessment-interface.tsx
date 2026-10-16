@@ -442,9 +442,9 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
 
   const getAssessmentTypeBadge = () => {
     const badges = {
-      quiz: { label: "Quiz", color: "bg-blue-100 text-blue-700" },
-      assignment: { label: "Assignment", color: "bg-green-100 text-green-700" },
-      test: { label: "Test", color: "bg-purple-100 text-purple-700" },
+      quiz: { label: "Quiz", color: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400" },
+      assignment: { label: "Assignment", color: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" },
+      test: { label: "Test", color: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" },
     }
     const badge = badges[assessment.type]
     return <span className={`text-xs px-3 py-1 rounded-full font-medium ${badge.color}`}>{badge.label}</span>
@@ -615,11 +615,11 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                 aria-current={isCurrent ? "step" : undefined}
                 aria-label={`Question ${index + 1}, ${status}${isCurrent ? ", current question" : ""}`}
                 className={cn(
-                  "relative flex h-10 min-w-0 items-center justify-center rounded-md border text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                  "relative flex h-10 min-w-0 items-center justify-center rounded-md border text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background",
                   isCurrent
                     ? "border-primary bg-primary text-primary-foreground"
                     : isAnswered
-                      ? "border-green-300 bg-green-50 text-green-800 hover:bg-green-100"
+                      ? "border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10 text-green-800 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-500/20"
                       : "bg-background hover:bg-muted",
                 )}
               >
@@ -628,7 +628,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                   <Check
                     className={cn(
                       "absolute top-0.5 right-0.5 h-3 w-3",
-                      isCurrent ? "text-primary-foreground" : "text-green-700",
+                      isCurrent ? "text-primary-foreground" : "text-green-700 dark:text-green-400",
                     )}
                     aria-hidden="true"
                   />
@@ -647,30 +647,30 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           </div>
           <div className="flex gap-2 mt-2">
             {question.type === "multiple-choice" && (
-              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Multiple Choice</span>
+              <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 rounded-full">Multiple Choice</span>
             )}
             {question.type === "text" && (
-              <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Written Response</span>
+              <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 rounded-full">Written Response</span>
             )}
             {question.type === "file" && (
-              <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">File Upload</span>
+              <span className="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 rounded-full">File Upload</span>
             )}
             {question.type === "ordered-list" && (
-              <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full">
+              <span className="text-xs px-2 py-1 bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 rounded-full">
                 {question.answerLayout === "paired" ? "3-Part Answer" : "In Order"}
               </span>
             )}
             {question.type === "memory-verse" && (
-              <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded-full">Memory Scripture</span>
+              <span className="text-xs px-2 py-1 bg-violet-100 dark:bg-violet-500/15 text-violet-700 dark:text-violet-400 rounded-full">Memory Scripture</span>
             )}
             {question.type === "spelling" && (
-              <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Spelling</span>
+              <span className="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 rounded-full">Spelling</span>
             )}
             {question.type === "matching" && (
-              <span className="text-xs px-2 py-1 bg-amber-100 text-amber-700 rounded-full">Drag &amp; Drop</span>
+              <span className="text-xs px-2 py-1 bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 rounded-full">Drag &amp; Drop</span>
             )}
             {question.type === "multi-select" && (
-              <span className="text-xs px-2 py-1 bg-sky-100 text-sky-700 rounded-full">
+              <span className="text-xs px-2 py-1 bg-sky-100 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400 rounded-full">
                 Pick {question.correctOptions?.length ?? 0}
               </span>
             )}
@@ -761,7 +761,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                         disabled={isDisabled}
                         onClick={() => handleMultiSelectToggle(currentQuestion, originalIndex)}
                         className={cn(
-                          "flex min-h-14 items-center gap-3 rounded-lg border-2 p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                          "flex min-h-14 items-center gap-3 rounded-lg border-2 p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background",
                           isSelected
                             ? "border-primary bg-primary/5 shadow-sm"
                             : "border-border hover:border-primary/50 hover:bg-muted/40",
@@ -917,7 +917,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                       key={index}
                       className={`flex min-h-11 items-center gap-3 rounded-md border px-3 py-2 ${
                         index < completed.length
-                          ? "border-green-300 bg-green-50 text-green-800"
+                          ? "border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10 text-green-800 dark:text-green-300"
                           : index === completed.length
                             ? "border-primary bg-primary/5"
                             : "bg-muted/20 text-muted-foreground"
@@ -929,7 +929,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                       {index < completed.length ? (
                         <>
                           <span className="font-medium">{completed[index]}</span>
-                          <CheckCircle2 className="ml-auto h-4 w-4 text-green-600" />
+                          <CheckCircle2 className="ml-auto h-4 w-4 text-green-600 dark:text-green-400" />
                         </>
                       ) : index === completed.length ? (
                         <span className="text-sm font-medium">Enter this item below</span>
@@ -941,7 +941,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
                 </div>
 
                 {isComplete ? (
-                  <div className="flex items-center gap-2 rounded-md border border-green-300 bg-green-50 p-4 text-green-800">
+                  <div className="flex items-center gap-2 rounded-md border border-green-300 dark:border-green-500/40 bg-green-50 dark:bg-green-500/10 p-4 text-green-800 dark:text-green-300">
                     <CheckCircle2 className="h-5 w-5" />
                     <span className="font-medium">All {expected.length} items are correct and in order.</span>
                   </div>
@@ -1023,7 +1023,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
       </Card>
 
       <div className="mb-6 flex items-center justify-between">
-        <p className={cn("text-sm", unansweredCount > 0 ? "text-amber-700" : "text-muted-foreground")}>
+        <p className={cn("text-sm", unansweredCount > 0 ? "text-amber-700 dark:text-amber-400" : "text-muted-foreground")}>
           {answeredCount} of {assessment.questions.length} questions answered
           {unansweredCount > 0 && ` · ${unansweredCount} still unanswered`}
         </p>
@@ -1059,7 +1059,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <TriangleAlert className="h-5 w-5 text-amber-600" />
+              <TriangleAlert className="h-5 w-5 text-amber-600 dark:text-amber-400" />
               Unanswered questions
             </DialogTitle>
             <DialogDescription>

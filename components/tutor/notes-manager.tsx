@@ -154,7 +154,7 @@ export function NotesManager({ courseId }: NotesManagerProps) {
           }}
         >
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-blue-600 text-white hover:bg-blue-700">
               <Plus className="w-4 h-4 mr-2" />
               Create Note
             </Button>
@@ -298,7 +298,7 @@ export function NotesManager({ courseId }: NotesManagerProps) {
                       <Pencil className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="icon" onClick={() => handleDelete(note._id)}>
-                      <Trash2 className="w-4 h-4 text-red-600" />
+                      <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
                     </Button>
                   </div>
                 </div>

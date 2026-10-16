@@ -14,7 +14,10 @@ export function LockStatusBadge({ locked, className, label = "Locked" }: LockSta
   return (
     <Badge
       variant="outline"
-      className={cn("gap-1 border-amber-300 bg-amber-50 text-amber-800", className)}
+      className={cn(
+        "gap-1 border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200",
+        className,
+      )}
       title={label}
     >
       <LockKeyhole className="h-3 w-3" />

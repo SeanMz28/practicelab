@@ -13,7 +13,7 @@ export function LockedContent({ title = "This content is locked", backHref = "/d
     <div className="container mx-auto max-w-xl px-4 py-12">
       <Card>
         <CardContent className="py-12 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-800">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300">
             <LockKeyhole className="h-6 w-6" />
           </div>
           <h1 className="text-xl font-semibold">{title}</h1>

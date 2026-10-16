@@ -58,7 +58,7 @@ export function GradesList() {
                       <p className="text-sm text-muted-foreground">{course?.name ?? ""}</p>
                     </div>
                     {isPending ? (
-                      <Badge variant="secondary" className="ml-2 bg-yellow-100 text-yellow-800">
+                      <Badge variant="secondary" className="ml-2 bg-yellow-100 dark:bg-yellow-500/15 text-yellow-800 dark:text-yellow-300">
                         <Clock className="w-3 h-3 mr-1" />
                         Pending
                       </Badge>

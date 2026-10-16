@@ -19,6 +19,7 @@ import { useConvexAuth, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { authClient } from "@/lib/auth-client"
 import { useViewMode } from "@/hooks/use-view-mode"
+import { ThemeRadioItems } from "@/components/theme-toggle"
 
 export function DashboardHeader() {
   const router = useRouter()
@@ -131,6 +132,9 @@ export function DashboardHeader() {
                   </DropdownMenuItem>
                 </>
               )}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">Theme</DropdownMenuLabel>
+              <ThemeRadioItems />
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
