@@ -894,7 +894,9 @@ Memorize all **66 books of the Bible in order**: the 39 books of the Old Testame
     title: "Light and Darkness",
     content: `# Light and Darkness
 
-> **Purpose:** To understand how to be saved. Adapted from the supplied *Light & Darkness* study notes.
+> **Purpose:** To understand how to be saved. Adapted from the supplied *Light & Darkness* study notes and First Principles class.
+
+Most people we study the Bible with are already convinced they are saved. This study shows from the Scriptures what it means to be saved in God's eyes, and how a person goes from the darkness into the light.
 
 ## Your spiritual timeline
 
@@ -904,6 +906,8 @@ What are your spiritual highlights? If it helps, draw a timeline.
 - When did you receive the Holy Spirit?
 - When did you receive the forgiveness of sin?
 
+If you have already talked with the person about their salvation, you may know these answers already.
+
 ## Light and darkness
 
 ### 1 Peter 2:9–10
@@ -911,11 +915,16 @@ What are your spiritual highlights? If it helps, draw a timeline.
 - **Darkness:** not a people of God, no mercy; lost, not a Christian, not a disciple.
 - **Light:** people of God, mercy; saved, Christian, disciple.
 - Every person is either in the darkness or the light. **There is no twilight zone.** Where are you?
+- Peter writes to disciples who were once in the darkness until God called them into his wonderful light. There is a **point in time** when a person is saved. Salvation is not a fleeting feeling that comes after a good week and goes after a bad one.
+- Ask the person where they stand before God. If they believe they are already saved, the rest of the study will not reach their heart.
+- Some people place themselves in a neutral zone because of their emotions or what they were taught. What counts is what the Bible teaches, not how we feel about ourselves.
 
 ### John 3:1–7
 
 - We must be **born again of water and the Spirit**.
 - This is a personal decision as an adult.
+- God's kingdom is in the light, so the way into the kingdom is the way a person is saved.
+- Nicodemus could not understand how a grown man could be born again. Being born again takes a mature decision, which is why it cannot be infant baptism.
 
 ### Acts 2:22–24
 
@@ -925,11 +934,15 @@ What message must one believe to be saved?
 2. That Jesus was physically raised from the dead (verse 24).
 3. That everyone is responsible for the crucifixion of Christ (verse 23), because all have sinned.
 
+This is why the Sin and Repentance study matters: the consequence of our sin is that Jesus had to go to the cross.
+
 ### Acts 2:37
 
 - What does it mean to be “cut to the heart”? **Deep emotional sorrow.**
 - The people recognized their responsibility for the death of Jesus.
 - Their response reflected godly sorrow: “What should we do?”
+- “Just tell me what I have to do” is the response of someone who has surrendered. A person who is still fighting, debating, or negotiating at this point is not ready to be a disciple.
+- **Lord and Christ (verse 36):** *Christ* means Messiah, the one who saves us; we cannot save ourselves or earn heaven. *Lord* means master. We cannot have one without the other. Some people want Jesus to save them without being their master. Others serve him as master while trying to earn their salvation, like the older son in the parable of the prodigal son. Jesus calls us friends, not servants (John 15:15).
 
 ### Acts 2:38–42
 
@@ -939,14 +952,17 @@ Once the people believed, what did they do?
 - **Be baptized** (be immersed in water).
   - Their sins were forgiven. This is the point in time when a person is saved.
   - The Holy Spirit is given to those who are baptized.
+- “With many other words he **warned** them; and he **pleaded** with them, ‘Save yourselves from this corrupt generation’” (verse 40). Peter was convinced they were lost unless they repented and were baptized, and we must share that conviction rather than be sentimental. Pleading appeals to the person because their soul is at stake; warning tells them the truth about what awaits them.
+- About three thousand were added that day. They devoted themselves to the apostles' teaching, fellowship, the breaking of bread, and prayer: that is how we know they became disciples.
 
 ## Why baptism?
 
 ### Romans 6:1–8
 
-- Baptism is the **participation in the death, burial, and resurrection of Christ** — it is more than just a symbol.
+- “Shall we go on sinning so that grace may increase? By no means! We are those who have died to sin.” Dying to sin is our repentance.
+- Baptism is the **participation in the death, burial, and resurrection of Christ** — it is more than just a symbol. It is not a ritual, tradition, or custom.
 - This is the point in time when we are freed from sin and united with Christ. The wall of sin is broken down — we are forgiven of our sins!
-- **The diagram:** Jesus died, was buried, and was resurrected. In baptism, our old life dies with Christ, is buried with Christ, and is raised to a new life.
+- **The diagram:** Jesus died, was buried, and was resurrected. In baptism, our old life dies with Christ, is buried with Christ, and is raised to a new life. We go into the water in the darkness and come out in the light.
 
 From darkness to light:
 
@@ -957,19 +973,26 @@ From darkness to light:
 ### Colossians 2:11–12
 
 - What activates the power of God at baptism? **It is our faith!**
-- We are saved by faith at the moment of baptism — not by the water itself.
+- We are saved by faith at the moment of baptism — not by the water itself. The water is not magic.
+- Reading from verse 9 gives the context: in Christ all the fullness of the Deity lives in bodily form.
+- Paul compares baptism to **circumcision done by Christ**: in baptism, Christ cuts away our sinful nature and forgives our sins (verse 13).
 
 ### Matthew 15:6–9
 
 - False doctrines often arise from **religious tradition**.
 - **Infant baptism** is refuted by Ezekiel 18:20 and 28:15. It began around the second century AD and became church doctrine in 549 AD.
+  - It rests on the belief that we inherit Adam's sin, but the child will not share the guilt of the parent. Each of us is responsible for our own sin.
+  - A baby cannot be made a disciple, because they cannot understand the decision.
 - **Praying Jesus into your heart** is a misinterpretation of Revelation 3:20. That passage was addressed to baptized disciples, and the practice originated in early-1800s America.
+  - Jesus was writing to the church in **Laodicea**, who claimed to be his disciples while he was not among them.
+  - The “knocking” is the warning itself, calling the church to repent. Like the farmer in the parable of the sower, who stood for Jesus as he told it, the messenger who brings the warning is how Jesus knocks.
 
 ### 1 Peter 3:18–22
 
 - What does the water represent in this passage? **Noah's flood.**
 - In the same way the flood washed away the sinful people in Noah's time, baptism cleanses us of sin through Christ!
 - Baptism “now saves you” — this confirms again that baptism is not merely symbolic, but the moment our sins are forgiven.
+- “Not the removal of dirt from the body”: we physically go into the water, but the water itself does not save us. It is the pledge of a clear conscience toward God.
 - **Review your timeline:** does it align with the biblical process of salvation? If not, now is the time to repent and be baptized!
 
 > **Challenge:** Respond urgently: be baptized for the forgiveness of your sins so you can be united with Jesus!
@@ -978,9 +1001,85 @@ From darkness to light:
 
 - **Matthew 28:18–20:** Then Jesus came to them and said, “All authority in heaven and on earth has been given to me. Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, and teaching them to obey everything I have commanded you. And surely I am with you always, to the very end of the age.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AMatthew+28%3A18%E2%80%9320))
 - **Luke 19:10:** “For the Son of Man came to seek and to save the lost.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3ALuke+19%3A10))
+
+## Books of the Bible: Genesis through Revelation
+
+Memorize all **66 books of the Bible in order**: the 39 books of the Old Testament and the 27 books of the New Testament.
+
+### Old Testament: Genesis through Malachi
+
+1. Genesis
+2. Exodus
+3. Leviticus
+4. Numbers
+5. Deuteronomy
+6. Joshua
+7. Judges
+8. Ruth
+9. 1 Samuel
+10. 2 Samuel
+11. 1 Kings
+12. 2 Kings
+13. 1 Chronicles
+14. 2 Chronicles
+15. Ezra
+16. Nehemiah
+17. Esther
+18. Job
+19. Psalms
+20. Proverbs
+21. Ecclesiastes
+22. Song of Songs
+23. Isaiah
+24. Jeremiah
+25. Lamentations
+26. Ezekiel
+27. Daniel
+28. Hosea
+29. Joel
+30. Amos
+31. Obadiah
+32. Jonah
+33. Micah
+34. Nahum
+35. Habakkuk
+36. Zephaniah
+37. Haggai
+38. Zechariah
+39. Malachi
+
+### New Testament: Matthew through Revelation
+
+1. Matthew
+2. Mark
+3. Luke
+4. John
+5. Acts
+6. Romans
+7. 1 Corinthians
+8. 2 Corinthians
+9. Galatians
+10. Ephesians
+11. Philippians
+12. Colossians
+13. 1 Thessalonians
+14. 2 Thessalonians
+15. 1 Timothy
+16. 2 Timothy
+17. Titus
+18. Philemon
+19. Hebrews
+20. James
+21. 1 Peter
+22. 2 Peter
+23. 1 John
+24. 2 John
+25. 3 John
+26. Jude
+27. Revelation
 `,
     createdAt: "2026-10-16T10:00:00Z",
-    updatedAt: "2026-10-16T10:00:00Z",
+    updatedAt: "2026-10-17T10:00:00Z",
   },
 ]
 
@@ -2247,9 +2346,10 @@ const lightAndDarknessStudyQuiz: Assessment = {
   id: "light-and-darkness-study-quiz",
   courseId: "8",
   title: "Light and Darkness Study Quiz",
-  description: "Review the Light and Darkness study and recite Matthew 28:18–20 and Luke 19:10 (NIV).",
+  description:
+    "Review the Light and Darkness study, recite Matthew 28:18–20 and Luke 19:10 (NIV), and put Genesis through Revelation in order.",
   type: "quiz",
-  timeLimit: 25,
+  timeLimit: 50,
   createdAt: "2026-10-16T10:00:00Z",
   questions: [
     {
@@ -2297,6 +2397,21 @@ const lightAndDarknessStudyQuiz: Assessment = {
         "The light side reads people of God, mercy, saved, Christian, disciple. The darkness side reads not a people of God, no mercy, lost, not a Christian, not a disciple.",
     },
     {
+      id: "ld-q24",
+      type: "multiple-choice",
+      question: "Some people feel saved after a good week and lost after a bad one. What does 1 Peter 2:9–10 show instead?",
+      points: 1,
+      options: [
+        "Salvation comes and goes with our feelings",
+        "There is a point in time when a person goes from darkness into light",
+        "We are saved once our good deeds outweigh our bad ones",
+        "Everyone starts in the light until they sin",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "God called them out of darkness into his wonderful light: once they were not a people, but now they are the people of God. Salvation is not a fleeting feeling.",
+    },
+    {
       id: "ld-q3",
       type: "spelling",
       question: "Who came to Jesus at night in John 3 and was told he must be born again?",
@@ -2315,7 +2430,8 @@ const lightAndDarknessStudyQuiz: Assessment = {
         "A feeling that comes over us at church",
       ],
       correctAnswer: 1,
-      explanation: "We must be born again of water and the Spirit, and this is a personal decision as an adult.",
+      explanation:
+        "We must be born again of water and the Spirit, and this is a personal decision as an adult. Nicodemus could not understand how a grown man could be born again: it takes a mature decision.",
     },
     {
       id: "ld-q5",
@@ -2357,6 +2473,36 @@ const lightAndDarknessStudyQuiz: Assessment = {
       correctAnswer: 2,
       explanation:
         "They recognized their responsibility for Jesus' death. Their response, “What should we do?”, reflected godly sorrow.",
+    },
+    {
+      id: "ld-q25",
+      type: "multiple-choice",
+      question: "In Acts 2:36, Peter says God made Jesus both Lord and Christ. What do the two titles mean?",
+      points: 1,
+      options: [
+        "Lord means teacher; Christ is Jesus' family name",
+        "Lord means Messiah; Christ means master",
+        "Lord means master; Christ means the Messiah who saves us",
+        "Both titles simply mean king",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Christ is the Messiah who saves us, since we cannot save ourselves. Lord is our master. We cannot have one without the other.",
+    },
+    {
+      id: "ld-q26",
+      type: "multiple-choice",
+      question: "According to the class, who wants Jesus as master but not as savior?",
+      points: 1,
+      options: [
+        "Someone who only calls on Jesus when facing death",
+        "Someone trying to earn their salvation by working hard for God",
+        "Someone who has never heard of Jesus",
+        "Someone who confesses their sins openly",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Like the older son in the parable of the prodigal son, they serve as slaves hoping to earn what can only be given. Jesus calls us friends, not servants (John 15:15). Calling on Jesus only when facing death is the opposite: wanting a savior without a master.",
     },
     {
       id: "ld-q8",
@@ -2418,6 +2564,21 @@ const lightAndDarknessStudyQuiz: Assessment = {
       correctMatches: [0, 1, 2, 3, 4],
       explanation:
         "They heard Peter's message (verses 22–36), were cut to the heart (verse 37), repented and were baptized, and received forgiveness of their sins and the gift of the Holy Spirit (verse 38).",
+    },
+    {
+      id: "ld-q27",
+      type: "multiple-choice",
+      question: "In Acts 2:40, what did Peter do “with many other words”?",
+      points: 1,
+      options: [
+        "He praised their talents and promised them positions",
+        "He left the decision entirely to them",
+        "He warned them and pleaded with them",
+        "He argued with them until they gave in",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "He warned them and pleaded with them: “Save yourselves from this corrupt generation.” Peter was convinced they were lost unless they repented and were baptized. Pleading appeals to the person; warning tells them the truth.",
     },
     {
       id: "ld-q12",
@@ -2483,6 +2644,21 @@ const lightAndDarknessStudyQuiz: Assessment = {
       explanation: "It is our faith! We are saved by faith at the moment of baptism, not by the water itself.",
     },
     {
+      id: "ld-q28",
+      type: "multiple-choice",
+      question: "In Colossians 2:11–12, what does Paul compare baptism to?",
+      points: 1,
+      options: [
+        "The Passover meal",
+        "Circumcision done by Christ, cutting away our sinful nature",
+        "Washing before entering the temple",
+        "Crossing the Jordan River",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "In baptism, Christ cuts away our sinful nature and forgives all our sins (verses 11–13). The water is not magic; it is our faith in the power of God.",
+    },
+    {
       id: "ld-q17",
       type: "multiple-choice",
       question: "According to the study, where do false doctrines often come from (Matthew 15:6–9)?",
@@ -2504,13 +2680,23 @@ const lightAndDarknessStudyQuiz: Assessment = {
       options: ["Romans 3:23", "Matthew 19:14", "Ezekiel 18:20", "John 3:16"],
       correctAnswer: 2,
       explanation:
-        "The study refutes infant baptism with Ezekiel 18:20 and 28:15. It says infant baptism began around the second century AD and became church doctrine in 549 AD.",
+        "The study refutes infant baptism with Ezekiel 18:20 and 28:15: the child will not share the guilt of the parent, so we do not inherit Adam's sin, and a baby cannot be made a disciple. The study says infant baptism began around the second century AD and became church doctrine in 549 AD.",
+    },
+    {
+      id: "ld-q33",
+      type: "multiple-choice",
+      question: "Which scripture does the study say is misinterpreted to teach praying Jesus into your heart?",
+      points: 1,
+      options: ["Matthew 7:7", "Romans 10:9", "John 3:16", "Revelation 3:20"],
+      correctAnswer: 3,
+      explanation:
+        "Praying Jesus into your heart comes from a misinterpretation of Revelation 3:20, which was addressed to baptized disciples in the church in Laodicea.",
     },
     {
       id: "ld-q19",
       type: "multiple-choice",
       question:
-        "Praying Jesus into your heart comes from a misinterpretation of Revelation 3:20. According to the study, why is it a misinterpretation?",
+        "The study says the passage used to teach praying Jesus into your heart is misinterpreted. Why?",
       points: 1,
       options: [
         "The passage was written to people who had never heard of Jesus",
@@ -2521,6 +2707,29 @@ const lightAndDarknessStudyQuiz: Assessment = {
       correctAnswer: 1,
       explanation:
         "Revelation 3:20 was addressed to baptized disciples. The study says the practice originated in early-1800s America.",
+    },
+    {
+      id: "ld-q29",
+      type: "spelling",
+      question: "The passage used to teach praying Jesus into your heart was written to the church in which city?",
+      points: 1,
+      correctAnswers: ["Laodicea"],
+    },
+    {
+      id: "ld-q30",
+      type: "multiple-choice",
+      question:
+        "In the passage used to teach praying Jesus into your heart, Jesus stands at the door and knocks. According to the class, what is the knocking?",
+      points: 1,
+      options: [
+        "Jesus knocking at the door of every unbeliever's heart",
+        "A sign of Jesus' second coming",
+        "An invitation to pray a prayer of salvation",
+        "The warning itself, calling the church to repent",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "The church claimed to be his disciples, but Jesus was not among them. The letter's warning is Jesus knocking, just as brothers warning an unrepentant brother would be.",
     },
     {
       id: "ld-q20",
@@ -2561,6 +2770,35 @@ const lightAndDarknessStudyQuiz: Assessment = {
       question: "Write Luke 19:10 from memory (NIV).",
       points: 3,
       correctText: "“For the Son of Man came to seek and to save the lost.”",
+    },
+    {
+      id: "ld-q31",
+      type: "ordered-list",
+      question: "Write the 39 books of the Old Testament, Genesis through Malachi, in order.",
+      points: 39,
+      correctAnswers: [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+        "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah",
+        "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs", "Isaiah", "Jeremiah",
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+        "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+    {
+      id: "ld-q32",
+      type: "ordered-list",
+      question: "Write the 27 books of the New Testament, Matthew through Revelation, in order.",
+      points: 27,
+      correctAnswers: [
+        "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
+        "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy",
+        "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude",
+        "Revelation",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
     },
   ],
 }

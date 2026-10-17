@@ -214,6 +214,8 @@ export const replaceAssessmentQuestions = internalMutation({
     courseCode: v.string(),
     title: v.string(),
     questions: v.array(questionValidator),
+    description: v.optional(v.string()),
+    timeLimit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const allCourses = await ctx.db.query("courses").collect()
@@ -227,7 +229,36 @@ export const replaceAssessmentQuestions = internalMutation({
     const assessment = assessments.find((a) => a.title === args.title)
     if (!assessment) throw new Error(`Assessment "${args.title}" not found in ${args.courseCode}`)
 
-    await ctx.db.patch(assessment._id, { questions: args.questions })
+    await ctx.db.patch(assessment._id, {
+      questions: args.questions,
+      ...(args.description !== undefined && { description: args.description }),
+      ...(args.timeLimit !== undefined && { timeLimit: args.timeLimit }),
+    })
     return { assessmentId: assessment._id, questionCount: args.questions.length }
+  },
+})
+
+// Seeding never overwrites an existing note either, so use this to push an edited seed note.
+export const replaceNoteContent = internalMutation({
+  args: {
+    courseCode: v.string(),
+    title: v.string(),
+    content: v.string(),
+    updatedAt: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const allCourses = await ctx.db.query("courses").collect()
+    const course = allCourses.find((c) => c.code === args.courseCode)
+    if (!course) throw new Error(`Course ${args.courseCode} not found`)
+
+    const notes = await ctx.db
+      .query("notes")
+      .withIndex("by_courseId", (q) => q.eq("courseId", course._id))
+      .collect()
+    const note = notes.find((n) => n.title === args.title)
+    if (!note) throw new Error(`Note "${args.title}" not found in ${args.courseCode}`)
+
+    await ctx.db.patch(note._id, { content: args.content, updatedAt: args.updatedAt })
+    return { noteId: note._id, contentLength: args.content.length }
   },
 })
