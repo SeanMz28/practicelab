@@ -34,6 +34,8 @@ function normalizeAssessmentText(value: string) {
   return value
     .normalize("NFKC")
     .toLocaleLowerCase("en")
+    // A dash separates words ("one another—and"), so it must not join them when removed.
+    .replace(/\p{Pd}/gu, " ")
     .replace(/[^\p{L}\p{N}\s]/gu, "")
     .replace(/\s+/g, " ")
     .trim()

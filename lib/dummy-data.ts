@@ -1081,6 +1081,213 @@ Memorize all **66 books of the Bible in order**: the 39 books of the Old Testame
     createdAt: "2026-10-16T10:00:00Z",
     updatedAt: "2026-10-17T10:00:00Z",
   },
+  {
+    id: "the-cross-notes",
+    courseId: "8",
+    title: "The Cross",
+    content: `# The Cross
+
+> **Purpose:** To hate sin and love God because we appreciate Jesus' sacrifice. Adapted from the supplied *The Cross* study notes.
+
+- How would you define sacrifice? Who would you die for?
+- The Cross is the **foundation of Christianity**.
+- Sin hurts both God and us.
+- Jesus was fully God and fully human. He experienced the same feelings and emotions we do.
+
+## The Passion of the Christ — Part One
+
+### Matthew 26:31–35
+
+- Jesus predicted that **all His disciples would fall away**.
+- What would make you stop following Jesus?
+
+### Matthew 26:36–46
+
+- Jesus didn't want to die. **He chose to die.** It was an emotional struggle.
+- **Prayer** enabled Jesus to bear the Cross.
+- Jesus had three of His close friends with Him (Peter, James, and John), and they fell asleep while He anguished! How would you feel?
+
+### Matthew 26:47–56
+
+- Jesus' disciples deserted Him despite three years of pouring His life into them.
+- Jesus stops Peter from defending Him. He could have called **twelve legions** of angels to save Him, but He did not. One legion was about 5,000 Roman soldiers, so twelve legions would be about **60,000 angels**!
+
+### Matthew 26:57–68
+
+- Jesus is arrested and taken before the religious officials, where He boldly spoke the truth.
+- Peter follows Jesus **at a distance**. How does this relate to you?
+- Jesus was talking about raising Himself from the dead, not tearing down a real temple (John 2:18–21).
+
+## Three responses to the Cross
+
+### Peter — Matthew 26:69–75
+
+- Peter disowns Jesus, just as Jesus had prophesied.
+- **The sin of cowardice:** he was afraid of a servant girl.
+- He was broken at a “heart level” and wept bitterly, showing **godly sorrow**.
+- He became the first leader of the first-century church in Acts after being given the “keys of the kingdom” by Jesus (Matthew 16:18–19).
+
+### Judas — Matthew 27:1–10
+
+- Jesus is handed over to Pilate, the Roman governor.
+- **The sin of betrayal:** Judas finally realized his error.
+- Judas gives in to his **worldly sorrow** and takes his life.
+
+### Pilate — Matthew 27:11–26
+
+- **The sin of indecision (omission):** Pilate's indecision was a decision. He cared more about people's opinions than God's opinions. He was man-focused, not God-focused.
+- **We are all Barabbas** and deserve to be crucified for our sins.
+
+## The Passion of the Christ — Part Two
+
+### Matthew 27:27–44
+
+- Summarize the events leading up to the crucifixion.
+- Why do you think Jesus refused the **gall** (a painkiller) while on the Cross? How do you personally respond to hurt, pain, or suffering?
+
+### Matthew 27:45–56
+
+- Jesus was crucified at **9 AM** (Mark 15:25) and remained on the Cross for **six hours**. After three hours, darkness came over the whole land.
+- At this moment, Jesus took upon Himself the sins of the entire world.
+- Do you think God abandoned Jesus at this point? (Isaiah 59:1–2) **Yes — sin separates us from God.** For the first time in eternity, Jesus felt that separation.
+
+### 2 Corinthians 5:21
+
+- Jesus became sin on the Cross for us, even though we might never repent.
+- His goal was that we might become **the righteousness of God**.
+
+### Matthew 27:57–61
+
+- Jesus was buried in a rich man's tomb, fulfilling the prophecy in **Isaiah 53:9**.
+
+## The Passion of the Christ — Part Three
+
+### Matthew 27:62–66
+
+- Everyone knew exactly where Jesus was buried — refuting later claims that people went to the “wrong tomb.”
+- Roman soldiers secured the tomb to prevent any attempt to steal Jesus' body.
+
+### Matthew 28:1–10
+
+- **Jesus is risen!**
+- He appears to His disciples and encourages them.
+
+## Our responsibility
+
+### Isaiah 53:4–6
+
+- Substitute your name into this passage. Our sins made us responsible for Jesus' death on the Cross.
+- Do you truly hate your sin because of how it hurt Him? (Proverbs 13:5)
+
+### 1 Peter 2:21–24
+
+- Jesus suffered for each of us individually.
+- We must **die to sin and live for righteousness**.
+- What is the hardest sin you need to surrender?
+
+> **Challenge:** Die to sin and live for righteousness out of gratitude for the Cross. Are you more like Peter, Judas, or Pilate? Which response will you choose? Take time for confession and develop a plan for repentance. Read Appendix B, the medical account of Jesus' crucifixion, or watch the Cross video.
+
+## Appendix B: The medical account of the crucifixion
+
+Key points from *A Physician Analyzes the Crucifixion* by Dr. C. Truman Davis:
+
+- **Origins:** crucifixion was first practiced by the Persians; the Romans learned it from the Carthaginians.
+- **The cross:** the upright post (*stipes*) usually stayed fixed at the execution site. The condemned man carried the cross-arm (*patibulum*), which weighed about **110 pounds**. The most common form was the T-shaped **Tau cross**.
+- **Gethsemane:** Jesus' physical suffering began here. Luke, a physician, is the only Gospel writer to mention the bloody sweat, called **hematidrosis**: under great emotional stress, tiny capillaries in the sweat glands break and mix blood with sweat.
+- **Before Caiaphas:** the first physical trauma. Jesus was struck, blindfolded, mocked, and spat on.
+- **Pilate** tried to pass responsibility to Herod Antipas, then released Barabbas and condemned Jesus to scourging and crucifixion.
+- **The scourging:** the flagrum was a short whip of leather thongs weighted with small lead balls. Jewish law forbade more than forty lashes.
+- **The crown of thorns** caused heavy bleeding, since the scalp is one of the most vascular areas of the body.
+- **The road to Golgotha:** Jesus fell under the beam, and Simon of Cyrene carried it for the rest of the 650-yard journey from the Fortress Antonia.
+- Jesus refused wine mixed with myrrh, a mild painkiller.
+- **The nails** went through the **wrists**, not the palms, which would tear under the body's weight. They pressed on the median nerves. The feet were nailed through the arches.
+- **Breathing:** hanging by the arms, Jesus could breathe in but had to push up on the nails to breathe out. He spoke His seven short sayings from the cross in these moments.
+- **His death:** the legs of crucified men were broken (crucifracture) so that they would suffocate quickly, but Jesus was already dead. The **blood and water** from His side (John 19:34) point to death by heart failure, from shock and fluid compressing the heart, rather than the usual suffocation.
+
+## Memory scriptures (NIV)
+
+- **Hebrews 10:24–25:** “And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another—and all the more as you see the Day approaching.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3AHebrews+10%3A24%E2%80%9325))
+- **1 John 1:9:** “If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.” ([NIV text](https://www.biblica.com/bible/?osis=niv%3A1+John+1%3A9))
+
+## Books of the Bible: Genesis through Revelation
+
+Memorize all **66 books of the Bible in order**: the 39 books of the Old Testament and the 27 books of the New Testament.
+
+### Old Testament: Genesis through Malachi
+
+1. Genesis
+2. Exodus
+3. Leviticus
+4. Numbers
+5. Deuteronomy
+6. Joshua
+7. Judges
+8. Ruth
+9. 1 Samuel
+10. 2 Samuel
+11. 1 Kings
+12. 2 Kings
+13. 1 Chronicles
+14. 2 Chronicles
+15. Ezra
+16. Nehemiah
+17. Esther
+18. Job
+19. Psalms
+20. Proverbs
+21. Ecclesiastes
+22. Song of Songs
+23. Isaiah
+24. Jeremiah
+25. Lamentations
+26. Ezekiel
+27. Daniel
+28. Hosea
+29. Joel
+30. Amos
+31. Obadiah
+32. Jonah
+33. Micah
+34. Nahum
+35. Habakkuk
+36. Zephaniah
+37. Haggai
+38. Zechariah
+39. Malachi
+
+### New Testament: Matthew through Revelation
+
+1. Matthew
+2. Mark
+3. Luke
+4. John
+5. Acts
+6. Romans
+7. 1 Corinthians
+8. 2 Corinthians
+9. Galatians
+10. Ephesians
+11. Philippians
+12. Colossians
+13. 1 Thessalonians
+14. 2 Thessalonians
+15. 1 Timothy
+16. 2 Timothy
+17. Titus
+18. Philemon
+19. Hebrews
+20. James
+21. 1 Peter
+22. 2 Peter
+23. 1 John
+24. 2 John
+25. 3 John
+26. Jude
+27. Revelation
+`,
+    createdAt: "2026-10-20T10:00:00Z",
+    updatedAt: "2026-10-20T10:00:00Z",
+  },
 ]
 
 const wordOfGodStudyQuiz: Assessment = {
@@ -2803,12 +3010,512 @@ const lightAndDarknessStudyQuiz: Assessment = {
   ],
 }
 
+const theCrossStudyQuiz: Assessment = {
+  id: "the-cross-study-quiz",
+  courseId: "8",
+  title: "The Cross Study Quiz",
+  description:
+    "Review The Cross study, recite Hebrews 10:24–25 and 1 John 1:9 (NIV), and put Genesis through Revelation in order.",
+  type: "quiz",
+  timeLimit: 50,
+  createdAt: "2026-10-20T10:00:00Z",
+  questions: [
+    {
+      id: "cr-purpose",
+      type: "multiple-choice",
+      question: "What is the purpose of The Cross study?",
+      points: 1,
+      options: [
+        "To understand how to be saved",
+        "To hate sin and love God because we appreciate Jesus' sacrifice",
+        "To make the Bible your standard for life",
+        "To prove historically that Jesus was crucified",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "The study's stated purpose is to hate sin and love God because we appreciate Jesus' sacrifice.",
+    },
+    {
+      id: "cr-q1",
+      type: "multiple-choice",
+      question: "According to the study, what is the foundation of Christianity?",
+      points: 1,
+      options: [
+        "Good works",
+        "Church attendance",
+        "The Ten Commandments",
+        "The Cross",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "The Cross is the foundation of Christianity. Sin hurts both God and us.",
+    },
+    {
+      id: "cr-q2",
+      type: "multiple-choice",
+      question: "The study says Jesus was fully God and fully human. What does that mean for His suffering?",
+      points: 1,
+      options: [
+        "He experienced the same feelings and emotions we do",
+        "He felt no pain because He was God",
+        "He suffered physically but not emotionally",
+        "He only appeared to suffer",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Jesus was fully God and fully human, so He experienced the same feelings and emotions we do.",
+    },
+    {
+      id: "cr-q3",
+      type: "multiple-choice",
+      question: "What did Jesus predict in Matthew 26:31–35?",
+      points: 1,
+      options: [
+        "Only Judas would leave Him",
+        "His disciples would fight to defend Him",
+        "All His disciples would fall away",
+        "The crowds would make Him king",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Peter insisted he would never fall away, yet that night all the disciples deserted Him and fled (verse 56), despite three years of pouring His life into them.",
+    },
+    {
+      id: "cr-q4",
+      type: "multiple-choice",
+      question: "What does the study say about Jesus' attitude toward His death in Gethsemane (Matthew 26:36–46)?",
+      points: 1,
+      options: [
+        "He wanted to die and felt no struggle",
+        "He tried to escape before the soldiers came",
+        "He did not know He was going to die",
+        "He didn't want to die, but He chose to die",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "It was an emotional struggle. He asked for the cup to be taken from Him, yet prayed, “Yet not as I will, but as you will” (verse 39).",
+    },
+    {
+      id: "cr-q5",
+      type: "multiple-choice",
+      question: "According to the study, what enabled Jesus to bear the Cross?",
+      points: 1,
+      options: [
+        "The support of His closest friends",
+        "Prayer",
+        "Anger at His enemies",
+        "The approval of the crowds",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Prayer enabled Jesus to bear the Cross, while His three closest friends fell asleep as He anguished.",
+    },
+    {
+      id: "cr-q6",
+      type: "multi-select",
+      question: "Pick the three close friends Jesus took with Him in Gethsemane, who fell asleep while He prayed.",
+      points: 3,
+      options: [
+        "Peter",
+        "Andrew",
+        "James",
+        "Judas",
+        "John",
+        "Thomas",
+      ],
+      correctOptions: [0, 2, 4],
+      explanation:
+        "Matthew 26:37 says He took Peter and the two sons of Zebedee, James and John.",
+    },
+    {
+      id: "cr-q7",
+      type: "multiple-choice",
+      question: "Jesus said He could call on more than twelve legions of angels (Matthew 26:53). About how many angels is that, according to the study?",
+      points: 1,
+      options: [
+        "Twelve",
+        "About 5,000",
+        "About 60,000",
+        "About 600",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "One legion was about 5,000 Roman soldiers, so twelve legions would be about 60,000 angels. Jesus could have been rescued, but He stopped Peter from defending Him.",
+    },
+    {
+      id: "cr-q8",
+      type: "multiple-choice",
+      question: "When Jesus spoke of destroying the temple and raising it in three days, what was He talking about (John 2:18–21)?",
+      points: 1,
+      options: [
+        "Tearing down the temple in Jerusalem",
+        "Raising Himself from the dead",
+        "Building a new church building",
+        "The fall of the Roman Empire",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "At His trial, His words were twisted (Matthew 26:61). The temple He spoke of was His body: He was talking about raising Himself from the dead.",
+    },
+    {
+      id: "cr-q9",
+      type: "multiple-choice",
+      question: "After Jesus was arrested, how did Peter follow Him (Matthew 26:58)?",
+      points: 1,
+      options: [
+        "At a distance",
+        "Right beside Him",
+        "He did not follow at all",
+        "Disguised as a soldier",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Peter followed at a distance. The study asks: how does this relate to you?",
+    },
+    {
+      id: "cr-q10",
+      type: "matching",
+      question: "Three responses to the Cross: drag each person onto the sin the study names for them.",
+      points: 3,
+      matchPrompts: ["The sin of indecision (omission)", "The sin of cowardice", "The sin of betrayal"],
+      options: ["Pilate", "Peter", "Judas", "Caiaphas", "Barabbas"],
+      correctMatches: [0, 1, 2],
+      explanation:
+        "Peter's sin was cowardice, Judas's was betrayal, and Pilate's was indecision, a sin of omission. Caiaphas and Barabbas are not among the three responses.",
+    },
+    {
+      id: "cr-q11",
+      type: "multiple-choice",
+      question: "In Matthew 26:69, who first questioned Peter about being with Jesus?",
+      points: 1,
+      options: [
+        "The high priest",
+        "A Roman centurion",
+        "A servant girl",
+        "Pilate",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Peter was afraid of a servant girl. He disowned Jesus three times, just as Jesus had predicted.",
+    },
+    {
+      id: "cr-q12",
+      type: "multiple-choice",
+      question: "Peter and Judas both grieved over what they had done. What was the difference?",
+      points: 1,
+      options: [
+        "Judas showed godly sorrow; Peter showed worldly sorrow",
+        "Peter wept bitterly with godly sorrow; Judas gave in to worldly sorrow and took his life",
+        "There was no difference; both turned back to Jesus",
+        "Neither of them felt any sorrow",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Peter was broken at a heart level. Godly sorrow brings repentance; worldly sorrow brings death (2 Corinthians 7:10, from the Sin and Repentance study).",
+    },
+    {
+      id: "cr-q13",
+      type: "multiple-choice",
+      question: "What did Peter go on to become after he disowned Jesus?",
+      points: 1,
+      options: [
+        "A member of the Jewish ruling council",
+        "A Roman official",
+        "The first leader of the church in Acts",
+        "He never followed Jesus again",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Jesus had given him the “keys of the kingdom” (Matthew 16:18–19), and Peter became the first leader of the first-century church in Acts.",
+    },
+    {
+      id: "cr-q14",
+      type: "multiple-choice",
+      question: "What does the study say about how Pilate handled Jesus' case (Matthew 27:11–26)?",
+      points: 1,
+      options: [
+        "He stayed out of it, so he carried no blame",
+        "He bravely defended Jesus to the crowd",
+        "He followed his conscience and set Jesus free",
+        "He cared more about people's opinions than God's",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "Pilate's indecision was a decision, a sin of omission. He was man-focused, not God-focused.",
+    },
+    {
+      id: "cr-q15",
+      type: "multiple-choice",
+      question: "The study says, “We are all Barabbas.” What does it mean?",
+      points: 1,
+      options: [
+        "We were all criminals in the eyes of Rome",
+        "We all deserve to be crucified for our sins, yet Jesus took our place",
+        "We would all have chosen to release Jesus",
+        "We all once led a rebellion",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Barabbas was guilty and went free while Jesus was crucified. We all deserve to be crucified for our sins.",
+    },
+    {
+      id: "cr-q16",
+      type: "multiple-choice",
+      question: "In Matthew 27:34, Jesus tasted wine mixed with gall and refused to drink it. What was the gall?",
+      points: 1,
+      options: [
+        "A poison to end His life quickly",
+        "A sign of honor from the soldiers",
+        "A painkiller",
+        "Medicine to heal His wounds",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Gall was a painkiller. The study asks why you think Jesus refused it, and how you respond to hurt, pain, or suffering.",
+    },
+    {
+      id: "cr-q17",
+      type: "spelling",
+      question: "Who was forced to carry Jesus' cross (Matthew 27:32)?",
+      points: 1,
+      correctAnswers: ["Simon of Cyrene", "Simon"],
+    },
+    {
+      id: "cr-q18",
+      type: "multiple-choice",
+      question: "Jesus was crucified at 9 AM (Mark 15:25). How long was He on the cross, and what happened after three hours?",
+      points: 1,
+      options: [
+        "Three hours; an earthquake shook the city",
+        "Twelve hours; the sun shone brightly",
+        "Six hours; darkness came over the whole land",
+        "Six hours; the soldiers broke His legs",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "He hung on the cross from 9 AM until about 3 PM. Darkness came over the land from noon, and at this moment Jesus took upon Himself the sins of the entire world.",
+    },
+    {
+      id: "cr-q19",
+      type: "multiple-choice",
+      question: "Did God abandon Jesus on the cross (Matthew 27:46; Isaiah 59:1–2)?",
+      points: 1,
+      options: [
+        "No; God never turned away from Him",
+        "Only His disciples abandoned Him",
+        "Yes; Jesus took on the sins of the world, and sin separates us from God",
+        "Jesus only felt abandoned because of the pain",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Sin separates us from God (Isaiah 59:1–2). For the first time in eternity, Jesus felt that separation.",
+    },
+    {
+      id: "cr-q20",
+      type: "multiple-choice",
+      question: "According to 2 Corinthians 5:21, why did God make Jesus, who had no sin, to be sin for us?",
+      points: 1,
+      options: [
+        "So that we would never need to repent",
+        "Because Jesus had sinned as well",
+        "So that the law would no longer apply",
+        "So that in Him we might become the righteousness of God",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "Jesus became sin on the Cross for us, even though we might never repent. His goal was that we might become the righteousness of God.",
+    },
+    {
+      id: "cr-q21",
+      type: "multiple-choice",
+      question: "Jesus was buried in a rich man's tomb (Matthew 27:57–61). Which prophecy did this fulfill?",
+      points: 1,
+      options: [
+        "Isaiah 53:9",
+        "Psalm 22:18",
+        "Micah 5:2",
+        "Zechariah 9:9",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Isaiah 53:9 says He was assigned a grave “with the rich in his death.” The tomb belonged to Joseph of Arimathea.",
+    },
+    {
+      id: "cr-q22",
+      type: "multi-select",
+      question: "Pick the two facts from Matthew 27:62–66 that answer later claims against the resurrection.",
+      points: 2,
+      options: [
+        "Everyone knew exactly where Jesus was buried",
+        "Jesus was buried in an unmarked grave",
+        "The tomb was sealed and guarded so no one could steal the body",
+        "The disciples took turns guarding the tomb",
+        "The tomb was left open overnight",
+        "The body was moved to another tomb on Saturday",
+      ],
+      correctOptions: [0, 2],
+      explanation:
+        "Everyone knew where Jesus was buried, refuting claims that people went to the “wrong tomb,” and Roman soldiers secured the tomb to prevent any attempt to steal His body.",
+    },
+    {
+      id: "cr-q23",
+      type: "multiple-choice",
+      question: "The study asks you to substitute your name into Isaiah 53:4–6. What is the point?",
+      points: 1,
+      options: [
+        "Only the people of Jesus' day were responsible for His death",
+        "Our own sins made us responsible for Jesus' death",
+        "Isaiah was describing his own suffering",
+        "God punished Jesus for His own mistakes",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "He was pierced for our transgressions. Do you truly hate your sin because of how it hurt Him? (Proverbs 13:5)",
+    },
+    {
+      id: "cr-q24",
+      type: "multiple-choice",
+      question: "According to 1 Peter 2:24, why did Jesus bear our sins in His body on the cross?",
+      points: 1,
+      options: [
+        "So that we could keep sinning without consequence",
+        "So that we would never face suffering",
+        "So that we might die to sins and live for righteousness",
+        "So that we would no longer need the Bible",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Jesus suffered for each of us individually. We must die to sin and live for righteousness. What is the hardest sin you need to surrender?",
+    },
+    {
+      id: "cr-q25",
+      type: "multiple-choice",
+      question: "What is the challenge at the end of the study?",
+      points: 1,
+      options: [
+        "Remember the Cross mainly at Easter",
+        "Wait until you feel ready before repenting",
+        "Die to sin and live for righteousness out of gratitude for the Cross",
+        "Avoid thinking about the Cross because it is too painful",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Are you more like Peter, Judas, or Pilate? Which response will you choose? Take time for confession and develop a plan for repentance.",
+    },
+    {
+      id: "cr-q26",
+      type: "multiple-choice",
+      question: "According to the medical account, what caused Jesus' sweat to become like drops of blood in Gethsemane (Luke 22:44)?",
+      points: 1,
+      options: [
+        "Wounds from the soldiers' beating",
+        "Great emotional stress breaking tiny capillaries in the sweat glands",
+        "The crown of thorns",
+        "Extreme heat in the garden",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "This is hematidrosis. Luke, a physician, is the only Gospel writer to mention it. Jesus' physical suffering began in Gethsemane, before anyone struck Him.",
+    },
+    {
+      id: "cr-q27",
+      type: "multiple-choice",
+      question: "According to the medical account, where were the nails driven to fix Jesus' arms to the cross?",
+      points: 1,
+      options: [
+        "Through the wrists",
+        "Through the palms",
+        "Through the forearms",
+        "His arms were tied, not nailed",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "Nails through the palms would tear out under the body's weight. The nails in the wrists pressed on the median nerves; anatomists have always counted the wrist as part of the hand.",
+    },
+    {
+      id: "cr-q28",
+      type: "multiple-choice",
+      question: "According to the medical account, what did Jesus carry toward the place of execution?",
+      points: 1,
+      options: [
+        "The whole cross, upright post and all",
+        "Only the sign stating His crime",
+        "The cross-arm (patibulum), about 110 pounds",
+        "Nothing; the soldiers carried it",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "The upright post (stipes) usually stayed fixed at the execution site. Jesus fell under the beam, and Simon of Cyrene carried it the rest of the 650 yards to Golgotha.",
+    },
+    {
+      id: "cr-q29",
+      type: "multiple-choice",
+      question: "According to the medical account, what does the blood and water from Jesus' side (John 19:34) show?",
+      points: 1,
+      options: [
+        "He was still alive when taken down from the cross",
+        "He died from blood loss caused by the scourging",
+        "His legs had been broken to speed up His death",
+        "He died of heart failure from shock and fluid around the heart",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "Most crucified men died of suffocation, which is why their legs were broken. Jesus was already dead, and the blood and water point to heart failure from shock and fluid compressing the heart.",
+    },
+    {
+      id: "cr-q30",
+      type: "memory-verse",
+      question: "Write Hebrews 10:24–25 from memory (NIV).",
+      points: 3,
+      correctText:
+        "And let us consider how we may spur one another on toward love and good deeds, not giving up meeting together, as some are in the habit of doing, but encouraging one another—and all the more as you see the Day approaching.",
+    },
+    {
+      id: "cr-q31",
+      type: "memory-verse",
+      question: "Write 1 John 1:9 from memory (NIV).",
+      points: 3,
+      correctText: "If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.",
+    },
+    {
+      id: "cr-q32",
+      type: "ordered-list",
+      question: "Write the 39 books of the Old Testament, Genesis through Malachi, in order.",
+      points: 39,
+      correctAnswers: [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+        "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah",
+        "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs", "Isaiah", "Jeremiah",
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+        "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+    {
+      id: "cr-q33",
+      type: "ordered-list",
+      question: "Write the 27 books of the New Testament, Matthew through Revelation, in order.",
+      points: 27,
+      correctAnswers: [
+        "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
+        "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy",
+        "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude",
+        "Revelation",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
   discipleshipStudyQuiz,
   comingOfTheKingdomStudyQuiz,
   sinAndRepentanceStudyQuiz,
   lightAndDarknessStudyQuiz,
+  theCrossStudyQuiz,
   {
     id: "pc-test-1",
     courseId: "6",

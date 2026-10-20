@@ -29,6 +29,7 @@ function normalizeOrderedAnswer(value: string | number) {
   return String(value)
     .normalize("NFKC")
     .toLocaleLowerCase("en")
+    .replace(/\p{Pd}/gu, " ")
     .replace(/[^\p{L}\p{N}\s]/gu, "")
     .replace(/\s+/g, " ")
     .trim()
