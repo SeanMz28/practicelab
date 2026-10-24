@@ -5432,12 +5432,14 @@ const actsChapters15To21Quiz: Assessment = {
     },
     {
       id: "acts3-q11",
-      type: "ordered-list",
-      question: "After leaving Philippi (Acts 16:40), Paul preached in four more cities before sailing for Syria from Cenchreae (18:18). Type them in the order he visited them.",
+      type: "matching",
+      question: "After leaving Philippi (Acts 16:40), Paul preached in four more cities before sailing for Syria from Cenchreae (18:18). Put them in the order he visited them: drag each city onto 1st, 2nd, 3rd or 4th.",
       points: 4,
-      correctAnswers: ["Thessalonica", "Berea", "Athens", "Corinth"],
-      orderedListHint: "Type the next city…",
-      answerLayout: "reorderable",
+      matchPrompts: ["1st", "2nd", "3rd", "4th"],
+      options: ["Athens", "Corinth", "Thessalonica", "Berea"],
+      correctMatches: [2, 3, 0, 1],
+      explanation:
+        "From Philippi Paul went to Thessalonica (17:1), then Berea (17:10), Athens (17:15) and Corinth (18:1), where he stayed a year and a half (18:11) before sailing from Cenchreae.",
     },
     {
       id: "acts3-q12",
