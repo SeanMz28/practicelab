@@ -6324,6 +6324,48 @@ const actsChapters22To28Quiz: Assessment = {
   ],
 }
 
+const booksOfTheBibleQuiz: Assessment = {
+  id: "books-of-the-bible-quiz",
+  courseId: "8",
+  title: "Books of the Bible Quiz",
+  description:
+    "Put all 66 books of the Bible in order: the 39 books of the Old Testament and the 27 books of the New Testament.",
+  type: "quiz",
+  timeLimit: 20,
+  createdAt: "2026-10-24T10:00:00Z",
+  questions: [
+    {
+      id: "bob-q1",
+      type: "ordered-list",
+      question: "Write the 39 books of the Old Testament, Genesis through Malachi, in order.",
+      points: 39,
+      correctAnswers: [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+        "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah",
+        "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs", "Isaiah", "Jeremiah",
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah",
+        "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+    {
+      id: "bob-q2",
+      type: "ordered-list",
+      question: "Write the 27 books of the New Testament, Matthew through Revelation, in order.",
+      points: 27,
+      correctAnswers: [
+        "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
+        "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy",
+        "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude",
+        "Revelation",
+      ],
+      orderedListHint: "Type the next book…",
+      answerLayout: "reorderable",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
   discipleshipStudyQuiz,
@@ -6336,6 +6378,7 @@ export const dummyAssessments: Assessment[] = [
   actsChapters8To14Quiz,
   actsChapters15To21Quiz,
   actsChapters22To28Quiz,
+  booksOfTheBibleQuiz,
   {
     id: "pc-test-1",
     courseId: "6",
