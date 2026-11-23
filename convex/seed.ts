@@ -159,6 +159,24 @@ export const ensureCourseWithAssessment = mutation({
       .collect()
     const existing = existingAssessments.find((a) => a.title === args.assessment.title)
     if (existing) {
+      // Upgrade the original Grade 4 demo quiz once, while leaving later tutor edits alone.
+      const isOriginalGrade4Quiz =
+        args.course.code === "MATH4" &&
+        args.assessment.title === "Graphs and Data Handling" &&
+        existing.description ===
+          "Read a bar graph and tally data, compare counts, and practise simple data handling. 10 questions, 12 marks."
+
+      if (isOriginalGrade4Quiz) {
+        await ctx.db.patch(existing._id, {
+          description: args.assessment.description,
+          type: args.assessment.type,
+          questions: args.assessment.questions,
+          ...(args.assessment.timeLimit !== undefined && { timeLimit: args.assessment.timeLimit }),
+          ...(args.assessment.dueDate !== undefined && { dueDate: args.assessment.dueDate }),
+        })
+        return { courseId, assessmentId: existing._id, created: false, updated: true }
+      }
+
       return { courseId, assessmentId: existing._id, created: false }
     }
 
@@ -207,8 +225,8 @@ export const ensureCourseWithNote = mutation({
   },
 })
 
-// Seeding never overwrites an existing assessment, so use this from the CLI to push edited
-// seed questions to a deployment, e.g. `npx convex run --prod seed:replaceAssessmentQuestions`.
+// Existing seeded assessments are otherwise left untouched. Use this from the CLI to push
+// edited seed questions to a deployment, e.g. `npx convex run --prod seed:replaceAssessmentQuestions`.
 export const replaceAssessmentQuestions = internalMutation({
   args: {
     courseCode: v.string(),
