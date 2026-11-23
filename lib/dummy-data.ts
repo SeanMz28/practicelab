@@ -50,6 +50,17 @@ export interface Question {
   answerLayout?: "paired" | "reorderable" // Ordered lists: answer in pairs of fields, or add items in any order and rearrange them
   explanation?: string
   acceptedFileTypes?: string[] // For file uploads
+  dataDisplay?: DataDisplay
+}
+
+export interface DataDisplay {
+  type: "pictograph" | "histograph" | "pie-chart" | "tally-table" | "line-graph"
+  title: string
+  labels: string[]
+  values: number[]
+  symbol?: string
+  keyValue?: number
+  unit?: string
 }
 
 export interface AssessmentAttempt {
@@ -6375,12 +6386,54 @@ const booksOfTheBibleQuiz: Assessment = {
   ],
 }
 
+const grade4PetPictograph: DataDisplay = {
+  type: "pictograph",
+  title: "Favourite pets",
+  labels: ["Cats", "Dogs", "Fish"],
+  values: [6, 8, 2],
+  symbol: "⭐",
+  keyValue: 2,
+  unit: "children",
+}
+
+const grade4PlantHistograph: DataDisplay = {
+  type: "histograph",
+  title: "Plant heights",
+  labels: ["0–4 cm", "5–9 cm", "10–14 cm"],
+  values: [2, 5, 3],
+  unit: "plants",
+}
+
+const grade4SportsPieChart: DataDisplay = {
+  type: "pie-chart",
+  title: "Favourite sports (16 learners)",
+  labels: ["Football", "Netball", "Skipping"],
+  values: [8, 4, 4],
+  unit: "learners",
+}
+
+const grade4PetsTallyTable: DataDisplay = {
+  type: "tally-table",
+  title: "Favourite pets",
+  labels: ["Cats", "Dogs", "Fish"],
+  values: [7, 5, 3],
+  unit: "learners",
+}
+
+const grade4PlantLineGraph: DataDisplay = {
+  type: "line-graph",
+  title: "Plant height during the week",
+  labels: ["Monday", "Tuesday", "Wednesday", "Thursday"],
+  values: [2, 4, 3, 5],
+  unit: "cm",
+}
+
 const grade4DataHandlingQuiz: Assessment = {
   id: "grade4-graphs-data-handling",
   courseId: "9",
   title: "Graphs and Data Handling",
   description:
-    "Practise pictographs, histographs, pie charts, tally tables, and line graphs. 15 questions, 15 marks.",
+    "Interpret pictographs, histographs, pie charts, tally tables, and line graphs. 15 questions, 15 marks.",
   type: "quiz",
   timeLimit: 18,
   createdAt: "2026-11-23T10:00:00Z",
@@ -6388,142 +6441,152 @@ const grade4DataHandlingQuiz: Assessment = {
     {
       id: "g4-data-q1",
       type: "multiple-choice",
-      question: "Pictograph: Favourite pets (each ⭐ = 2 children): Cats ⭐⭐⭐; Dogs ⭐⭐⭐⭐; Fish ⭐. How many children chose Dogs?",
+      question: "Use the pictograph to find how many children chose Dogs.",
       points: 1,
       options: ["4 children", "6 children", "8 children", "10 children"],
       correctAnswer: 2,
       explanation: "There are 4 dog symbols, and each symbol stands for 2 children: 4 × 2 = 8.",
+      dataDisplay: grade4PetPictograph,
     },
     {
       id: "g4-data-q2",
       type: "multiple-choice",
-      question: "Pictograph: Favourite pets (each ⭐ = 2 children): Cats ⭐⭐⭐; Dogs ⭐⭐⭐⭐; Fish ⭐. Which pet was chosen by the most children?",
+      question: "Which pet was chosen by the most children?",
       points: 1,
       options: ["Cats", "Dogs", "Fish", "They are equal"],
       correctAnswer: 1,
       explanation: "The Dogs category has the most symbols in the pictograph.",
+      dataDisplay: grade4PetPictograph,
     },
     {
       id: "g4-data-q3",
       type: "multiple-choice",
-      question: "Pictograph: Favourite pets (each ⭐ = 2 children): Cats ⭐⭐⭐; Dogs ⭐⭐⭐⭐; Fish ⭐. How many children chose Cats or Fish altogether?",
+      question: "How many children chose Cats or Fish altogether?",
       points: 1,
       options: ["6 children", "8 children", "10 children", "12 children"],
       correctAnswer: 1,
       explanation: "There are 3 symbols for Cats and 1 for Fish: 4 symbols × 2 children = 8 children.",
+      dataDisplay: grade4PetPictograph,
     },
     {
       id: "g4-data-q4",
       type: "multiple-choice",
-      question: "A histograph (frequency polygon) is made by joining which points?",
+      question: "How many plants grew between 10 and 14 cm tall?",
       points: 1,
-      options: [
-        "The middle-top points of bars for number ranges",
-        "Pictures that each stand for several votes",
-        "Slices of a circle",
-        "Tally marks in groups of five",
-      ],
-      correctAnswer: 0,
-      explanation: "A histograph joins the middle-top points for grouped number ranges to show how their frequencies change.",
+      options: ["2 plants", "3 plants", "5 plants", "10 plants"],
+      correctAnswer: 1,
+      explanation: "The point above the 10–14 cm range is at 3 plants.",
+      dataDisplay: grade4PlantHistograph,
     },
     {
       id: "g4-data-q5",
       type: "multiple-choice",
-      question: "Histograph data: plant heights 0–4 cm: 2 plants; 5–9 cm: 5 plants; 10–14 cm: 3 plants. Which range has the highest point?",
+      question: "Which plant-height range has the highest point on the histograph?",
       points: 1,
       options: ["0–4 cm", "5–9 cm", "10–14 cm", "All are equal"],
       correctAnswer: 1,
       explanation: "The 5–9 cm range has the largest frequency: 5 plants.",
+      dataDisplay: grade4PlantHistograph,
     },
     {
       id: "g4-data-q6",
       type: "multiple-choice",
-      question: "Histograph data: 0–4 cm: 2 plants; 5–9 cm: 5 plants; 10–14 cm: 3 plants. From the first range to the second, what happens to the frequency?",
+      question: "From the first range to the second, how does the number of plants change?",
       points: 1,
       options: ["It goes down by 3", "It stays the same", "It goes up by 3", "It goes up by 5"],
       correctAnswer: 2,
       explanation: "The frequency rises from 2 plants to 5 plants, an increase of 3.",
+      dataDisplay: grade4PlantHistograph,
     },
     {
       id: "g4-data-q7",
       type: "multiple-choice",
-      question: "A pie chart shows 16 learners' favourite sports: Football = 1/2 of the circle, Netball = 1/4, Skipping = 1/4. How many learners chose Football?",
+      question: "How many learners chose Football?",
       points: 1,
       options: ["4 learners", "6 learners", "8 learners", "12 learners"],
       correctAnswer: 2,
       explanation: "Half of 16 is 8, so 8 learners chose Football.",
+      dataDisplay: grade4SportsPieChart,
     },
     {
       id: "g4-data-q8",
       type: "multiple-choice",
-      question: "A pie chart shows 16 learners' favourite sports: Football = 1/2, Netball = 1/4, Skipping = 1/4. Which two sports have equal-sized slices?",
+      question: "Which two sports have equal-sized slices?",
       points: 1,
       options: ["Football and Netball", "Football and Skipping", "Netball and Skipping", "All three"],
       correctAnswer: 2,
       explanation: "Netball and Skipping each take one quarter of the circle.",
+      dataDisplay: grade4SportsPieChart,
     },
     {
       id: "g4-data-q9",
       type: "multiple-choice",
-      question: "In the pie chart, Football is 1/2, Netball is 1/4, and Skipping is 1/4. What fraction of learners chose Netball or Skipping altogether?",
+      question: "What fraction of learners chose Netball or Skipping altogether?",
       points: 1,
       options: ["1/4", "1/2", "3/4", "1 whole"],
       correctAnswer: 1,
       explanation: "One quarter plus one quarter is one half of the circle.",
+      dataDisplay: grade4SportsPieChart,
     },
     {
       id: "g4-data-q10",
       type: "multiple-choice",
-      question: "Tally table of favourite pets: Cats ||||/ ||; Dogs ||||/; Fish |||. How many learners were counted altogether?",
+      question: "How many learners were counted altogether?",
       points: 1,
       options: ["12 learners", "14 learners", "15 learners", "16 learners"],
       correctAnswer: 2,
       explanation: "There are 7 tallies for Cats, 5 for Dogs, and 3 for Fish. 7 + 5 + 3 = 15 learners.",
+      dataDisplay: grade4PetsTallyTable,
     },
     {
       id: "g4-data-q11",
       type: "multiple-choice",
-      question: "Tally table of favourite pets: Cats ||||/ ||; Dogs ||||/; Fish |||. Which pet was chosen most often?",
+      question: "Which pet was chosen most often?",
       points: 1,
       options: ["Cats", "Dogs", "Fish", "They are equal"],
       correctAnswer: 0,
       explanation: "There are 7 tally marks for Cats, more than Dogs (5) or Fish (3).",
+      dataDisplay: grade4PetsTallyTable,
     },
     {
       id: "g4-data-q12",
       type: "multiple-choice",
-      question: "Tally table of favourite pets: Cats ||||/ ||; Dogs ||||/; Fish |||. How many more learners chose Cats than Fish?",
+      question: "How many more learners chose Cats than Fish?",
       points: 1,
       options: ["2 learners", "3 learners", "4 learners", "5 learners"],
       correctAnswer: 2,
       explanation: "Cats has 7 tallies and Fish has 3. 7 − 3 = 4 learners.",
+      dataDisplay: grade4PetsTallyTable,
     },
     {
       id: "g4-data-q13",
       type: "multiple-choice",
-      question: "Line graph of a plant's height: Monday 2 cm → Tuesday 4 cm → Wednesday 3 cm → Thursday 5 cm. On which day was it tallest?",
+      question: "On which day was the plant tallest?",
       points: 1,
       options: ["Monday", "Tuesday", "Wednesday", "Thursday"],
       correctAnswer: 3,
       explanation: "The greatest height is 5 cm, on Thursday.",
+      dataDisplay: grade4PlantLineGraph,
     },
     {
       id: "g4-data-q14",
       type: "multiple-choice",
-      question: "Line graph of a plant's height: Monday 2 cm → Tuesday 4 cm → Wednesday 3 cm → Thursday 5 cm. Between which days did its height go down?",
+      question: "Between which days did the plant's height go down?",
       points: 1,
       options: ["Monday and Tuesday", "Tuesday and Wednesday", "Wednesday and Thursday", "It never went down"],
       correctAnswer: 1,
       explanation: "The height changes from 4 cm on Tuesday to 3 cm on Wednesday, so it goes down then.",
+      dataDisplay: grade4PlantLineGraph,
     },
     {
       id: "g4-data-q15",
       type: "multiple-choice",
-      question: "Line graph of a plant's height: Monday 2 cm → Tuesday 4 cm → Wednesday 3 cm → Thursday 5 cm. How much taller was it on Thursday than Monday?",
+      question: "How much taller was the plant on Thursday than Monday?",
       points: 1,
       options: ["2 cm", "3 cm", "4 cm", "5 cm"],
       correctAnswer: 1,
       explanation: "Thursday is 5 cm and Monday is 2 cm. 5 − 2 = 3 cm.",
+      dataDisplay: grade4PlantLineGraph,
     },
   ],
 }

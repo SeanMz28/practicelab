@@ -10,6 +10,22 @@ import {
   removeResourceAccess,
 } from "./access"
 
+const dataDisplayValidator = v.object({
+  type: v.union(
+    v.literal("pictograph"),
+    v.literal("histograph"),
+    v.literal("pie-chart"),
+    v.literal("tally-table"),
+    v.literal("line-graph"),
+  ),
+  title: v.string(),
+  labels: v.array(v.string()),
+  values: v.array(v.number()),
+  symbol: v.optional(v.string()),
+  keyValue: v.optional(v.number()),
+  unit: v.optional(v.string()),
+})
+
 const questionValidator = v.object({
   id: v.string(),
   type: v.union(
@@ -35,6 +51,7 @@ const questionValidator = v.object({
   answerLayout: v.optional(v.union(v.literal("paired"), v.literal("reorderable"))),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
+  dataDisplay: v.optional(dataDisplayValidator),
 })
 
 async function assessmentAccessState(

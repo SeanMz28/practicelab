@@ -2,6 +2,22 @@ import { v } from "convex/values"
 import { internalMutation, mutation } from "./_generated/server"
 import type { Id } from "./_generated/dataModel"
 
+const dataDisplayValidator = v.object({
+  type: v.union(
+    v.literal("pictograph"),
+    v.literal("histograph"),
+    v.literal("pie-chart"),
+    v.literal("tally-table"),
+    v.literal("line-graph"),
+  ),
+  title: v.string(),
+  labels: v.array(v.string()),
+  values: v.array(v.number()),
+  symbol: v.optional(v.string()),
+  keyValue: v.optional(v.number()),
+  unit: v.optional(v.string()),
+})
+
 const questionValidator = v.object({
   id: v.string(),
   type: v.union(
@@ -27,6 +43,7 @@ const questionValidator = v.object({
   answerLayout: v.optional(v.union(v.literal("paired"), v.literal("reorderable"))),
   explanation: v.optional(v.string()),
   acceptedFileTypes: v.optional(v.array(v.string())),
+  dataDisplay: v.optional(dataDisplayValidator),
 })
 
 export const seedIfEmpty = mutation({
@@ -163,8 +180,10 @@ export const ensureCourseWithAssessment = mutation({
       const isOriginalGrade4Quiz =
         args.course.code === "MATH4" &&
         args.assessment.title === "Graphs and Data Handling" &&
-        existing.description ===
-          "Read a bar graph and tally data, compare counts, and practise simple data handling. 10 questions, 12 marks."
+        [
+          "Read a bar graph and tally data, compare counts, and practise simple data handling. 10 questions, 12 marks.",
+          "Practise pictographs, histographs, pie charts, tally tables, and line graphs. 15 questions, 15 marks.",
+        ].includes(existing.description)
 
       if (isOriginalGrade4Quiz) {
         await ctx.db.patch(existing._id, {

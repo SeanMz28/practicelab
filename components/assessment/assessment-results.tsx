@@ -10,6 +10,7 @@ import { api } from "@/convex/_generated/api"
 import type { Id } from "@/convex/_generated/dataModel"
 import { downloadFromUrl } from "@/lib/download-file"
 import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
+import { AssessmentDataDisplay } from "@/components/assessment/data-display"
 import { ResultsPageLoading } from "@/components/loading/loading-states"
 
 interface AssessmentResultsProps {
@@ -232,6 +233,7 @@ export function AssessmentResults({ courseId, assessmentId, attemptId }: Assessm
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
+                {question.dataDisplay && <AssessmentDataDisplay display={question.dataDisplay} />}
                 {question.type === "multiple-choice" && question.options && (
                   <div className="space-y-2">
                     {question.options.map((option, oIndex) => {

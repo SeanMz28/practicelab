@@ -429,6 +429,9 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       type: questionDraft.type ?? original.type,
       question: questionDraft.question,
       points: questionDraft.points && questionDraft.points > 0 ? questionDraft.points : original.points,
+      ...((questionDraft.type ?? original.type) === original.type && original.dataDisplay
+        ? { dataDisplay: original.dataDisplay }
+        : {}),
       ...(questionDraft.type === "multiple-choice" && {
         options: questionDraft.options,
         correctAnswer: questionDraft.correctAnswer ?? 0,
@@ -539,6 +542,7 @@ export function AssessmentsManager({ courseId }: AssessmentsManagerProps) {
       type: currentQuestion.type!,
       question: currentQuestion.question,
       points: currentQuestion.points || 10,
+      ...(currentQuestion.dataDisplay && { dataDisplay: currentQuestion.dataDisplay }),
       ...(currentQuestion.type === "multiple-choice" && {
         options: currentQuestion.options,
         correctAnswer: currentQuestion.correctAnswer,

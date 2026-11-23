@@ -28,6 +28,7 @@ import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import type { Doc, Id } from "@/convex/_generated/dataModel"
 import { QuizLeaderboard } from "@/components/assessment/quiz-leaderboard"
+import { AssessmentDataDisplay } from "@/components/assessment/data-display"
 import { MatchingQuestion } from "@/components/assessment/matching-question"
 import { ReorderableListQuestion } from "@/components/assessment/reorderable-list-question"
 import {
@@ -677,6 +678,7 @@ export function AssessmentInterface({ assessment, course }: AssessmentInterfaceP
           </div>
         </CardHeader>
         <CardContent>
+          {question.dataDisplay && <AssessmentDataDisplay display={question.dataDisplay} />}
           {question.type === "multiple-choice" && question.options && (
             <RadioGroup
               key={`q-${currentQuestion}`}
