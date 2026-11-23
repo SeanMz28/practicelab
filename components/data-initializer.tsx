@@ -141,6 +141,30 @@ export function DataInitializer() {
             })
           }
         }
+
+        const mathsCourse = dummyCourses.find((c) => c.code === "MATH4")
+        const mathsQuiz = dummyAssessments.find(
+          (a) => a.courseId === mathsCourse?.id && a.title === "Graphs and Data Handling",
+        )
+        if (mathsCourse && mathsQuiz) {
+          await ensureCourseWithAssessment({
+            course: {
+              name: mathsCourse.name,
+              code: mathsCourse.code,
+              description: mathsCourse.description,
+              color: mathsCourse.color,
+            },
+            assessment: {
+              title: mathsQuiz.title,
+              description: mathsQuiz.description,
+              type: mathsQuiz.type,
+              questions: mathsQuiz.questions,
+              timeLimit: mathsQuiz.timeLimit,
+              dueDate: mathsQuiz.dueDate,
+              createdAt: mathsQuiz.createdAt,
+            },
+          })
+        }
       })
       .catch((err) => {
         console.error("Seed failed", err)

@@ -121,6 +121,13 @@ export const dummyCourses: Course[] = [
     color: "bg-pink-500",
   },
   {
+    id: "9",
+    name: "Grade 4 Mathematics",
+    code: "MATH4",
+    description: "Practise number skills, graphs, and data handling.",
+    color: "bg-emerald-500",
+  },
+  {
     id: "6",
     name: "Parallel Computing",
     code: "CS280",
@@ -6368,6 +6375,118 @@ const booksOfTheBibleQuiz: Assessment = {
   ],
 }
 
+const grade4GamesGraph =
+  "Favourite playground games (each ■ = 2 votes): Soccer ■■■■; Tag ■■■; Skipping ■■; Chess ■."
+
+const grade4DataHandlingQuiz: Assessment = {
+  id: "grade4-graphs-data-handling",
+  courseId: "9",
+  title: "Graphs and Data Handling",
+  description:
+    "Read a bar graph and tally data, compare counts, and practise simple data handling. 10 questions, 12 marks.",
+  type: "quiz",
+  timeLimit: 15,
+  createdAt: "2026-11-23T10:00:00Z",
+  questions: [
+    {
+      id: "g4-data-q1",
+      type: "multiple-choice",
+      question: `${grade4GamesGraph} How many votes did Soccer get?`,
+      points: 1,
+      options: ["4 votes", "8 votes", "6 votes", "10 votes"],
+      correctAnswer: 1,
+      explanation: "Soccer has 4 squares. Each square stands for 2 votes, so 4 × 2 = 8 votes.",
+    },
+    {
+      id: "g4-data-q2",
+      type: "multiple-choice",
+      question: `${grade4GamesGraph} Which game got the most votes?`,
+      points: 1,
+      options: ["Chess", "Tag", "Soccer", "Skipping"],
+      correctAnswer: 2,
+      explanation: "Soccer has the longest bar, with 4 squares.",
+    },
+    {
+      id: "g4-data-q3",
+      type: "multiple-choice",
+      question: `${grade4GamesGraph} How many votes were there altogether?`,
+      points: 2,
+      options: ["20 votes", "18 votes", "16 votes", "10 votes"],
+      correctAnswer: 0,
+      explanation: "There are 10 squares altogether. At 2 votes per square, 10 × 2 = 20 votes.",
+    },
+    {
+      id: "g4-data-q4",
+      type: "multiple-choice",
+      question: `${grade4GamesGraph} How many more votes did Soccer get than Tag?`,
+      points: 1,
+      options: ["1 vote", "2 votes", "4 votes", "6 votes"],
+      correctAnswer: 1,
+      explanation: "Soccer got 8 votes and Tag got 6 votes. 8 − 6 = 2 votes.",
+    },
+    {
+      id: "g4-data-q5",
+      type: "multiple-choice",
+      question: "A class recorded books read last week: Asha 4, Ben 7, Cara 3. How many books did they read altogether?",
+      points: 2,
+      options: ["11 books", "12 books", "14 books", "15 books"],
+      correctAnswer: 2,
+      explanation: "Add the three counts: 4 + 7 + 3 = 14 books.",
+    },
+    {
+      id: "g4-data-q6",
+      type: "multiple-choice",
+      question: "Using the book data (Asha 4, Ben 7, Cara 3), who read the fewest books?",
+      points: 1,
+      options: ["Asha", "Ben", "Cara", "They read the same number"],
+      correctAnswer: 2,
+      explanation: "Cara read 3 books, the smallest number in the data.",
+    },
+    {
+      id: "g4-data-q7",
+      type: "multiple-choice",
+      question: "Using the book data (Asha 4, Ben 7, Cara 3), how many more books did Ben read than Cara?",
+      points: 1,
+      options: ["3 books", "4 books", "5 books", "10 books"],
+      correctAnswer: 1,
+      explanation: "Ben read 7 and Cara read 3. 7 − 3 = 4 books.",
+    },
+    {
+      id: "g4-data-q8",
+      type: "multiple-choice",
+      question:
+        "A tally table shows favourite fruit: Apples ||||/ | (6), Bananas ||||/ (5), Oranges |||| (4). Which fruit was chosen most often?",
+      points: 1,
+      options: ["Apples", "Bananas", "Oranges", "All equally"],
+      correctAnswer: 0,
+      explanation: "Apples was chosen most often, with 6 votes.",
+    },
+    {
+      id: "g4-data-q9",
+      type: "multiple-choice",
+      question: "In a bar graph about favourite sports, what should the labels along the bottom show?",
+      points: 1,
+      options: ["The names of the sports", "The number of learners", "The date today", "The learners' ages"],
+      correctAnswer: 0,
+      explanation: "The bottom axis lists the categories being compared, such as the names of the sports.",
+    },
+    {
+      id: "g4-data-q10",
+      type: "multiple-choice",
+      question: "You want to find out which fruit learners in your class like best. What is a good way to collect the data?",
+      points: 1,
+      options: [
+        "Ask each learner and record one answer in a tally table",
+        "Guess what everyone likes",
+        "Ask only your best friend",
+        "Count the fruit in a shop",
+      ],
+      correctAnswer: 0,
+      explanation: "Ask everyone the same question, then record each answer so you can count and compare them fairly.",
+    },
+  ],
+}
+
 export const dummyAssessments: Assessment[] = [
   wordOfGodStudyQuiz,
   discipleshipStudyQuiz,
@@ -6381,6 +6500,7 @@ export const dummyAssessments: Assessment[] = [
   actsChapters15To21Quiz,
   actsChapters22To28Quiz,
   booksOfTheBibleQuiz,
+  grade4DataHandlingQuiz,
   {
     id: "pc-test-1",
     courseId: "6",
